@@ -106,7 +106,16 @@ function cleanTitle(raw) {
   t = t.replace(/\bSr\.(\s)/gi, "Senior$1").replace(/\bSr\.$/gi, "Senior")
        .replace(/\bJr\.(\s)/gi, "Junior$1").replace(/\bJr\.$/gi, "Junior")
        .replace(/\bMgr\.?(\s|$)/gi, "Manager$1").replace(/\bCoord\.?(\s|$)/gi, "Coordinator$1")
-       .replace(/\bBD\b/g, "Business Development").replace(/\bOps\b/gi, "Operations");
+       .replace(/\bAsst\.?(\s|$)/gi, "Assistant$1").replace(/\bSupvr?\.?(\s|$)/gi, "Supervisor$1")
+       .replace(/\bDir\.?(\s|$)/gi, "Director$1").replace(/\bExec\.?(\s|$)/gi, "Executive$1")
+       .replace(/\bBD\b/g, "Business Development").replace(/\bOps\b/gi, "Operations")
+       .replace(/\bGM\b/g, "General Manager").replace(/\bVP\b/g, "Vice President")
+       .replace(/\bSVP\b/g, "Senior Vice President").replace(/\bEVP\b/g, "Executive Vice President")
+       .replace(/\bCOO\b/g, "Chief Operations Officer").replace(/\bCFO\b/g, "Chief Financial Officer")
+       .replace(/\bCTO\b/g, "Chief Technology Officer")
+       .replace(/\b3PL\b/gi, "3PL").replace(/\bDC\b/g, "Distribution Centre")
+       .replace(/\bInt['']?l\b/gi, "International").replace(/\bNatl\b/gi, "National")
+       .replace(/\bTL\b/g, "Team Lead").replace(/\bP&L\b/gi, "P&L");
   t = t.replace(/(\s*[-–]\s*){2,}/g, " - ");
   return t.trim().replace(/\s+/g, " ").replace(/[-–,|]+$/, "").trim()
           .replace(/\b\w/g, c => c.toUpperCase());
