@@ -4,15 +4,15 @@ import * as XLSX from "xlsx";
 // ── Classification data ─────────────────────────────────────────────────────
 
 const PRIORITY_DOMAIN_RULES = {
-  "Warehouse": ["warehouse manager","warehouse supervisor","warehouse coordinator","warehouse assistant","warehouse","storeperson","store person","forklift","picker","packer","pick pack","inventory","stock","distribution centre","distribution center","devanner","labourer"],
+  "Warehouse": ["warehouse manager","warehouse supervisor","warehouse coordinator","warehouse assistant","warehouse","storeperson","store person","forklift","picker","packer","pick pack","inventory","stock","distribution centre","distribution center","devanner","labourer","fulfilment","fulfillment","fulfilment manager","fulfillment manager","inbound","outbound","returns","cold storage","receiving","despatch","put away"],
   "Transport": ["transport manager","dispatch coordinator","dispatcher","dispatch","allocator","delivery","driver","courier","linehaul","fleet","route"],
   "Freight Forwarding": ["freight","customs","brokerage","import","export","airfreight","seafreight","forwarding"],
   "Planning": ["supply chain","demand planner","planner","planning","procurement","purchasing","purchaser","buyer","business analyst","scheduler","sourcing","replenishment","forecast"],
-  "Finance": ["accounts payable","accounts receivable","accountant","accounts","payroll","finance","billing","costing"],
+  "Finance": ["accounts payable","accounts receivable","accountant","accounts","payroll","finance","billing","costing","fp&a","financial planning","financial analyst","treasury","budgeting"],
   "IT Support": ["developer","architect","systems","technology","application support","technical support","it support","software support","application specialist","hris specialist","technical consultant"],
-  "Operations": ["operations manager","operations supervisor","operations coordinator","logistics manager","logistics coordinator","logistics","operator","controller","process","production","quality","qa","sap","decon","consol","erp"],
+  "Operations": ["operations manager","operations supervisor","operations coordinator","logistics manager","logistics coordinator","logistics","operator","controller","process","production","quality","qa","sap","decon","consol","erp","e-commerce","ecommerce","omnichannel"],
   "Business Administration": ["office administrator","admin assistant","executive assistant","personal assistant","receptionist","office support","clerical","office manager","hr business partner","hr advisor","hr coordinator","hr transformation","hr specialist"],
-  "Sales": ["customer service","customer support","sales","business development","key account","merchandiser","representative","account manager"],
+  "Sales": ["customer service","customer support","sales","business development","key account","merchandiser","representative","account manager","commercial","commercial manager","commercial development"],
 };
 
 const FUZZY_ROLE_REPAIR = {
@@ -68,7 +68,7 @@ const DOMAIN_SKILL_FIXED = {
   "Other/Noise":[],
 };
 
-const REMOVE_PHRASES = ["immediate start","apply now","great opportunity","exciting opportunity","career growth","wanted","needed","join our team","above award rate","great money"];
+const REMOVE_PHRASES = ["immediate start","apply now","great opportunity","exciting opportunity","career growth","wanted","needed","join our team","above award rate","great money","packag","distrib","remuner","salary package","competitive package","competitive salary"];
 const REMOVE_SHIFT = ["night shift","day shift","afternoon shift","am shift","pm shift","overnight","morning shift","part time","full time","casual"];
 const REMOVE_CONTRACT = ["ftc","fixed term","fixed-term","contract role","contract position","temp role","temporary role","temp to perm","maternity cover","parental leave cover","secondment","ongoing","permanent role","casual role"];
 const SALARY_PATTERN = /\$[\d,]+[k]?(\s*[-–]\s*\$?[\d,]+[k]?)?\s*(pa|p\.a\.|per annum|per year|annually|ph|p\.h\.|per hour)?/gi;
@@ -189,6 +189,8 @@ const SKILL_DESCRIPTIONS = {
 
 function cleanTitle(raw) {
   let t = raw;
+  // Strip emoji and special Unicode symbols
+  t = t.replace(/[\u{1F300}-\u{1FAFF}]|[\u{2600}-\u{27BF}]|[\u{FE00}-\u{FE0F}]/gu, "").trim();
   // Normalize ALL-CAPS titles: if >70% of letters are uppercase, lowercase first
   const letters = t.replace(/[^a-zA-Z]/g, "");
   if (letters.length > 0 && letters.replace(/[^A-Z]/g, "").length / letters.length > 0.7) {
@@ -208,6 +210,7 @@ function cleanTitle(raw) {
        .replace(/\bAsst\.?(\s|$)/gi, "Assistant$1").replace(/\bSupvr?\.?(\s|$)/gi, "Supervisor$1")
        .replace(/\bDir\.?(\s|$)/gi, "Director$1").replace(/\bExec\.?(\s|$)/gi, "Executive$1")
        .replace(/\bBD\b/g, "Business Development").replace(/\bOps\b/gi, "Operations")
+       .replace(/\bFP&A\b/gi, "Financial Planning & Analysis")
        .replace(/\bGM\b/g, "General Manager").replace(/\bVP\b/g, "Vice President")
        .replace(/\bSVP\b/g, "Senior Vice President").replace(/\bEVP\b/g, "Executive Vice President")
        .replace(/\bCOO\b/g, "Chief Operations Officer").replace(/\bCFO\b/g, "Chief Financial Officer")
@@ -216,7 +219,7 @@ function cleanTitle(raw) {
        .replace(/\bInt['']?l\b/gi, "International").replace(/\bNatl\b/gi, "National")
        .replace(/\bTL\b/g, "Team Lead").replace(/\bP&L\b/gi, "P&L");
   t = t.replace(/(\s*[-–]\s*){2,}/g, " - ");
-  return t.trim().replace(/\s+/g, " ").replace(/[-–,|]+$/, "").trim()
+  return t.trim().replace(/\s+/g, " ").replace(/[-–,|&]+$/, "").trim()
           .replace(/\b\w/g, c => c.toUpperCase());
 }
 
