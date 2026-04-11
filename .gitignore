@@ -1,0 +1,25 @@
+# dependencies
+node_modules
+
+# production build
+dist
+
+# environment variables
+.env
+.env.*
+
+# macOS
+.DS_Store
+
+.vercel
+deploy.sh
+logistics-title-mapper-prototype.jsx
+
+
+Logistics Title Mapper Complete Project Brief.pdf
+Personal Product V1 Spec Logistics Title Mapper.pdf
+
+vite.config.js.timestamp-1775854254382-935bba3762da8.mjs
+vite.config.js.timestamp-1775855604006-9efa1deb41a13.mjs
+vite.config.js.timestamp-1775855607645-4888d66b563a1.mjs
+vite.config.js.timestamp-1775855615848-745ac749de302.mjs
