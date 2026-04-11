@@ -174,6 +174,11 @@ const SKILL_DESCRIPTIONS = {
 
 function cleanTitle(raw) {
   let t = raw;
+  // Normalize ALL-CAPS titles: if >70% of letters are uppercase, lowercase first
+  const letters = t.replace(/[^a-zA-Z]/g, "");
+  if (letters.length > 0 && letters.replace(/[^A-Z]/g, "").length / letters.length > 0.7) {
+    t = t.toLowerCase();
+  }
   for (const p of [...REMOVE_PHRASES, ...REMOVE_SHIFT]) t = t.replace(new RegExp(p, "gi"), "");
   for (const [typo, fix] of Object.entries(TYPO_MAP)) t = t.replace(new RegExp(typo, "gi"), fix);
   t = t.replace(SALARY_PATTERN, "");
