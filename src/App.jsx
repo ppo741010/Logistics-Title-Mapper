@@ -70,6 +70,9 @@ const DOMAIN_SKILL_FIXED = {
 
 const REMOVE_PHRASES = ["immediate start","apply now","great opportunity","exciting opportunity","career growth","wanted","needed","join our team","above award rate","great money"];
 const REMOVE_SHIFT = ["night shift","day shift","afternoon shift","am shift","pm shift","overnight","morning shift","part time","full time","casual"];
+const REMOVE_CONTRACT = ["ftc","fixed term","fixed-term","contract role","contract position","temp role","temporary role","temp to perm","maternity cover","parental leave cover","secondment","ongoing","permanent role","casual role"];
+const SALARY_PATTERN = /\$[\d,]+[k]?(\s*[-–]\s*\$?[\d,]+[k]?)?\s*(pa|p\.a\.|per annum|per year|annually|ph|p\.h\.|per hour)?/gi;
+const CONTRACT_DURATION_PATTERN = /\b\d+[-\s]?(month|week|year)[s]?\b(\s*contract)?/gi;
 const TYPO_MAP = {"assisstant":"assistant","coodrinator":"coordinator","sepcialist":"specialist","mandarine":"mandarin","operatior":"operator","oprations":"operations"};
 
 // ── Feedback ─────────────────────────────────────────────────────────────────
@@ -95,13 +98,17 @@ function cleanTitle(raw) {
   let t = raw;
   for (const p of [...REMOVE_PHRASES, ...REMOVE_SHIFT]) t = t.replace(new RegExp(p, "gi"), "");
   for (const [typo, fix] of Object.entries(TYPO_MAP)) t = t.replace(new RegExp(typo, "gi"), fix);
+  t = t.replace(SALARY_PATTERN, "");
+  t = t.replace(CONTRACT_DURATION_PATTERN, "");
+  for (const p of REMOVE_CONTRACT) t = t.replace(new RegExp(`\\b${p}\\b`, "gi"), "");
   t = t.replace(/[-–]\s*(NZ|AU|NZL|AUS|Auckland|Wellington|Christchurch|Sydney|Melbourne|Brisbane|Perth|APAC|Remote).*/i, "");
   t = t.replace(/\(.*?\)/g, "").replace(/\[.*?\]/g, "");
   t = t.replace(/\bSr\.(\s)/gi, "Senior$1").replace(/\bSr\.$/gi, "Senior")
        .replace(/\bJr\.(\s)/gi, "Junior$1").replace(/\bJr\.$/gi, "Junior")
        .replace(/\bMgr\.?(\s|$)/gi, "Manager$1").replace(/\bCoord\.?(\s|$)/gi, "Coordinator$1")
        .replace(/\bBD\b/g, "Business Development").replace(/\bOps\b/gi, "Operations");
-  return t.trim().replace(/\s+/g, " ").replace(/[-–,]+$/, "").trim()
+  t = t.replace(/(\s*[-–]\s*){2,}/g, " - ");
+  return t.trim().replace(/\s+/g, " ").replace(/[-–,|]+$/, "").trim()
           .replace(/\b\w/g, c => c.toUpperCase());
 }
 
