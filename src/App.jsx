@@ -92,6 +92,33 @@ const SKILL_SYNONYMS = {
   "mrp":"MRP","sop":"SOP","edi":"EDI","vmi":"VMI","ohs":"OHS","ehs":"EHS","sla":"SLA",
 };
 
+const SKILL_DESCRIPTIONS = {
+  "WMS":                      "Warehouse Management System — software used to manage day-to-day warehouse operations including inventory tracking, picking, and dispatch.",
+  "TMS":                      "Transport Management System — platform for planning, executing, and optimising the movement of goods.",
+  "ERP Systems":              "Enterprise Resource Planning — integrated software (e.g. SAP, Oracle) that manages core business processes across finance, supply chain, and operations.",
+  "SAP":                      "SAP ERP — one of the most widely used enterprise platforms in logistics and supply chain management.",
+  "CRM":                      "Customer Relationship Management — software for managing customer interactions, sales pipelines, and account data.",
+  "Microsoft Excel":          "Spreadsheet tool used for data analysis, reporting, and operational planning in logistics roles.",
+  "Microsoft Excel (Advanced)":"Advanced Excel skills including pivot tables, VLOOKUP, macros, and data modelling.",
+  "SQL":                      "Structured Query Language — used to query and manage data in relational databases.",
+  "S&OP":                     "Sales & Operations Planning — cross-functional process aligning demand forecasts with supply capacity.",
+  "MRP":                      "Material Requirements Planning — system for calculating materials and components needed to manufacture products.",
+  "EDI":                      "Electronic Data Interchange — standardised electronic communication of business documents (e.g. purchase orders, invoices) between trading partners.",
+  "VMI":                      "Vendor Managed Inventory — arrangement where the supplier monitors and replenishes stock on behalf of the buyer.",
+  "RF Scanning":              "Radio Frequency scanning — handheld barcode scanning used for inventory tracking and order picking in warehouses.",
+  "Forklift Operation":       "Operation of forklift equipment for moving, stacking, and loading goods in a warehouse or DC environment.",
+  "Supply Chain Management":  "End-to-end coordination of goods, information, and finances from supplier to customer.",
+  "Inventory Control":        "Processes and procedures to maintain accurate stock levels and minimise discrepancies.",
+  "Inventory Management":     "Broader management of stock — including ordering, storage, and movement of goods across the supply chain.",
+  "KPI":                      "Key Performance Indicators — metrics used to measure and track operational performance.",
+  "KPI Management":           "Setting, monitoring, and reporting on KPIs to drive performance improvement.",
+  "SOP":                      "Standard Operating Procedures — documented step-by-step instructions for routine operations.",
+  "Data Governance":          "Framework for managing data quality, security, and compliance across an organisation.",
+  "OHS":                      "Occupational Health & Safety — compliance and practices related to workplace safety.",
+  "EHS":                      "Environment, Health & Safety — broader framework covering environmental compliance alongside workplace safety.",
+  "SLA":                      "Service Level Agreement — contractual commitments defining expected service standards (e.g. delivery timeframes).",
+};
+
 // ── Core logic ──────────────────────────────────────────────────────────────
 
 function cleanTitle(raw) {
@@ -1069,12 +1096,19 @@ function SkillMapper() {
             : (
               <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
                 {results.map((r, i) => (
-                  <div key={i} style={{ display: "flex", alignItems: "center", gap: 12, padding: "10px 14px", borderRadius: 8, background: r.normalized ? C.greenLight : C.redLight, border: `1px solid ${r.normalized ? C.greenBorder : C.redBorder}` }}>
-                    <span style={{ fontFamily: "monospace", fontSize: 12, color: C.text, flexShrink: 0 }}>{r.raw}</span>
-                    <span style={{ color: C.textMuted, fontSize: 11 }}>→</span>
-                    {r.normalized
-                      ? <Badge tone="green">{r.normalized}</Badge>
-                      : <span style={{ fontSize: 12, color: C.red, fontWeight: 600 }}>⚑ No match — review</span>}
+                  <div key={i} style={{ padding: "10px 14px", borderRadius: 8, background: r.normalized ? C.greenLight : C.redLight, border: `1px solid ${r.normalized ? C.greenBorder : C.redBorder}` }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                      <span style={{ fontFamily: "monospace", fontSize: 12, color: C.text, flexShrink: 0 }}>{r.raw}</span>
+                      <span style={{ color: C.textMuted, fontSize: 11 }}>→</span>
+                      {r.normalized
+                        ? <Badge tone="green">{r.normalized}</Badge>
+                        : <span style={{ fontSize: 12, color: C.red, fontWeight: 600 }}>⚑ No match — review</span>}
+                    </div>
+                    {r.normalized && SKILL_DESCRIPTIONS[r.normalized] && (
+                      <div style={{ marginTop: 6, fontSize: 11, color: "#166534", lineHeight: 1.6 }}>
+                        {SKILL_DESCRIPTIONS[r.normalized]}
+                      </div>
+                    )}
                   </div>
                 ))}
                 <div style={{ padding: "8px 14px", borderRadius: 8, background: C.bg, fontSize: 12, color: C.textMuted, border: `1px solid ${C.border}`, marginTop: 4 }}>
