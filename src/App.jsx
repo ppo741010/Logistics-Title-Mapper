@@ -73,7 +73,22 @@ const REMOVE_SHIFT = ["night shift","day shift","afternoon shift","am shift","pm
 const REMOVE_CONTRACT = ["ftc","fixed term","fixed-term","contract role","contract position","temp role","temporary role","temp to perm","maternity cover","parental leave cover","secondment","ongoing","permanent role","casual role"];
 const SALARY_PATTERN = /\$[\d,]+[k]?(\s*[-–]\s*\$?[\d,]+[k]?)?\s*(pa|p\.a\.|per annum|per year|annually|ph|p\.h\.|per hour)?/gi;
 const CONTRACT_DURATION_PATTERN = /\b\d+[-\s]?(month|week|year)[s]?\b(\s*contract)?/gi;
-const TYPO_MAP = {"assisstant":"assistant","coodrinator":"coordinator","sepcialist":"specialist","mandarine":"mandarin","operatior":"operator","oprations":"operations"};
+const TYPO_MAP = {
+  "assisstant":"assistant","coodrinator":"coordinator","sepcialist":"specialist",
+  "mandarine":"mandarin","operatior":"operator","oprations":"operations",
+  "mananger":"manager","manageer":"manager","manger":"manager",
+  "logsitics":"logistics","logistic ":"logistics ","logsitic":"logistics",
+  "warehuse":"warehouse","warehose":"warehouse","wherehouse":"warehouse",
+  "suprevisor":"supervisor","supervisior":"supervisor","supervsior":"supervisor",
+  "freigth":"freight","frieght":"freight",
+  "tranport":"transport","transprot":"transport",
+  "recieving":"receiving","reciving":"receiving",
+  "planiner":"planner","plannner":"planner",
+  "accouns":"accounts","acocunts":"accounts",
+  "purchassing":"purchasing","purchacing":"purchasing",
+  "cusotmer":"customer","custumer":"customer",
+};
+const HOURS_POSITIONS_PATTERN = /\b(\d+\.?\d*\s*h(rs?|ours?)(\s*p\.?w\.?|\s*per\s*week)?|\d+\s*x\s*\w+|x\s*\d+\s*(position|role|vacancy|vacancies)?s?|\d+\s*(position|role|vacancy|vacancies)s?|multiple\s*(position|role)s?)\b/gi;
 
 // ── Feedback ─────────────────────────────────────────────────────────────────
 // Replace with your Google Form URL when ready
@@ -183,6 +198,7 @@ function cleanTitle(raw) {
   for (const [typo, fix] of Object.entries(TYPO_MAP)) t = t.replace(new RegExp(typo, "gi"), fix);
   t = t.replace(SALARY_PATTERN, "");
   t = t.replace(CONTRACT_DURATION_PATTERN, "");
+  t = t.replace(HOURS_POSITIONS_PATTERN, "");
   for (const p of REMOVE_CONTRACT) t = t.replace(new RegExp(`\\b${p}\\b`, "gi"), "");
   t = t.replace(/[-–|,]\s*(NZ|AU|NZL|AUS|NZ\/AU|AU\/NZ|Auckland|Wellington|Christchurch|Hamilton|Dunedin|Sydney|Melbourne|Brisbane|Perth|Adelaide|Canberra|Singapore|SGP|London|Manchester|Birmingham|UK|United Kingdom|New York|Los Angeles|Chicago|Houston|US|USA|United States|APAC|ANZ|Remote|Hybrid|On-?site).*/i, "");
   t = t.replace(/\(.*?\)/g, "").replace(/\[.*?\]/g, "");
