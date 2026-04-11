@@ -107,22 +107,55 @@ function cleanTitle(raw) {
 
 function classify(title, description) {
   const tl = title.toLowerCase(), dl = description.toLowerCase();
-  for (const [domain, kws] of Object.entries(PRIORITY_DOMAIN_RULES))
-    for (const kw of kws) if (tl.includes(kw)) return { domain, confidence: 88, source: "title" };
+
+  // Score every domain — multi-word keywords are more specific, weight them higher
+  const domainScores = {};
+  const domainMatches = {};
+  for (const [domain, kws] of Object.entries(PRIORITY_DOMAIN_RULES)) {
+    let score = 0;
+    const matched = [];
+    for (const kw of kws) {
+      if (tl.includes(kw)) {
+        const weight = kw.includes(" ") ? kw.split(" ").length : 1;
+        score += weight;
+        matched.push(kw);
+      }
+    }
+    if (score > 0) { domainScores[domain] = score; domainMatches[domain] = matched; }
+  }
+
+  if (Object.keys(domainScores).length > 0) {
+    const sorted = Object.entries(domainScores).sort((a, b) => b[1] - a[1]);
+    const [bestDomain, bestScore] = sorted[0];
+    const secondScore = sorted[1]?.[1] || 0;
+    const margin = bestScore - secondScore;
+    const confidence =
+      bestScore >= 4 && margin >= 2 ? 92 :
+      bestScore >= 3 && margin >= 2 ? 88 :
+      bestScore >= 2 && margin >= 1 ? 80 :
+      margin >= 1 ? 72 : 62;
+    return { domain: bestDomain, confidence, source: "title", matchedKeywords: domainMatches[bestDomain] };
+  }
+
+  // Fuzzy repair fallback
   for (const [key, domain] of Object.entries(FUZZY_ROLE_REPAIR))
-    if (tl.includes(key)) return { domain, confidence: domain === "Other/Noise" ? 30 : 74, source: "fuzzy" };
+    if (tl.includes(key)) return { domain, confidence: domain === "Other/Noise" ? 30 : 74, source: "fuzzy", matchedKeywords: [key] };
+
+  // Description fallback — also weighted
   if (description.length > 0) {
-    const domainHits = {};
+    const descScores = {};
     for (const [domain, kws] of Object.entries(PRIORITY_DOMAIN_RULES))
-      for (const kw of kws) if (dl.includes(kw)) domainHits[domain] = (domainHits[domain] || 0) + 1;
-    if (Object.keys(domainHits).length > 0) {
-      const best = Object.entries(domainHits).sort((a, b) => b[1] - a[1])[0];
-      const hits = best[1];
-      const confidence = hits >= 3 ? 72 : hits === 2 ? 68 : 60;
-      return { domain: best[0], confidence, source: "description" };
+      for (const kw of kws)
+        if (dl.includes(kw)) descScores[domain] = (descScores[domain] || 0) + (kw.includes(" ") ? kw.split(" ").length : 1);
+    if (Object.keys(descScores).length > 0) {
+      const best = Object.entries(descScores).sort((a, b) => b[1] - a[1])[0];
+      const score = best[1];
+      const confidence = score >= 4 ? 72 : score >= 2 ? 65 : 58;
+      return { domain: best[0], confidence, source: "description", matchedKeywords: [] };
     }
   }
-  return { domain: "Other/Noise", confidence: 30, source: "unmatched" };
+
+  return { domain: "Other/Noise", confidence: 30, source: "unmatched", matchedKeywords: [] };
 }
 
 const CROSS_FUNCTIONAL_PAIRS = [
@@ -156,7 +189,7 @@ function getSkills(domain, description) {
 
 function analyze(rawTitle, description, country) {
   const clean = cleanTitle(rawTitle);
-  const { domain, confidence, source } = classify(rawTitle, description);
+  const { domain, confidence, source, matchedKeywords = [] } = classify(rawTitle, description);
   const seniority = domain === "Other/Noise" ? "Review Required" : getSeniority(rawTitle);
   const nature    = domain === "Other/Noise" ? "Review Required" : getWorkNature(rawTitle);
   const skills    = getSkills(domain, description);
@@ -171,7 +204,7 @@ function analyze(rawTitle, description, country) {
     if (combined.includes(a) && combined.includes(b)) flags.push(flag);
   const hasCrossFlag = CROSS_FUNCTIONAL_PAIRS.some(({ a, b }) => combined.includes(a) && combined.includes(b));
   const needsReview = domain === "Other/Noise" || confidence < 70 || hasCrossFlag;
-  return { cleanTitle: clean, domain, nature, seniority, skills, confidence, flags, hasCrossFlag, needsReview };
+  return { cleanTitle: clean, domain, nature, seniority, skills, confidence, flags, hasCrossFlag, needsReview, matchedKeywords };
 }
 
 // ── File parsing ─────────────────────────────────────────────────────────────
@@ -576,6 +609,13 @@ function SingleAnalyzer() {
                 <Card style={{ padding: 16 }}>
                   <FieldLabel>Suggested Functional Area</FieldLabel>
                   <Badge tone={domainTone(result.domain)}>{result.domain}</Badge>
+                  {result.matchedKeywords?.length > 0 && (
+                    <div style={{ marginTop: 8, fontSize: 11, color: C.textMuted }}>
+                      Matched on: {result.matchedKeywords.map(k => (
+                        <span key={k} style={{ fontFamily: "monospace", background: C.pill, padding: "1px 5px", borderRadius: 4, marginRight: 4 }}>{k}</span>
+                      ))}
+                    </div>
+                  )}
                 </Card>
                 <Card style={{ padding: 16 }}>
                   <FieldLabel>Suggested Work Nature</FieldLabel>
