@@ -138,8 +138,13 @@ function classify(title, description) {
   }
 
   // Fuzzy repair fallback
-  for (const [key, domain] of Object.entries(FUZZY_ROLE_REPAIR))
-    if (tl.includes(key)) return { domain, confidence: domain === "Other/Noise" ? 30 : 74, source: "fuzzy", matchedKeywords: [key] };
+  for (const [key, domain] of Object.entries(FUZZY_ROLE_REPAIR)) {
+    if (tl.includes(key)) {
+      if (domain === "Other/Noise")
+        return { domain, confidence: 30, source: "fuzzy", matchedKeywords: [key], noiseReason: "fuzzy_noise", noiseKeyword: key };
+      return { domain, confidence: 74, source: "fuzzy", matchedKeywords: [key] };
+    }
+  }
 
   // Description fallback — also weighted
   if (description.length > 0) {
@@ -155,7 +160,7 @@ function classify(title, description) {
     }
   }
 
-  return { domain: "Other/Noise", confidence: 30, source: "unmatched", matchedKeywords: [] };
+  return { domain: "Other/Noise", confidence: 30, source: "unmatched", matchedKeywords: [], noiseReason: "no_match" };
 }
 
 const CROSS_FUNCTIONAL_PAIRS = [
@@ -189,7 +194,7 @@ function getSkills(domain, description) {
 
 function analyze(rawTitle, description, country) {
   const clean = cleanTitle(rawTitle);
-  const { domain, confidence, source, matchedKeywords = [] } = classify(rawTitle, description);
+  const { domain, confidence, source, matchedKeywords = [], noiseReason, noiseKeyword } = classify(rawTitle, description);
   const seniority = domain === "Other/Noise" ? "Review Required" : getSeniority(rawTitle);
   const nature    = domain === "Other/Noise" ? "Review Required" : getWorkNature(rawTitle);
   const skills    = getSkills(domain, description);
@@ -204,7 +209,7 @@ function analyze(rawTitle, description, country) {
     if (combined.includes(a) && combined.includes(b)) flags.push(flag);
   const hasCrossFlag = CROSS_FUNCTIONAL_PAIRS.some(({ a, b }) => combined.includes(a) && combined.includes(b));
   const needsReview = domain === "Other/Noise" || confidence < 70 || hasCrossFlag;
-  return { cleanTitle: clean, domain, nature, seniority, skills, confidence, flags, hasCrossFlag, needsReview, matchedKeywords };
+  return { cleanTitle: clean, domain, nature, seniority, skills, confidence, flags, hasCrossFlag, needsReview, matchedKeywords, noiseReason, noiseKeyword };
 }
 
 // ── File parsing ─────────────────────────────────────────────────────────────
@@ -592,8 +597,19 @@ function SingleAnalyzer() {
             <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
               {result.domain === "Other/Noise" && (
                 <div style={{ background: C.redLight, border: `1.5px solid ${C.redBorder}`, borderRadius: 10, padding: "14px 18px" }}>
-                  <div style={{ fontWeight: 700, color: "#991b1b", fontSize: 13, marginBottom: 3 }}>⚠ Outside logistics scope</div>
-                  <div style={{ fontSize: 12, color: "#b91c1c", lineHeight: 1.6 }}>This title does not match a known logistics domain. Manual review is recommended before use.</div>
+                  <div style={{ fontWeight: 700, color: "#991b1b", fontSize: 13, marginBottom: 6 }}>⚠ Outside logistics scope</div>
+                  {result.noiseReason === "fuzzy_noise" && (
+                    <div style={{ fontSize: 12, color: "#b91c1c", lineHeight: 1.7 }}>
+                      Detected term <span style={{ fontFamily: "monospace", background: "#fecaca", padding: "1px 5px", borderRadius: 4 }}>{result.noiseKeyword}</span> — this matches a known non-logistics role category.<br />
+                      This title is likely outside the logistics/supply chain domain. Exclude or manually reclassify before use.
+                    </div>
+                  )}
+                  {result.noiseReason === "no_match" && (
+                    <div style={{ fontSize: 12, color: "#b91c1c", lineHeight: 1.7 }}>
+                      No logistics keywords were detected in this title or description.<br />
+                      This title may be unrelated to logistics. Verify the source data or add a job description to improve classification.
+                    </div>
+                  )}
                 </div>
               )}
               <Card highlight={result.domain !== "Other/Noise"}>
