@@ -12,7 +12,7 @@ const PRIORITY_DOMAIN_RULES = {
   "IT Support": ["developer","architect","systems","technology","application support","technical support","it support","software support","application specialist","hris specialist","technical consultant"],
   "Operations": ["operations manager","operations supervisor","operations coordinator","logistics manager","logistics coordinator","logistics","operator","controller","process","production","quality","qa","sap","decon","consol","erp","e-commerce","ecommerce","omnichannel"],
   "Business Administration": ["office administrator","admin assistant","executive assistant","personal assistant","receptionist","office support","clerical","office manager","hr business partner","hr advisor","hr coordinator","hr transformation","hr specialist"],
-  "Sales": ["customer service","customer support","sales","business development","key account","merchandiser","representative","account manager","commercial","commercial manager","commercial development"],
+  "Sales": ["customer service","customer support","sales operations","sales coordinator","sales manager","sales","business development","key account","merchandiser","representative","account manager","commercial","commercial manager","commercial development","business to business","b2b","b2c","activation","channel"],
 };
 
 const FUZZY_ROLE_REPAIR = {
@@ -211,6 +211,7 @@ function cleanTitle(raw) {
        .replace(/\bDir\.?(\s|$)/gi, "Director$1").replace(/\bExec\.?(\s|$)/gi, "Executive$1")
        .replace(/\bBD\b/g, "Business Development").replace(/\bOps\b/gi, "Operations")
        .replace(/\bFP&A\b/gi, "Financial Planning & Analysis")
+       .replace(/\bB2B\b/gi, "Business to Business").replace(/\bB2C\b/gi, "Business to Consumer")
        .replace(/\bGM\b/g, "General Manager").replace(/\bVP\b/g, "Vice President")
        .replace(/\bSVP\b/g, "Senior Vice President").replace(/\bEVP\b/g, "Executive Vice President")
        .replace(/\bCOO\b/g, "Chief Operations Officer").replace(/\bCFO\b/g, "Chief Financial Officer")
