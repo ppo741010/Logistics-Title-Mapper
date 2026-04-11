@@ -90,6 +90,31 @@ const SKILL_SYNONYMS = {
   "inventory management":"Inventory Management","rf scanning":"RF Scanning",
   "sap":"SAP","s&op":"S&OP","kpi":"KPI","kpi management":"KPI Management",
   "mrp":"MRP","sop":"SOP","edi":"EDI","vmi":"VMI","ohs":"OHS","ehs":"EHS","sla":"SLA",
+  // Analytics tools
+  "power bi":"Power BI","powerbi":"Power BI","power-bi":"Power BI",
+  "tableau":"Tableau",
+  "python":"Python","python scripting":"Python",
+  // Logistics operations
+  "cold chain":"Cold Chain","cold storage":"Cold Chain","temperature controlled":"Cold Chain",
+  "last mile":"Last Mile Delivery","last mile delivery":"Last Mile Delivery","last-mile":"Last Mile Delivery",
+  "cross docking":"Cross-Docking","cross-docking":"Cross-Docking","cross dock":"Cross-Docking",
+  "pick and pack":"Pick & Pack","pick & pack":"Pick & Pack","pick pack":"Pick & Pack",
+  "3pl management":"3PL Management","third party logistics":"3PL Management","3pl":"3PL Management",
+  // Compliance & certifications
+  "dangerous goods":"Dangerous Goods","dg":"Dangerous Goods","hazmat":"Dangerous Goods","hazchem":"Dangerous Goods",
+  "haccp":"HACCP","food safety":"HACCP",
+  "iso 9001":"ISO 9001","iso9001":"ISO 9001",
+  "customs compliance":"Customs Compliance","customs regulations":"Customs Compliance",
+  // Procurement
+  "tender management":"Tender Management","rfq":"Tender Management","request for quotation":"Tender Management",
+  "vendor management":"Vendor Management","supplier management":"Vendor Management","supplier relations":"Vendor Management",
+  "contract negotiation":"Contract Negotiation","contract management":"Contract Negotiation",
+  // Soft skills
+  "stakeholder management":"Stakeholder Management","stakeholder engagement":"Stakeholder Management",
+  "team leadership":"Team Leadership","people management":"Team Leadership","leading teams":"Team Leadership",
+  "communication":"Communication Skills","written communication":"Communication Skills","verbal communication":"Communication Skills",
+  "continuous improvement":"Continuous Improvement","ci":"Continuous Improvement","lean":"Lean Methodology",
+  "lean six sigma":"Lean Six Sigma","six sigma":"Lean Six Sigma",
 };
 
 const SKILL_DESCRIPTIONS = {
@@ -117,6 +142,32 @@ const SKILL_DESCRIPTIONS = {
   "OHS":                      "Occupational Health & Safety — compliance and practices related to workplace safety.",
   "EHS":                      "Environment, Health & Safety — broader framework covering environmental compliance alongside workplace safety.",
   "SLA":                      "Service Level Agreement — contractual commitments defining expected service standards (e.g. delivery timeframes).",
+  // Analytics tools
+  "Power BI":                 "Microsoft Power BI — business intelligence tool used for data visualisation and reporting dashboards.",
+  "Tableau":                  "Data visualisation platform used to create interactive reports and dashboards from large datasets.",
+  "Python":                   "Programming language commonly used for data analysis, automation, and scripting in logistics and supply chain contexts.",
+  // Logistics operations
+  "Cold Chain":               "Temperature-controlled supply chain management — ensuring goods (e.g. food, pharmaceuticals) are stored and transported within required temperature ranges.",
+  "Last Mile Delivery":       "The final stage of the delivery process from a distribution hub to the end customer — a key focus area for cost and customer experience.",
+  "Cross-Docking":            "Logistics process where incoming goods are transferred directly to outbound transport with minimal or no storage time.",
+  "Pick & Pack":              "Warehouse fulfilment process of selecting items from stock and packaging them for shipment.",
+  "3PL Management":           "Management of third-party logistics providers — overseeing outsourced warehousing, transport, and fulfilment operations.",
+  // Compliance & certifications
+  "Dangerous Goods":          "Handling, documentation, and compliance for hazardous materials (HAZCHEM/HAZMAT) in transport and storage.",
+  "HACCP":                    "Hazard Analysis and Critical Control Points — food safety management system identifying and controlling biological, chemical, and physical hazards.",
+  "ISO 9001":                 "International standard for quality management systems — demonstrates consistent processes and continuous improvement.",
+  "Customs Compliance":       "Knowledge of import/export regulations, tariff classifications, and customs documentation requirements.",
+  // Procurement
+  "Tender Management":        "Process of issuing RFQs, evaluating supplier bids, and awarding contracts for goods or services.",
+  "Vendor Management":        "Building and maintaining relationships with suppliers — covering performance monitoring, onboarding, and risk management.",
+  "Contract Negotiation":     "Negotiating and managing commercial agreements with suppliers, carriers, or service providers.",
+  // Soft skills
+  "Stakeholder Management":   "Engaging and influencing internal and external stakeholders to align on goals and drive outcomes.",
+  "Team Leadership":          "Leading, developing, and managing a team to achieve operational goals.",
+  "Communication Skills":     "Effective written and verbal communication across teams, clients, and stakeholders.",
+  "Continuous Improvement":   "Identifying and implementing incremental process improvements to increase efficiency and reduce waste.",
+  "Lean Methodology":         "Operational philosophy focused on eliminating waste and maximising value in processes.",
+  "Lean Six Sigma":           "Combined methodology using Lean (waste reduction) and Six Sigma (defect reduction) for process improvement.",
 };
 
 // ── Core logic ──────────────────────────────────────────────────────────────
