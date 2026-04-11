@@ -101,7 +101,7 @@ function cleanTitle(raw) {
   t = t.replace(SALARY_PATTERN, "");
   t = t.replace(CONTRACT_DURATION_PATTERN, "");
   for (const p of REMOVE_CONTRACT) t = t.replace(new RegExp(`\\b${p}\\b`, "gi"), "");
-  t = t.replace(/[-–]\s*(NZ|AU|NZL|AUS|Auckland|Wellington|Christchurch|Sydney|Melbourne|Brisbane|Perth|APAC|Remote).*/i, "");
+  t = t.replace(/[-–|,]\s*(NZ|AU|NZL|AUS|NZ\/AU|AU\/NZ|Auckland|Wellington|Christchurch|Hamilton|Dunedin|Sydney|Melbourne|Brisbane|Perth|Adelaide|Canberra|Singapore|SGP|London|Manchester|Birmingham|UK|United Kingdom|New York|Los Angeles|Chicago|Houston|US|USA|United States|APAC|ANZ|Remote|Hybrid|On-?site).*/i, "");
   t = t.replace(/\(.*?\)/g, "").replace(/\[.*?\]/g, "");
   t = t.replace(/\bSr\.(\s)/gi, "Senior$1").replace(/\bSr\.$/gi, "Senior")
        .replace(/\bJr\.(\s)/gi, "Junior$1").replace(/\bJr\.$/gi, "Junior")
