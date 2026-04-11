@@ -74,7 +74,7 @@ const TYPO_MAP = {"assisstant":"assistant","coodrinator":"coordinator","sepciali
 
 // ── Feedback ─────────────────────────────────────────────────────────────────
 // Replace with your Google Form URL when ready
-const FEEDBACK_URL = "https://docs.google.com/forms/d/1YOCYMceWIB0skhFHq3bYH2jJmrAH5JfTFgBHtbxvbno/viewform";
+const FEEDBACK_URL = "https://docs.google.com/forms/d/e/1FAIpQLScik439YpEZg69E1axAJWJbR2XTjJpk71f7wc4gy9sDNCPkYg/viewform";
 
 const SKILL_SYNONYMS = {
   "erp":"ERP Systems","sap/erp":"ERP Systems","erp software":"ERP Systems",
