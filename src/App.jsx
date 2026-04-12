@@ -1,6 +1,6 @@
 import { useState, useRef } from "react";
 import * as XLSX from "xlsx";
-import { analyzeViaAPI } from "./api.js";
+import { analyzeViaAPI, bulkAnalyzeViaAPI } from "./api.js";
 
 // ── Classification data ─────────────────────────────────────────────────────
 
@@ -853,22 +853,35 @@ function BulkUpload({ onResultsReady }) {
     }
   }
 
-  function processRows() {
+  async function processRows() {
     if (!colMap.rawTitle) return;
     setPhase("processing");
-    setTimeout(() => {
-      const processed = parsedRows
-        .map((row, i) => {
-          const rawTitle   = (row[colMap.rawTitle] || "").trim();
-          const desc       = colMap.description ? (row[colMap.description] || "") : "";
-          const country    = colMap.country     ? (row[colMap.country]     || "") : "";
-          return { id: i + 1, raw: rawTitle, country, ...analyze(rawTitle, desc, country) };
-        })
-        .filter(r => r.raw);
-      setResults(processed);
-      onResultsReady && onResultsReady(processed);
-      setPhase("done");
-    }, 900);
+
+    const rows = parsedRows
+      .map((row, i) => ({
+        id: i + 1,
+        title:       (row[colMap.rawTitle]    || "").trim(),
+        description: colMap.description ? (row[colMap.description] || "") : "",
+        country:     colMap.country     ? (row[colMap.country]     || "") : "",
+      }))
+      .filter(r => r.title);
+
+    // Try API first
+    const apiResults = await bulkAnalyzeViaAPI(
+      rows.map(r => ({ title: r.title, description: r.description, country: r.country }))
+    );
+
+    let processed;
+    if (apiResults) {
+      processed = rows.map((r, i) => ({ id: r.id, raw: r.title, country: r.country, ...apiResults[i] }));
+    } else {
+      // Fallback to local JS logic
+      processed = rows.map(r => ({ id: r.id, raw: r.title, country: r.country, ...analyze(r.title, r.description, r.country) }));
+    }
+
+    setResults(processed);
+    onResultsReady && onResultsReady(processed);
+    setPhase("done");
   }
 
   function reset() {
