@@ -1,5 +1,6 @@
 import { useState, useRef } from "react";
 import * as XLSX from "xlsx";
+import { analyzeViaAPI } from "./api.js";
 
 // ── Classification data ─────────────────────────────────────────────────────
 
@@ -642,10 +643,17 @@ function SingleAnalyzer() {
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  function run() {
+  async function run() {
     if (!title.trim()) return;
     setLoading(true); setResult(null);
-    setTimeout(() => { setResult(analyze(title, desc, country)); setLoading(false); }, 500);
+    const apiResult = await analyzeViaAPI(title, desc, country);
+    if (apiResult) {
+      setResult(apiResult);
+    } else {
+      // Fallback to local logic if API is unavailable
+      setResult(analyze(title, desc, country));
+    }
+    setLoading(false);
   }
 
   return (
