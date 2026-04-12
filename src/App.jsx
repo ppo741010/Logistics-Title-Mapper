@@ -1,6 +1,6 @@
 import { useState, useRef } from "react";
 import * as XLSX from "xlsx";
-import { analyzeViaAPI, bulkAnalyzeViaAPI } from "./api.js";
+import { analyzeViaAPI, bulkAnalyzeViaAPI, cleanPreviewViaAPI } from "./api.js";
 
 // ── Classification data ─────────────────────────────────────────────────────
 
@@ -808,15 +808,16 @@ function SingleAnalyzer() {
 // ── Page 2: Bulk Upload ─────────────────────────────────────────────────────
 
 function BulkUpload({ onResultsReady }) {
-  const [phase, setPhase]           = useState("idle"); // idle | error | mapping | ready | processing | done
-  const [error, setError]           = useState(null);
-  const [fileName, setFileName]     = useState("");
-  const [parsedRows, setParsedRows] = useState([]);
-  const [headers, setHeaders]       = useState([]);
-  const [colMap, setColMap]         = useState({ rawTitle: "", description: "", country: "" });
-  const [results, setResults]       = useState([]);
-  const [dragOver, setDragOver]     = useState(false);
-  const fileInputRef                = useRef(null);
+  const [phase, setPhase]               = useState("idle"); // idle | error | mapping | ready | previewing | processing | done
+  const [error, setError]               = useState(null);
+  const [fileName, setFileName]         = useState("");
+  const [parsedRows, setParsedRows]     = useState([]);
+  const [headers, setHeaders]           = useState([]);
+  const [colMap, setColMap]             = useState({ rawTitle: "", description: "", country: "" });
+  const [cleanPreviews, setCleanPreviews] = useState([]);
+  const [results, setResults]           = useState([]);
+  const [dragOver, setDragOver]         = useState(false);
+  const fileInputRef                    = useRef(null);
 
   // Summary stats
   const total          = results.length;
@@ -884,9 +885,22 @@ function BulkUpload({ onResultsReady }) {
     setPhase("done");
   }
 
+  async function previewCleaning() {
+    if (!colMap.rawTitle) return;
+    setPhase("previewing_loading");
+    const titles = parsedRows.map(r => (r[colMap.rawTitle] || "").trim()).filter(Boolean);
+    const apiResult = await cleanPreviewViaAPI(titles);
+    if (apiResult) {
+      setCleanPreviews(apiResult);
+    } else {
+      setCleanPreviews(titles.map(t => ({ raw: t, clean: cleanTitle(t) })));
+    }
+    setPhase("previewing");
+  }
+
   function reset() {
     setPhase("idle"); setError(null); setFileName(""); setParsedRows([]); setHeaders([]);
-    setColMap({ rawTitle: "", description: "", country: "" }); setResults([]);
+    setColMap({ rawTitle: "", description: "", country: "" }); setCleanPreviews([]); setResults([]);
   }
 
   const onDrop = e => { e.preventDefault(); setDragOver(false); handleFile(e.dataTransfer.files[0]); };
@@ -1022,8 +1036,16 @@ function BulkUpload({ onResultsReady }) {
                 Remove
               </button>
               {phase === "ready" && (
+                <button onClick={previewCleaning} style={{ padding: "8px 22px", borderRadius: 8, border: "none", background: C.accent, color: "#fff", fontWeight: 700, fontSize: 13, cursor: "pointer", fontFamily: "inherit" }}>
+                  Preview Cleaning →
+                </button>
+              )}
+              {phase === "previewing_loading" && (
+                <div style={{ padding: "8px 22px", borderRadius: 8, background: C.accentLight, color: C.accent, fontWeight: 600, fontSize: 13 }}>Loading preview…</div>
+              )}
+              {phase === "previewing" && (
                 <button onClick={processRows} style={{ padding: "8px 22px", borderRadius: 8, border: "none", background: C.accent, color: "#fff", fontWeight: 700, fontSize: 13, cursor: "pointer", fontFamily: "inherit" }}>
-                  Run Mapper →
+                  Run Classifier →
                 </button>
               )}
               {phase === "processing" && (
@@ -1057,8 +1079,14 @@ function BulkUpload({ onResultsReady }) {
         <Card style={{ padding: 0, overflow: "hidden" }}>
           <div style={{ padding: "14px 20px", borderBottom: `1px solid ${C.border}`, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
             <div style={{ fontWeight: 600, color: C.text, fontSize: 14 }}>
-              {phase === "done" ? "Structured Output Preview" : "Input Preview"}
+              {phase === "done" ? "Structured Output Preview" : phase === "previewing" ? "Cleaning Preview" : "Input Preview"}
             </div>
+            {phase === "previewing" && (() => {
+              const changed = cleanPreviews.filter(p => p.raw !== p.clean).length;
+              return changed > 0
+                ? <div style={{ fontSize: 12, color: C.accent, fontWeight: 600 }}>{changed} title{changed !== 1 ? "s" : ""} will be cleaned</div>
+                : <div style={{ fontSize: 12, color: C.green, fontWeight: 600 }}>All titles already clean</div>;
+            })()}
             {phase === "done" && (total - structured) > 0 && (
               <div style={{ fontSize: 12, color: C.amber, fontWeight: 600 }}>⚑ {total - structured} row{total - structured !== 1 ? "s" : ""} flagged</div>
             )}
@@ -1067,20 +1095,34 @@ function BulkUpload({ onResultsReady }) {
             <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
               <thead>
                 <tr style={{ background: C.bg, borderBottom: `2px solid ${C.border}` }}>
-                  {["#", "Raw Title", ...(phase === "done" ? ["Clean Title","Functional Area","Seniority","Confidence","Status"] : [])].map(h => (
+                  {["#", "Raw Title",
+                    ...(phase === "previewing" ? ["Clean Title"] : []),
+                    ...(phase === "done" ? ["Clean Title","Functional Area","Seniority","Confidence","Status"] : [])
+                  ].map(h => (
                     <th key={h} style={{ textAlign: "left", padding: "10px 16px", color: C.textMuted, fontWeight: 600, fontSize: 11, textTransform: "uppercase", letterSpacing: "0.06em", whiteSpace: "nowrap" }}>{h}</th>
                   ))}
                 </tr>
               </thead>
               <tbody>
-                {(phase === "done" ? results : parsedRows.slice(0, 12).map((r, i) => ({ id: i + 1, raw: r[colMap.rawTitle] || "(empty)" }))).map((row, i) => {
+                {(phase === "done"
+                  ? results
+                  : phase === "previewing"
+                  ? cleanPreviews.map((p, i) => ({ id: i + 1, raw: p.raw, clean: p.clean }))
+                  : parsedRows.slice(0, 12).map((r, i) => ({ id: i + 1, raw: r[colMap.rawTitle] || "(empty)" }))
+                ).map((row, i) => {
                   const isOOS = phase === "done" && row.domain === "Other/Noise";
                   const needsRev = phase === "done" && row.needsReview;
-                  const rowBg = isOOS ? C.redLight : needsRev ? C.amberLight : i % 2 === 0 ? C.card : C.bg;
+                  const wasChanged = phase === "previewing" && row.raw !== row.clean;
+                  const rowBg = isOOS ? C.redLight : needsRev ? C.amberLight : wasChanged ? C.accentLight : i % 2 === 0 ? C.card : C.bg;
                   return (
                     <tr key={row.id || i} style={{ borderBottom: `1px solid ${C.border}`, background: rowBg }}>
                       <td style={{ padding: "10px 16px", color: C.textMuted, fontSize: 12 }}>{row.id || i + 1}</td>
-                      <td style={{ padding: "10px 16px", color: C.text, maxWidth: 200, fontFamily: "monospace", fontSize: 12 }}>{row.raw}</td>
+                      <td style={{ padding: "10px 16px", color: C.text, maxWidth: 220, fontFamily: "monospace", fontSize: 12 }}>{row.raw}</td>
+                      {phase === "previewing" && (
+                        <td style={{ padding: "10px 16px", fontFamily: "monospace", fontSize: 12, color: wasChanged ? C.accent : C.textMuted, fontWeight: wasChanged ? 600 : 400 }}>
+                          {wasChanged ? row.clean : <span style={{ opacity: 0.5 }}>unchanged</span>}
+                        </td>
+                      )}
                       {phase === "done" && <>
                         <td style={{ padding: "10px 16px", fontWeight: 600, color: C.text }}>{row.cleanTitle}</td>
                         <td style={{ padding: "10px 16px" }}><Badge tone={domainTone(row.domain)} size="sm">{row.domain}</Badge></td>
