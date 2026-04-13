@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import * as XLSX from "xlsx";
 import { analyzeViaAPI, bulkAnalyzeViaAPI, cleanPreviewViaAPI } from "./api.js";
 
@@ -1301,12 +1301,26 @@ const TC_SAMPLES = [
 ];
 
 function TitleCleaner() {
-  const [manualInput, setManualInput] = useState("");
+  const [manualInput, setManualInput]   = useState("");
   const [manualResult, setManualResult] = useState(null);
+  const [manualLoading, setManualLoading] = useState(false);
+  const [sampleResults, setSampleResults] = useState(() =>
+    TC_SAMPLES.map(raw => ({ raw, ...analyze(raw, "", "") }))
+  );
 
-  function runManual() {
+  useEffect(() => {
+    bulkAnalyzeViaAPI(TC_SAMPLES.map(title => ({ title, description: "", country: "" })))
+      .then(res => {
+        if (res) setSampleResults(TC_SAMPLES.map((raw, i) => ({ raw, ...res[i] })));
+      });
+  }, []);
+
+  async function runManual() {
     if (!manualInput.trim()) return;
-    setManualResult(analyze(manualInput.trim(), "", ""));
+    setManualLoading(true);
+    const apiResult = await analyzeViaAPI(manualInput.trim());
+    setManualResult(apiResult ?? analyze(manualInput.trim(), "", ""));
+    setManualLoading(false);
   }
 
   return (
@@ -1321,9 +1335,9 @@ function TitleCleaner() {
             onKeyDown={e => e.key === "Enter" && runManual()}
             placeholder="Paste any raw title and press Clean →"
             style={{ ...inputStyle, flex: 1 }} />
-          <button onClick={runManual} disabled={!manualInput.trim()}
-            style={{ padding: "10px 22px", borderRadius: 8, border: "none", background: manualInput.trim() ? C.accent : "#d1d5db", color: "#fff", fontWeight: 700, fontSize: 13.5, cursor: manualInput.trim() ? "pointer" : "default", fontFamily: "inherit", whiteSpace: "nowrap" }}>
-            Clean →
+          <button onClick={runManual} disabled={!manualInput.trim() || manualLoading}
+            style={{ padding: "10px 22px", borderRadius: 8, border: "none", background: manualInput.trim() ? C.accent : "#d1d5db", color: "#fff", fontWeight: 700, fontSize: 13.5, cursor: manualInput.trim() && !manualLoading ? "pointer" : "default", fontFamily: "inherit", whiteSpace: "nowrap" }}>
+            {manualLoading ? "…" : "Clean →"}
           </button>
         </div>
         {manualResult && (
@@ -1371,12 +1385,11 @@ function TitleCleaner() {
               </tr>
             </thead>
             <tbody>
-              {TC_SAMPLES.map((raw, i) => {
-                const res = analyze(raw, "", "");
-                const changed = res.cleanTitle.toLowerCase().replace(/\s/g,"") !== raw.toLowerCase().replace(/\s/g,"");
+              {sampleResults.map((res, i) => {
+                const changed = res.cleanTitle.toLowerCase().replace(/\s/g,"") !== res.raw.toLowerCase().replace(/\s/g,"");
                 return (
                   <tr key={i} style={{ borderBottom: `1px solid ${C.border}`, background: i % 2 === 0 ? C.card : C.bg }}>
-                    <td style={{ padding: "13px 18px", fontFamily: "monospace", fontSize: 12, color: "#6b1a1a", background: "#fff8f8", maxWidth: 220 }}>{raw}</td>
+                    <td style={{ padding: "13px 18px", fontFamily: "monospace", fontSize: 12, color: "#6b1a1a", background: "#fff8f8", maxWidth: 220 }}>{res.raw}</td>
                     <td style={{ padding: "13px 18px", fontWeight: 600, color: res.domain === "Other/Noise" ? C.red : "#14532d" }}>
                       {res.cleanTitle}
                       {changed && <span style={{ display: "block", fontSize: 10, color: C.textMuted, fontWeight: 400, marginTop: 2 }}>cleaned</span>}
