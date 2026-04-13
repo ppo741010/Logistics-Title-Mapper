@@ -647,12 +647,7 @@ function SingleAnalyzer() {
     if (!title.trim()) return;
     setLoading(true); setResult(null);
     const apiResult = await analyzeViaAPI(title, desc, country);
-    if (apiResult) {
-      setResult(apiResult);
-    } else {
-      // Fallback to local logic if API is unavailable
-      setResult(analyze(title, desc, country));
-    }
+    setResult(apiResult ?? { ...analyze(title, desc, country), source: "local" });
     setLoading(false);
   }
 
@@ -722,6 +717,11 @@ function SingleAnalyzer() {
           )}
           {result && !loading && (
             <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+              {result.source === "local" && (
+                <div style={{ background: C.amberLight, border: `1px solid ${C.amberBorder}`, borderRadius: 8, padding: "10px 14px", fontSize: 12, color: "#78350f" }}>
+                  ⚠ API unavailable — result from local classifier. Accuracy may differ from the Python engine.
+                </div>
+              )}
               {result.domain === "Other/Noise" && (
                 <div style={{ background: C.redLight, border: `1.5px solid ${C.redBorder}`, borderRadius: 10, padding: "14px 18px" }}>
                   <div style={{ fontWeight: 700, color: "#991b1b", fontSize: 13, marginBottom: 6 }}>⚠ Outside logistics scope</div>
@@ -878,8 +878,7 @@ function BulkUpload({ onResultsReady }) {
     if (apiResults) {
       processed = rows.map((r, i) => ({ id: r.id, raw: r.raw, country: r.country, ...apiResults[i] }));
     } else {
-      // Fallback to local JS logic
-      processed = rows.map(r => ({ id: r.id, raw: r.raw, country: r.country, ...analyze(r.title, r.description, r.country) }));
+      processed = rows.map(r => ({ id: r.id, raw: r.raw, country: r.country, source: "local", ...analyze(r.title, r.description, r.country) }));
     }
 
     setResults(processed);
@@ -1066,6 +1065,13 @@ function BulkUpload({ onResultsReady }) {
             </div>
           </div>
         </Card>
+
+        {/* Fallback warning */}
+        {phase === "done" && results[0]?.source === "local" && (
+          <div style={{ background: C.amberLight, border: `1px solid ${C.amberBorder}`, borderRadius: 8, padding: "12px 16px", fontSize: 13, color: "#78350f" }}>
+            ⚠ API unavailable — all results from local classifier. Accuracy may differ from the Python engine.
+          </div>
+        )}
 
         {/* Summary cards — shown when done */}
         {phase === "done" && (
@@ -1319,7 +1325,7 @@ function TitleCleaner() {
     if (!manualInput.trim()) return;
     setManualLoading(true);
     const apiResult = await analyzeViaAPI(manualInput.trim());
-    setManualResult(apiResult ?? analyze(manualInput.trim(), "", ""));
+    setManualResult(apiResult ?? { ...analyze(manualInput.trim(), "", ""), source: "local" });
     setManualLoading(false);
   }
 
@@ -1340,6 +1346,11 @@ function TitleCleaner() {
             {manualLoading ? "…" : "Clean →"}
           </button>
         </div>
+        {manualResult?.source === "local" && (
+          <div style={{ marginTop: 12, padding: "8px 12px", borderRadius: 7, background: C.amberLight, border: `1px solid ${C.amberBorder}`, fontSize: 12, color: "#78350f" }}>
+            ⚠ API unavailable — result from local classifier.
+          </div>
+        )}
         {manualResult && (
           <div style={{ marginTop: 16, padding: "16px 18px", borderRadius: 9, background: C.accentLight, border: `1px solid ${C.accentBorder}`, display: "flex", flexWrap: "wrap", gap: 24, alignItems: "center" }}>
             <div>
