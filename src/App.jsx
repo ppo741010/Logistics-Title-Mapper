@@ -131,6 +131,42 @@ const SKILL_SYNONYMS = {
   "communication":"Communication Skills","written communication":"Communication Skills","verbal communication":"Communication Skills",
   "continuous improvement":"Continuous Improvement","ci":"Continuous Improvement","lean":"Lean Methodology",
   "lean six sigma":"Lean Six Sigma","six sigma":"Lean Six Sigma",
+  // Microsoft Office Suite
+  "microsoft office":"Microsoft Office Suite","ms office":"Microsoft Office Suite","office 365":"Microsoft Office Suite","microsoft 365":"Microsoft Office Suite","ms office suite":"Microsoft Office Suite",
+  "microsoft word":"Microsoft Word","ms word":"Microsoft Word",
+  "microsoft powerpoint":"Microsoft PowerPoint","ms powerpoint":"Microsoft PowerPoint","powerpoint":"Microsoft PowerPoint",
+  "microsoft outlook":"Microsoft Outlook","ms outlook":"Microsoft Outlook","outlook":"Microsoft Outlook",
+  "microsoft teams":"Microsoft Teams","ms teams":"Microsoft Teams",
+  // Google Workspace
+  "google workspace":"Google Workspace","google suite":"Google Workspace","g suite":"Google Workspace",
+  "google sheets":"Google Sheets","g sheets":"Google Sheets",
+  "google docs":"Google Docs",
+  // Accounting software
+  "xero":"Xero","xero accounting":"Xero",
+  "myob":"MYOB","myob accounting":"MYOB",
+  "quickbooks":"QuickBooks","quick books":"QuickBooks",
+  // Project management tools
+  "project management":"Project Management","pm skills":"Project Management",
+  "agile":"Agile","agile methodology":"Agile","scrum":"Agile",
+  "jira":"Jira",
+  "asana":"Asana",
+  "trello":"Trello",
+  "ms project":"Microsoft Project","microsoft project":"Microsoft Project",
+  // HR systems
+  "hris":"HRIS","hr information system":"HRIS","hr system":"HRIS",
+  "workday":"Workday",
+  "employment hero":"Employment Hero",
+  // General office skills
+  "data entry":"Data Entry","data input":"Data Entry",
+  "report writing":"Report Writing","reporting":"Report Writing",
+  "scheduling":"Scheduling","calendar management":"Scheduling","diary management":"Scheduling",
+  "presentation skills":"Presentation Skills","presentations":"Presentation Skills",
+  "problem solving":"Problem Solving","problem-solving":"Problem Solving",
+  "time management":"Time Management",
+  "attention to detail":"Attention to Detail",
+  "minute taking":"Minute Taking","meeting minutes":"Minute Taking","minutes":"Minute Taking",
+  "adaptability":"Adaptability","adaptable":"Adaptability",
+  "collaboration":"Collaboration","teamwork":"Collaboration",
 };
 
 const SKILL_DESCRIPTIONS = {
@@ -184,6 +220,42 @@ const SKILL_DESCRIPTIONS = {
   "Continuous Improvement":   "Identifying and implementing incremental process improvements to increase efficiency and reduce waste.",
   "Lean Methodology":         "Operational philosophy focused on eliminating waste and maximising value in processes.",
   "Lean Six Sigma":           "Combined methodology using Lean (waste reduction) and Six Sigma (defect reduction) for process improvement.",
+  // Microsoft Office Suite
+  "Microsoft Office Suite":   "Core Microsoft productivity tools — Word, Excel, PowerPoint, Outlook, and Teams — widely used in office and admin roles.",
+  "Microsoft Word":           "Word processing tool used for drafting documents, reports, and correspondence.",
+  "Microsoft PowerPoint":     "Presentation software used to create slides for meetings, reports, and business proposals.",
+  "Microsoft Outlook":        "Email and calendar management tool used for scheduling, communication, and task tracking.",
+  "Microsoft Teams":          "Collaboration platform for messaging, video calls, and file sharing within organisations.",
+  // Google Workspace
+  "Google Workspace":         "Google's cloud-based productivity suite — including Gmail, Docs, Sheets, Drive, and Meet.",
+  "Google Sheets":            "Cloud-based spreadsheet tool, equivalent to Excel, used for data tracking and reporting.",
+  "Google Docs":              "Cloud-based word processing tool for collaborative document creation and editing.",
+  // Accounting software
+  "Xero":                     "Cloud-based accounting software widely used by SMEs in Australia and New Zealand for invoicing, payroll, and reporting.",
+  "MYOB":                     "Australian accounting software used for bookkeeping, payroll, and business financials.",
+  "QuickBooks":               "Accounting software used for managing invoices, expenses, payroll, and financial reporting.",
+  // Project management tools
+  "Project Management":       "Planning, executing, and overseeing projects to deliver on time, on budget, and within scope.",
+  "Agile":                    "Iterative project management methodology focused on flexibility, collaboration, and incremental delivery.",
+  "Jira":                     "Project tracking tool widely used for managing tasks, sprints, and workflows in Agile teams.",
+  "Asana":                    "Work management platform for tracking tasks, projects, and team workloads.",
+  "Trello":                   "Visual task management tool using boards and cards to organise and track project progress.",
+  "Microsoft Project":        "Project scheduling and planning software used for managing timelines, resources, and dependencies.",
+  // HR systems
+  "HRIS":                     "Human Resources Information System — software for managing employee records, payroll, and HR processes.",
+  "Workday":                  "Cloud-based HR and finance platform used for talent management, payroll, and workforce planning.",
+  "Employment Hero":          "HR and payroll platform popular in Australia and New Zealand for onboarding, leave management, and compliance.",
+  // General office skills
+  "Data Entry":               "Accurate input and management of data into systems, spreadsheets, or databases.",
+  "Report Writing":           "Preparing clear, structured reports and summaries for internal or external stakeholders.",
+  "Scheduling":               "Coordinating and managing calendars, appointments, and meeting logistics.",
+  "Presentation Skills":      "Ability to create and deliver clear, engaging presentations to internal or external audiences.",
+  "Problem Solving":          "Identifying issues, analysing root causes, and developing effective solutions.",
+  "Time Management":          "Prioritising tasks and managing workload efficiently to meet deadlines.",
+  "Attention to Detail":      "Maintaining accuracy and thoroughness in tasks, data, and documentation.",
+  "Minute Taking":            "Recording accurate meeting notes and action items for distribution to attendees.",
+  "Adaptability":             "Ability to adjust to changing priorities, processes, and environments effectively.",
+  "Collaboration":            "Working effectively with cross-functional teams to achieve shared goals.",
 };
 
 // ── Core logic ──────────────────────────────────────────────────────────────
