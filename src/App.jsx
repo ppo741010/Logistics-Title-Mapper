@@ -861,7 +861,9 @@ function BulkUpload({ onResultsReady }) {
     const rows = parsedRows
       .map((row, i) => ({
         id: i + 1,
-        title:       (row[colMap.rawTitle]    || "").trim(),
+        raw:         (row[colMap.rawTitle] || "").trim(),
+        // Use edited clean title from preview if available, otherwise raw
+        title:       cleanPreviews[i]?.clean || (row[colMap.rawTitle] || "").trim(),
         description: colMap.description ? (row[colMap.description] || "") : "",
         country:     colMap.country     ? (row[colMap.country]     || "") : "",
       }))
@@ -874,10 +876,10 @@ function BulkUpload({ onResultsReady }) {
 
     let processed;
     if (apiResults) {
-      processed = rows.map((r, i) => ({ id: r.id, raw: r.title, country: r.country, ...apiResults[i] }));
+      processed = rows.map((r, i) => ({ id: r.id, raw: r.raw, country: r.country, ...apiResults[i] }));
     } else {
       // Fallback to local JS logic
-      processed = rows.map(r => ({ id: r.id, raw: r.title, country: r.country, ...analyze(r.title, r.description, r.country) }));
+      processed = rows.map(r => ({ id: r.id, raw: r.raw, country: r.country, ...analyze(r.title, r.description, r.country) }));
     }
 
     setResults(processed);
@@ -890,12 +892,19 @@ function BulkUpload({ onResultsReady }) {
     setPhase("previewing_loading");
     const titles = parsedRows.map(r => (r[colMap.rawTitle] || "").trim()).filter(Boolean);
     const apiResult = await cleanPreviewViaAPI(titles);
-    if (apiResult) {
-      setCleanPreviews(apiResult);
-    } else {
-      setCleanPreviews(titles.map(t => ({ raw: t, clean: cleanTitle(t) })));
-    }
+    const pairs = apiResult
+      ? apiResult.map(p => ({ raw: p.raw, clean: p.clean, original: p.clean }))
+      : titles.map(t => { const c = cleanTitle(t); return { raw: t, clean: c, original: c }; });
+    setCleanPreviews(pairs);
     setPhase("previewing");
+  }
+
+  function updateCleanPreview(index, value) {
+    setCleanPreviews(prev => prev.map((p, i) => i === index ? { ...p, clean: value } : p));
+  }
+
+  function resetCleanPreview(index) {
+    setCleanPreviews(prev => prev.map((p, i) => i === index ? { ...p, clean: p.original } : p));
   }
 
   function reset() {
@@ -1096,7 +1105,7 @@ function BulkUpload({ onResultsReady }) {
               <thead>
                 <tr style={{ background: C.bg, borderBottom: `2px solid ${C.border}` }}>
                   {["#", "Raw Title",
-                    ...(phase === "previewing" ? ["Clean Title"] : []),
+                    ...(phase === "previewing" ? ["Clean Title (editable)"] : []),
                     ...(phase === "done" ? ["Clean Title","Functional Area","Seniority","Confidence","Status"] : [])
                   ].map(h => (
                     <th key={h} style={{ textAlign: "left", padding: "10px 16px", color: C.textMuted, fontWeight: 600, fontSize: 11, textTransform: "uppercase", letterSpacing: "0.06em", whiteSpace: "nowrap" }}>{h}</th>
@@ -1107,20 +1116,33 @@ function BulkUpload({ onResultsReady }) {
                 {(phase === "done"
                   ? results
                   : phase === "previewing"
-                  ? cleanPreviews.map((p, i) => ({ id: i + 1, raw: p.raw, clean: p.clean }))
+                  ? cleanPreviews.map((p, i) => ({ id: i + 1, raw: p.raw, clean: p.clean, original: p.original }))
                   : parsedRows.slice(0, 12).map((r, i) => ({ id: i + 1, raw: r[colMap.rawTitle] || "(empty)" }))
                 ).map((row, i) => {
                   const isOOS = phase === "done" && row.domain === "Other/Noise";
                   const needsRev = phase === "done" && row.needsReview;
-                  const wasChanged = phase === "previewing" && row.raw !== row.clean;
-                  const rowBg = isOOS ? C.redLight : needsRev ? C.amberLight : wasChanged ? C.accentLight : i % 2 === 0 ? C.card : C.bg;
+                  const autoCleaned = phase === "previewing" && row.raw !== row.original;
+                  const manualEdited = phase === "previewing" && row.clean !== row.original;
+                  const rowBg = isOOS ? C.redLight : needsRev ? C.amberLight : manualEdited ? "#fffbeb" : autoCleaned ? C.accentLight : i % 2 === 0 ? C.card : C.bg;
                   return (
                     <tr key={row.id || i} style={{ borderBottom: `1px solid ${C.border}`, background: rowBg }}>
                       <td style={{ padding: "10px 16px", color: C.textMuted, fontSize: 12 }}>{row.id || i + 1}</td>
-                      <td style={{ padding: "10px 16px", color: C.text, maxWidth: 220, fontFamily: "monospace", fontSize: 12 }}>{row.raw}</td>
+                      <td style={{ padding: "10px 16px", color: C.textMuted, maxWidth: 220, fontFamily: "monospace", fontSize: 12 }}>{row.raw}</td>
                       {phase === "previewing" && (
-                        <td style={{ padding: "10px 16px", fontFamily: "monospace", fontSize: 12, color: wasChanged ? C.accent : C.textMuted, fontWeight: wasChanged ? 600 : 400 }}>
-                          {wasChanged ? row.clean : <span style={{ opacity: 0.5 }}>unchanged</span>}
+                        <td style={{ padding: "6px 10px" }}>
+                          <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                            <input
+                              value={row.clean}
+                              onChange={e => updateCleanPreview(i, e.target.value)}
+                              style={{ flex: 1, fontFamily: "monospace", fontSize: 12, padding: "5px 8px", borderRadius: 6, border: `1.5px solid ${manualEdited ? C.amberBorder : autoCleaned ? C.accentBorder : C.border}`, background: "transparent", color: C.text, outline: "none" }}
+                            />
+                            {(autoCleaned || manualEdited) && (
+                              <button onClick={() => resetCleanPreview(i)} title="Reset to auto-cleaned"
+                                style={{ padding: "4px 7px", borderRadius: 5, border: `1px solid ${C.border}`, background: C.bg, cursor: "pointer", fontSize: 12, color: C.textMuted, lineHeight: 1 }}>
+                                ↺
+                              </button>
+                            )}
+                          </div>
                         </td>
                       )}
                       {phase === "done" && <>
