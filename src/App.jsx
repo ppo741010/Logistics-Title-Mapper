@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import * as XLSX from "xlsx";
 import { analyzeViaAPI, bulkAnalyzeViaAPI, cleanPreviewViaAPI } from "./api.js";
 
@@ -131,6 +131,42 @@ const SKILL_SYNONYMS = {
   "communication":"Communication Skills","written communication":"Communication Skills","verbal communication":"Communication Skills",
   "continuous improvement":"Continuous Improvement","ci":"Continuous Improvement","lean":"Lean Methodology",
   "lean six sigma":"Lean Six Sigma","six sigma":"Lean Six Sigma",
+  // Microsoft Office Suite
+  "microsoft office":"Microsoft Office Suite","ms office":"Microsoft Office Suite","office 365":"Microsoft Office Suite","microsoft 365":"Microsoft Office Suite","ms office suite":"Microsoft Office Suite",
+  "microsoft word":"Microsoft Word","ms word":"Microsoft Word",
+  "microsoft powerpoint":"Microsoft PowerPoint","ms powerpoint":"Microsoft PowerPoint","powerpoint":"Microsoft PowerPoint",
+  "microsoft outlook":"Microsoft Outlook","ms outlook":"Microsoft Outlook","outlook":"Microsoft Outlook",
+  "microsoft teams":"Microsoft Teams","ms teams":"Microsoft Teams",
+  // Google Workspace
+  "google workspace":"Google Workspace","google suite":"Google Workspace","g suite":"Google Workspace",
+  "google sheets":"Google Sheets","g sheets":"Google Sheets",
+  "google docs":"Google Docs",
+  // Accounting software
+  "xero":"Xero","xero accounting":"Xero",
+  "myob":"MYOB","myob accounting":"MYOB",
+  "quickbooks":"QuickBooks","quick books":"QuickBooks",
+  // Project management tools
+  "project management":"Project Management","pm skills":"Project Management",
+  "agile":"Agile","agile methodology":"Agile","scrum":"Agile",
+  "jira":"Jira",
+  "asana":"Asana",
+  "trello":"Trello",
+  "ms project":"Microsoft Project","microsoft project":"Microsoft Project",
+  // HR systems
+  "hris":"HRIS","hr information system":"HRIS","hr system":"HRIS",
+  "workday":"Workday",
+  "employment hero":"Employment Hero",
+  // General office skills
+  "data entry":"Data Entry","data input":"Data Entry",
+  "report writing":"Report Writing","reporting":"Report Writing",
+  "scheduling":"Scheduling","calendar management":"Scheduling","diary management":"Scheduling",
+  "presentation skills":"Presentation Skills","presentations":"Presentation Skills",
+  "problem solving":"Problem Solving","problem-solving":"Problem Solving",
+  "time management":"Time Management",
+  "attention to detail":"Attention to Detail",
+  "minute taking":"Minute Taking","meeting minutes":"Minute Taking","minutes":"Minute Taking",
+  "adaptability":"Adaptability","adaptable":"Adaptability",
+  "collaboration":"Collaboration","teamwork":"Collaboration",
 };
 
 const SKILL_DESCRIPTIONS = {
@@ -184,6 +220,42 @@ const SKILL_DESCRIPTIONS = {
   "Continuous Improvement":   "Identifying and implementing incremental process improvements to increase efficiency and reduce waste.",
   "Lean Methodology":         "Operational philosophy focused on eliminating waste and maximising value in processes.",
   "Lean Six Sigma":           "Combined methodology using Lean (waste reduction) and Six Sigma (defect reduction) for process improvement.",
+  // Microsoft Office Suite
+  "Microsoft Office Suite":   "Core Microsoft productivity tools — Word, Excel, PowerPoint, Outlook, and Teams — widely used in office and admin roles.",
+  "Microsoft Word":           "Word processing tool used for drafting documents, reports, and correspondence.",
+  "Microsoft PowerPoint":     "Presentation software used to create slides for meetings, reports, and business proposals.",
+  "Microsoft Outlook":        "Email and calendar management tool used for scheduling, communication, and task tracking.",
+  "Microsoft Teams":          "Collaboration platform for messaging, video calls, and file sharing within organisations.",
+  // Google Workspace
+  "Google Workspace":         "Google's cloud-based productivity suite — including Gmail, Docs, Sheets, Drive, and Meet.",
+  "Google Sheets":            "Cloud-based spreadsheet tool, equivalent to Excel, used for data tracking and reporting.",
+  "Google Docs":              "Cloud-based word processing tool for collaborative document creation and editing.",
+  // Accounting software
+  "Xero":                     "Cloud-based accounting software widely used by SMEs in Australia and New Zealand for invoicing, payroll, and reporting.",
+  "MYOB":                     "Australian accounting software used for bookkeeping, payroll, and business financials.",
+  "QuickBooks":               "Accounting software used for managing invoices, expenses, payroll, and financial reporting.",
+  // Project management tools
+  "Project Management":       "Planning, executing, and overseeing projects to deliver on time, on budget, and within scope.",
+  "Agile":                    "Iterative project management methodology focused on flexibility, collaboration, and incremental delivery.",
+  "Jira":                     "Project tracking tool widely used for managing tasks, sprints, and workflows in Agile teams.",
+  "Asana":                    "Work management platform for tracking tasks, projects, and team workloads.",
+  "Trello":                   "Visual task management tool using boards and cards to organise and track project progress.",
+  "Microsoft Project":        "Project scheduling and planning software used for managing timelines, resources, and dependencies.",
+  // HR systems
+  "HRIS":                     "Human Resources Information System — software for managing employee records, payroll, and HR processes.",
+  "Workday":                  "Cloud-based HR and finance platform used for talent management, payroll, and workforce planning.",
+  "Employment Hero":          "HR and payroll platform popular in Australia and New Zealand for onboarding, leave management, and compliance.",
+  // General office skills
+  "Data Entry":               "Accurate input and management of data into systems, spreadsheets, or databases.",
+  "Report Writing":           "Preparing clear, structured reports and summaries for internal or external stakeholders.",
+  "Scheduling":               "Coordinating and managing calendars, appointments, and meeting logistics.",
+  "Presentation Skills":      "Ability to create and deliver clear, engaging presentations to internal or external audiences.",
+  "Problem Solving":          "Identifying issues, analysing root causes, and developing effective solutions.",
+  "Time Management":          "Prioritising tasks and managing workload efficiently to meet deadlines.",
+  "Attention to Detail":      "Maintaining accuracy and thoroughness in tasks, data, and documentation.",
+  "Minute Taking":            "Recording accurate meeting notes and action items for distribution to attendees.",
+  "Adaptability":             "Ability to adjust to changing priorities, processes, and environments effectively.",
+  "Collaboration":            "Working effectively with cross-functional teams to achieve shared goals.",
 };
 
 // ── Core logic ──────────────────────────────────────────────────────────────
@@ -647,12 +719,7 @@ function SingleAnalyzer() {
     if (!title.trim()) return;
     setLoading(true); setResult(null);
     const apiResult = await analyzeViaAPI(title, desc, country);
-    if (apiResult) {
-      setResult(apiResult);
-    } else {
-      // Fallback to local logic if API is unavailable
-      setResult(analyze(title, desc, country));
-    }
+    setResult(apiResult ?? { ...analyze(title, desc, country), source: "local" });
     setLoading(false);
   }
 
@@ -722,6 +789,11 @@ function SingleAnalyzer() {
           )}
           {result && !loading && (
             <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+              {result.source === "local" && (
+                <div style={{ background: C.amberLight, border: `1px solid ${C.amberBorder}`, borderRadius: 8, padding: "10px 14px", fontSize: 12, color: "#78350f" }}>
+                  ⚠ API unavailable — result from local classifier. Accuracy may differ from the Python engine.
+                </div>
+              )}
               {result.domain === "Other/Noise" && (
                 <div style={{ background: C.redLight, border: `1.5px solid ${C.redBorder}`, borderRadius: 10, padding: "14px 18px" }}>
                   <div style={{ fontWeight: 700, color: "#991b1b", fontSize: 13, marginBottom: 6 }}>⚠ Outside logistics scope</div>
@@ -861,7 +933,9 @@ function BulkUpload({ onResultsReady }) {
     const rows = parsedRows
       .map((row, i) => ({
         id: i + 1,
-        title:       (row[colMap.rawTitle]    || "").trim(),
+        raw:         (row[colMap.rawTitle] || "").trim(),
+        // Use edited clean title from preview if available, otherwise raw
+        title:       cleanPreviews[i]?.clean || (row[colMap.rawTitle] || "").trim(),
         description: colMap.description ? (row[colMap.description] || "") : "",
         country:     colMap.country     ? (row[colMap.country]     || "") : "",
       }))
@@ -874,10 +948,9 @@ function BulkUpload({ onResultsReady }) {
 
     let processed;
     if (apiResults) {
-      processed = rows.map((r, i) => ({ id: r.id, raw: r.title, country: r.country, ...apiResults[i] }));
+      processed = rows.map((r, i) => ({ id: r.id, raw: r.raw, country: r.country, ...apiResults[i] }));
     } else {
-      // Fallback to local JS logic
-      processed = rows.map(r => ({ id: r.id, raw: r.title, country: r.country, ...analyze(r.title, r.description, r.country) }));
+      processed = rows.map(r => ({ id: r.id, raw: r.raw, country: r.country, source: "local", ...analyze(r.title, r.description, r.country) }));
     }
 
     setResults(processed);
@@ -890,12 +963,19 @@ function BulkUpload({ onResultsReady }) {
     setPhase("previewing_loading");
     const titles = parsedRows.map(r => (r[colMap.rawTitle] || "").trim()).filter(Boolean);
     const apiResult = await cleanPreviewViaAPI(titles);
-    if (apiResult) {
-      setCleanPreviews(apiResult);
-    } else {
-      setCleanPreviews(titles.map(t => ({ raw: t, clean: cleanTitle(t) })));
-    }
+    const pairs = apiResult
+      ? apiResult.map(p => ({ raw: p.raw, clean: p.clean, original: p.clean }))
+      : titles.map(t => { const c = cleanTitle(t); return { raw: t, clean: c, original: c }; });
+    setCleanPreviews(pairs);
     setPhase("previewing");
+  }
+
+  function updateCleanPreview(index, value) {
+    setCleanPreviews(prev => prev.map((p, i) => i === index ? { ...p, clean: value } : p));
+  }
+
+  function resetCleanPreview(index) {
+    setCleanPreviews(prev => prev.map((p, i) => i === index ? { ...p, clean: p.original } : p));
   }
 
   function reset() {
@@ -1058,6 +1138,13 @@ function BulkUpload({ onResultsReady }) {
           </div>
         </Card>
 
+        {/* Fallback warning */}
+        {phase === "done" && results[0]?.source === "local" && (
+          <div style={{ background: C.amberLight, border: `1px solid ${C.amberBorder}`, borderRadius: 8, padding: "12px 16px", fontSize: 13, color: "#78350f" }}>
+            ⚠ API unavailable — all results from local classifier. Accuracy may differ from the Python engine.
+          </div>
+        )}
+
         {/* Summary cards — shown when done */}
         {phase === "done" && (
           <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 12 }}>
@@ -1096,7 +1183,7 @@ function BulkUpload({ onResultsReady }) {
               <thead>
                 <tr style={{ background: C.bg, borderBottom: `2px solid ${C.border}` }}>
                   {["#", "Raw Title",
-                    ...(phase === "previewing" ? ["Clean Title"] : []),
+                    ...(phase === "previewing" ? ["Clean Title (editable)"] : []),
                     ...(phase === "done" ? ["Clean Title","Functional Area","Seniority","Confidence","Status"] : [])
                   ].map(h => (
                     <th key={h} style={{ textAlign: "left", padding: "10px 16px", color: C.textMuted, fontWeight: 600, fontSize: 11, textTransform: "uppercase", letterSpacing: "0.06em", whiteSpace: "nowrap" }}>{h}</th>
@@ -1107,20 +1194,33 @@ function BulkUpload({ onResultsReady }) {
                 {(phase === "done"
                   ? results
                   : phase === "previewing"
-                  ? cleanPreviews.map((p, i) => ({ id: i + 1, raw: p.raw, clean: p.clean }))
+                  ? cleanPreviews.map((p, i) => ({ id: i + 1, raw: p.raw, clean: p.clean, original: p.original }))
                   : parsedRows.slice(0, 12).map((r, i) => ({ id: i + 1, raw: r[colMap.rawTitle] || "(empty)" }))
                 ).map((row, i) => {
                   const isOOS = phase === "done" && row.domain === "Other/Noise";
                   const needsRev = phase === "done" && row.needsReview;
-                  const wasChanged = phase === "previewing" && row.raw !== row.clean;
-                  const rowBg = isOOS ? C.redLight : needsRev ? C.amberLight : wasChanged ? C.accentLight : i % 2 === 0 ? C.card : C.bg;
+                  const autoCleaned = phase === "previewing" && row.raw !== row.original;
+                  const manualEdited = phase === "previewing" && row.clean !== row.original;
+                  const rowBg = isOOS ? C.redLight : needsRev ? C.amberLight : manualEdited ? "#fffbeb" : autoCleaned ? C.accentLight : i % 2 === 0 ? C.card : C.bg;
                   return (
                     <tr key={row.id || i} style={{ borderBottom: `1px solid ${C.border}`, background: rowBg }}>
                       <td style={{ padding: "10px 16px", color: C.textMuted, fontSize: 12 }}>{row.id || i + 1}</td>
-                      <td style={{ padding: "10px 16px", color: C.text, maxWidth: 220, fontFamily: "monospace", fontSize: 12 }}>{row.raw}</td>
+                      <td style={{ padding: "10px 16px", color: C.textMuted, maxWidth: 220, fontFamily: "monospace", fontSize: 12 }}>{row.raw}</td>
                       {phase === "previewing" && (
-                        <td style={{ padding: "10px 16px", fontFamily: "monospace", fontSize: 12, color: wasChanged ? C.accent : C.textMuted, fontWeight: wasChanged ? 600 : 400 }}>
-                          {wasChanged ? row.clean : <span style={{ opacity: 0.5 }}>unchanged</span>}
+                        <td style={{ padding: "6px 10px" }}>
+                          <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                            <input
+                              value={row.clean}
+                              onChange={e => updateCleanPreview(i, e.target.value)}
+                              style={{ flex: 1, fontFamily: "monospace", fontSize: 12, padding: "5px 8px", borderRadius: 6, border: `1.5px solid ${manualEdited ? C.amberBorder : autoCleaned ? C.accentBorder : C.border}`, background: "transparent", color: C.text, outline: "none" }}
+                            />
+                            {(autoCleaned || manualEdited) && (
+                              <button onClick={() => resetCleanPreview(i)} title="Reset to auto-cleaned"
+                                style={{ padding: "4px 7px", borderRadius: 5, border: `1px solid ${C.border}`, background: C.bg, cursor: "pointer", fontSize: 12, color: C.textMuted, lineHeight: 1 }}>
+                                ↺
+                              </button>
+                            )}
+                          </div>
                         </td>
                       )}
                       {phase === "done" && <>
@@ -1279,12 +1379,26 @@ const TC_SAMPLES = [
 ];
 
 function TitleCleaner() {
-  const [manualInput, setManualInput] = useState("");
+  const [manualInput, setManualInput]   = useState("");
   const [manualResult, setManualResult] = useState(null);
+  const [manualLoading, setManualLoading] = useState(false);
+  const [sampleResults, setSampleResults] = useState(() =>
+    TC_SAMPLES.map(raw => ({ raw, ...analyze(raw, "", "") }))
+  );
 
-  function runManual() {
+  useEffect(() => {
+    bulkAnalyzeViaAPI(TC_SAMPLES.map(title => ({ title, description: "", country: "" })))
+      .then(res => {
+        if (res) setSampleResults(TC_SAMPLES.map((raw, i) => ({ raw, ...res[i] })));
+      });
+  }, []);
+
+  async function runManual() {
     if (!manualInput.trim()) return;
-    setManualResult(analyze(manualInput.trim(), "", ""));
+    setManualLoading(true);
+    const apiResult = await analyzeViaAPI(manualInput.trim());
+    setManualResult(apiResult ?? { ...analyze(manualInput.trim(), "", ""), source: "local" });
+    setManualLoading(false);
   }
 
   return (
@@ -1299,11 +1413,16 @@ function TitleCleaner() {
             onKeyDown={e => e.key === "Enter" && runManual()}
             placeholder="Paste any raw title and press Clean →"
             style={{ ...inputStyle, flex: 1 }} />
-          <button onClick={runManual} disabled={!manualInput.trim()}
-            style={{ padding: "10px 22px", borderRadius: 8, border: "none", background: manualInput.trim() ? C.accent : "#d1d5db", color: "#fff", fontWeight: 700, fontSize: 13.5, cursor: manualInput.trim() ? "pointer" : "default", fontFamily: "inherit", whiteSpace: "nowrap" }}>
-            Clean →
+          <button onClick={runManual} disabled={!manualInput.trim() || manualLoading}
+            style={{ padding: "10px 22px", borderRadius: 8, border: "none", background: manualInput.trim() ? C.accent : "#d1d5db", color: "#fff", fontWeight: 700, fontSize: 13.5, cursor: manualInput.trim() && !manualLoading ? "pointer" : "default", fontFamily: "inherit", whiteSpace: "nowrap" }}>
+            {manualLoading ? "…" : "Clean →"}
           </button>
         </div>
+        {manualResult?.source === "local" && (
+          <div style={{ marginTop: 12, padding: "8px 12px", borderRadius: 7, background: C.amberLight, border: `1px solid ${C.amberBorder}`, fontSize: 12, color: "#78350f" }}>
+            ⚠ API unavailable — result from local classifier.
+          </div>
+        )}
         {manualResult && (
           <div style={{ marginTop: 16, padding: "16px 18px", borderRadius: 9, background: C.accentLight, border: `1px solid ${C.accentBorder}`, display: "flex", flexWrap: "wrap", gap: 24, alignItems: "center" }}>
             <div>
@@ -1349,12 +1468,11 @@ function TitleCleaner() {
               </tr>
             </thead>
             <tbody>
-              {TC_SAMPLES.map((raw, i) => {
-                const res = analyze(raw, "", "");
-                const changed = res.cleanTitle.toLowerCase().replace(/\s/g,"") !== raw.toLowerCase().replace(/\s/g,"");
+              {sampleResults.map((res, i) => {
+                const changed = res.cleanTitle.toLowerCase().replace(/\s/g,"") !== res.raw.toLowerCase().replace(/\s/g,"");
                 return (
                   <tr key={i} style={{ borderBottom: `1px solid ${C.border}`, background: i % 2 === 0 ? C.card : C.bg }}>
-                    <td style={{ padding: "13px 18px", fontFamily: "monospace", fontSize: 12, color: "#6b1a1a", background: "#fff8f8", maxWidth: 220 }}>{raw}</td>
+                    <td style={{ padding: "13px 18px", fontFamily: "monospace", fontSize: 12, color: "#6b1a1a", background: "#fff8f8", maxWidth: 220 }}>{res.raw}</td>
                     <td style={{ padding: "13px 18px", fontWeight: 600, color: res.domain === "Other/Noise" ? C.red : "#14532d" }}>
                       {res.cleanTitle}
                       {changed && <span style={{ display: "block", fontSize: 10, color: C.textMuted, fontWeight: 400, marginTop: 2 }}>cleaned</span>}
