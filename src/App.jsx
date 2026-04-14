@@ -9,7 +9,7 @@ const PRIORITY_DOMAIN_RULES = {
   "Transport": ["transport manager","dispatch coordinator","dispatcher","dispatch","allocator","delivery","driver","courier","linehaul","fleet","route"],
   "Freight Forwarding": ["freight","customs","brokerage","import","export","airfreight","seafreight","forwarding"],
   "Planning": ["supply chain","demand planner","planner","planning","procurement","purchasing","purchaser","buyer","business analyst","scheduler","sourcing","replenishment","forecast"],
-  "Finance": ["accounts payable","accounts receivable","accountant","accounts","payroll","finance","billing","costing","fp&a","financial planning","financial analyst","treasury","budgeting"],
+  "Finance": ["accounts payable","accounts receivable","accounts payable/receivable","accountant","accounts","payroll","finance","billing","costing","fp&a","financial planning","financial analyst","treasury","budgeting"],
   "IT Support": ["developer","architect","systems","technology","application support","technical support","it support","software support","application specialist","hris specialist","technical consultant"],
   "Operations": ["operations manager","operations supervisor","operations coordinator","logistics manager","logistics coordinator","logistics","operator","controller","process","production","quality","qa","sap","decon","consol","erp","e-commerce","ecommerce","omnichannel"],
   "Business Administration": ["office administrator","admin assistant","executive assistant","personal assistant","receptionist","office support","clerical","office manager","hr business partner","hr advisor","hr coordinator","hr transformation","hr specialist"],
@@ -69,10 +69,10 @@ const DOMAIN_SKILL_FIXED = {
   "Other/Noise":[],
 };
 
-const REMOVE_PHRASES = ["immediate start","apply now","great opportunity","exciting opportunity","career growth","wanted","needed","join our team","above award rate","great money","packag","distrib","remuner","salary package","competitive package","competitive salary"];
+const REMOVE_PHRASES = ["immediate start","apply now","great opportunity","exciting opportunity","career growth","wanted","needed","join our team","above award rate","great money","packag","distrib","remuner","salary package","competitive package","competitive salary","bonus"];
 const REMOVE_SHIFT = ["night shift","day shift","afternoon shift","am shift","pm shift","overnight","morning shift","part time","full time","casual"];
 const REMOVE_CONTRACT = ["ftc","fixed term","fixed-term","contract role","contract position","temp role","temporary role","temp to perm","maternity cover","parental leave cover","secondment","ongoing","permanent role","casual role"];
-const SALARY_PATTERN = /\$[\d,]+[k]?(\s*[-–]\s*\$?[\d,]+[k]?)?\s*(pa|p\.a\.|per annum|per year|annually|ph|p\.h\.|per hour)?/gi;
+const SALARY_PATTERN = /\$[\d,]+[k]?(\s*[-–]\s*\$?[\d,]+[k]?)?\s*(pa\b|p\.a\.|per annum|per year|annually|ph\b|p\.h\.|per hour)?/gi;
 const CONTRACT_DURATION_PATTERN = /\b\d+[-\s]?(month|week|year)[s]?\b(\s*contract)?/gi;
 const TYPO_MAP = {
   "assisstant":"assistant","coodrinator":"coordinator","sepcialist":"specialist",
@@ -284,6 +284,8 @@ function cleanTitle(raw) {
        .replace(/\bDir\.?(\s|$)/gi, "Director$1").replace(/\bExec\.?(\s|$)/gi, "Executive$1")
        .replace(/\bBD\b/g, "Business Development").replace(/\bOps\b/gi, "Operations")
        .replace(/\bFP&A\b/gi, "Financial Planning & Analysis")
+       .replace(/\bAP\/AR\b/gi, "Accounts Payable/Receivable")
+       .replace(/\bA\/P\b/gi, "Accounts Payable").replace(/\bA\/R\b/gi, "Accounts Receivable")
        .replace(/\bB2B\b/gi, "Business to Business").replace(/\bB2C\b/gi, "Business to Consumer")
        .replace(/\bGM\b/g, "General Manager").replace(/\bVP\b/g, "Vice President")
        .replace(/\bSVP\b/g, "Senior Vice President").replace(/\bEVP\b/g, "Executive Vice President")

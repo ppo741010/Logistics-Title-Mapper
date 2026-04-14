@@ -30,9 +30,9 @@ PRIORITY_DOMAIN_RULES = {
         "sourcing","replenishment","forecast",
     ],
     "Finance": [
-        "accounts payable","accounts receivable","accountant","accounts",
-        "payroll","finance","billing","costing","fp&a","financial planning",
-        "financial analyst","treasury","budgeting",
+        "accounts payable","accounts receivable","accounts payable/receivable",
+        "accountant","accounts","payroll","finance","billing","costing",
+        "fp&a","financial planning","financial analyst","treasury","budgeting",
     ],
     "IT Support": [
         "developer","architect","systems","technology","application support",
@@ -193,7 +193,7 @@ REMOVE_PHRASES = [
     "immediate start","apply now","great opportunity","exciting opportunity",
     "career growth","wanted","needed","join our team","above award rate",
     "great money","packag","distrib","remuner","salary package",
-    "competitive package","competitive salary",
+    "competitive package","competitive salary","bonus",
 ]
 REMOVE_SHIFT = [
     "night shift","day shift","afternoon shift","am shift","pm shift",
@@ -238,7 +238,7 @@ CROSS_FUNCTIONAL_PAIRS = [
 
 _SALARY_RE = re.compile(
     r'\$[\d,]+[k]?(?:\s*[-–]\s*\$?[\d,]+[k]?)?\s*'
-    r'(?:pa|p\.a\.|per annum|per year|annually|ph|p\.h\.|per hour)?',
+    r'(?:pa\b|p\.a\.|per annum|per year|annually|ph\b|p\.h\.|per hour)?',
     re.IGNORECASE,
 )
 _CONTRACT_DURATION_RE = re.compile(
@@ -283,9 +283,9 @@ def clean_title(raw: str) -> str:
     letters = re.sub(r'[^a-zA-Z]', '', t)
     if letters and sum(1 for c in letters if c.isupper()) / len(letters) > 0.7:
         t = t.lower()
-    # Remove noise phrases and shift patterns
+    # Remove noise phrases and shift patterns (prefix match — e.g. "packag" removes "package")
     for phrase in REMOVE_PHRASES + REMOVE_SHIFT:
-        t = re.sub(rf'\b{re.escape(phrase)}\b', '', t, flags=re.IGNORECASE)
+        t = re.sub(rf'\b{re.escape(phrase)}\w*', '', t, flags=re.IGNORECASE)
     # Fix typos
     for typo, fix in TYPO_MAP.items():
         t = re.sub(re.escape(typo), fix, t, flags=re.IGNORECASE)
@@ -316,14 +316,21 @@ def clean_title(raw: str) -> str:
         (r"\bInt['']?l\b", 'International'), (r'\bNatl\b', 'National'),
         (r'\bTL\b', 'Team Lead'),
         (r'\bFP&A\b', 'Financial Planning & Analysis'),
+        (r'\bAP/AR\b', 'Accounts Payable/Receivable'),
+        (r'\bA/P\b',   'Accounts Payable'),
+        (r'\bA/R\b',   'Accounts Receivable'),
         (r'\bB2B\b', 'Business to Business'), (r'\bB2C\b', 'Business to Consumer'),
     ]
     for pattern, replacement in abbrevs:
         t = re.sub(pattern, replacement, t, flags=re.IGNORECASE)
     # Collapse multiple separators and clean trailing chars
     t = _MULTI_SEP_RE.sub(' - ', t)
+    # Remove orphaned + signs not between word characters
+    t = re.sub(r'\s*\+\s*', ' ', t)
     t = re.sub(r'\s+', ' ', t).strip()
     t = _TRAILING_RE.sub('', t).strip()
+    # Remove leading separators
+    t = re.sub(r'^[-–,|&\s]+', '', t).strip()
     return _title_case(t)
 
 
