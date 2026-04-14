@@ -7,10 +7,17 @@ Output: gemini_noise_resolved.csv        (same folder as this script)
 Does NOT touch Seek_job project or database.
 Run from anywhere: python gemini_classify_noise.py
 Requires: GEMINI_API_KEY as env var or in a .env file nearby
+
+Features:
+- Checkpoint/resume: saves progress to gemini_checkpoint.json after each batch
+- Rate limiter: max 12 requests/min (free tier safe), configurable
+- Capped retry: max 60s wait between retries, no runaway exponential backoff
+- Company-aware matching: fixes title-only matching bug
 """
 
 import csv, json, time, os, sys
 from pathlib import Path
+from collections import deque
 
 # ── API Key ───────────────────────────────────────────────────────────────────
 try:
@@ -32,13 +39,17 @@ except ImportError:
 
 client = genai.Client(api_key=GEMINI_API_KEY)
 
-# ── Paths (all relative to this script — no Seek_job dependency) ──────────────
-HERE       = Path(__file__).parent
-INPUT_CSV  = HERE / "logistics_classified_report.csv"
-OUTPUT_CSV = HERE / "gemini_noise_resolved.csv"
+# ── Paths ─────────────────────────────────────────────────────────────────────
+HERE            = Path(__file__).parent
+INPUT_CSV       = HERE / "logistics_classified_report.csv"
+OUTPUT_CSV      = HERE / "gemini_noise_resolved.csv"
+CHECKPOINT_FILE = HERE / "gemini_checkpoint.json"
 
-BATCH_SIZE = 5
-DELAY_SECS = 12
+# ── Config ────────────────────────────────────────────────────────────────────
+BATCH_SIZE       = 5    # titles per Gemini call
+REQUESTS_PER_MIN = 12   # free tier: 15 RPM — stay safely under
+MAX_RETRY_WAIT   = 60   # seconds — cap on retry wait (no runaway backoff)
+MAX_RETRIES      = 6
 
 VALID_DOMAINS = [
     "Warehouse", "Transport", "Freight Forwarding", "Planning", "Operations",
@@ -54,29 +65,59 @@ For each title + company pair, decide:
    Warehouse | Transport | Freight Forwarding | Planning | Operations | Finance | Sales | IT Support | Business Administration
 3. If no (retail, hospitality, construction, banking, etc.), use: Not Logistics
 
-Return ONLY a JSON array, no markdown, no explanation:
-[{{"title": "...", "domain": "Operations", "reason": "brief reason"}}]
+Return ONLY a JSON array, no markdown, no explanation.
+IMPORTANT: include both "title" AND "company" in each result so I can match them back.
+[{{"title": "...", "company": "...", "domain": "Operations", "reason": "brief reason"}}]
 
 Classify these:
 {items}"""
 
 
-def call_gemini(prompt: str, max_retries: int = 10) -> str:
+# ── Rate Limiter ──────────────────────────────────────────────────────────────
+class RateLimiter:
+    """Sliding window rate limiter — ensures max N requests per 60s."""
+    def __init__(self, max_per_minute: int):
+        self.max_per_minute = max_per_minute
+        self.timestamps = deque()
+
+    def wait(self):
+        now = time.time()
+        # Remove timestamps older than 60s
+        while self.timestamps and now - self.timestamps[0] > 60:
+            self.timestamps.popleft()
+
+        if len(self.timestamps) >= self.max_per_minute:
+            sleep_for = 60 - (now - self.timestamps[0]) + 1
+            if sleep_for > 0:
+                print(f"  [rate limiter] waiting {sleep_for:.0f}s to stay under {self.max_per_minute} RPM...", flush=True)
+                time.sleep(sleep_for)
+
+        self.timestamps.append(time.time())
+
+
+rate_limiter = RateLimiter(REQUESTS_PER_MIN)
+
+
+# ── Gemini call with capped retry ─────────────────────────────────────────────
+def call_gemini(prompt: str) -> str:
     wait = 10
-    for attempt in range(max_retries):
+    for attempt in range(MAX_RETRIES):
+        rate_limiter.wait()
         try:
             resp = client.models.generate_content(model="gemini-2.0-flash", contents=prompt)
             return resp.text
         except Exception as e:
             if "429" in str(e) or "RESOURCE_EXHAUSTED" in str(e):
-                print(f"  429 — waiting {wait}s (attempt {attempt+1}/{max_retries})")
-                time.sleep(wait)
-                wait *= 2
+                capped = min(wait, MAX_RETRY_WAIT)
+                print(f"  429 — waiting {capped}s (attempt {attempt+1}/{MAX_RETRIES})", flush=True)
+                time.sleep(capped)
+                wait = min(wait * 2, MAX_RETRY_WAIT)
             else:
                 raise
     raise Exception("Max retries exceeded")
 
 
+# ── Parse Gemini JSON response ────────────────────────────────────────────────
 def parse_gemini(text: str) -> list:
     text = text.strip()
     if text.startswith("```"):
@@ -93,18 +134,36 @@ def parse_gemini(text: str) -> list:
     return []
 
 
+# ── Checkpoint helpers ────────────────────────────────────────────────────────
+def load_checkpoint() -> dict:
+    if CHECKPOINT_FILE.exists():
+        try:
+            data = json.loads(CHECKPOINT_FILE.read_text(encoding="utf-8"))
+            print(f"✓ Resuming from checkpoint: {len(data)} keys already done")
+            return data
+        except Exception:
+            print("  Warning: checkpoint file corrupt, starting fresh")
+    return {}
+
+
+def save_checkpoint(results: dict):
+    CHECKPOINT_FILE.write_text(json.dumps(results, ensure_ascii=False, indent=2), encoding="utf-8")
+
+
+# ── Main ──────────────────────────────────────────────────────────────────────
 def run():
-    # ── 1. Load Other/Noise rows from CSV ─────────────────────────────────────
+    # 1. Load Other/Noise rows
     if not INPUT_CSV.exists():
         print(f"ERROR: {INPUT_CSV} not found.")
-        print("Make sure logistics_classified_report.csv is in the same folder as this script.")
         sys.exit(1)
 
-    all_rows   = list(csv.DictReader(open(INPUT_CSV, encoding="utf-8")))
+    with open(INPUT_CSV, encoding="utf-8") as f:
+        all_rows = list(csv.DictReader(f))
+
     noise_rows = [r for r in all_rows if r.get("mapper_domain", "") in ("Other/Noise", "")]
     print(f"✓ Loaded {len(all_rows)} rows — {len(noise_rows)} are Other/Noise\n")
 
-    # ── 2. Deduplicate by title + company ──────────────────────────────────────
+    # 2. Deduplicate by title + company
     seen, unique_noise = set(), []
     for r in noise_rows:
         key = (r["job_title_clean"].strip().lower(), (r.get("company") or "").strip().lower())
@@ -114,13 +173,32 @@ def run():
 
     total_batches = (len(unique_noise) + BATCH_SIZE - 1) // BATCH_SIZE
     print(f"Unique title+company combos: {len(unique_noise)}")
-    print(f"Gemini batches of {BATCH_SIZE}: {total_batches}\n")
+    print(f"Gemini batches of {BATCH_SIZE}: {total_batches}")
+    print(f"Rate limit: {REQUESTS_PER_MIN} RPM  |  Max retry wait: {MAX_RETRY_WAIT}s\n")
 
-    # ── 3. Send to Gemini ──────────────────────────────────────────────────────
-    gemini_results = {}
+    # 3. Load checkpoint, skip already-done keys
+    gemini_results = load_checkpoint()
+    done_keys = set(gemini_results.keys())
 
+    skipped = sum(
+        1 for r in unique_noise
+        if f"{r['job_title_clean'].strip().lower()}|||{(r.get('company') or '').strip().lower()}" in done_keys
+    )
+    if skipped:
+        print(f"  Skipping {skipped} already-processed combos\n")
+
+    # 4. Send to Gemini (skip done batches)
     for i in range(total_batches):
         batch = unique_noise[i * BATCH_SIZE : (i + 1) * BATCH_SIZE]
+
+        # Skip batch if all items already in checkpoint
+        batch_keys = [
+            f"{r['job_title_clean'].strip().lower()}|||{(r.get('company') or '').strip().lower()}"
+            for r in batch
+        ]
+        if all(k in done_keys for k in batch_keys):
+            continue
+
         items = "\n".join(
             f'{j+1}. Title: "{r["job_title_clean"]}" | Company: "{r.get("company") or "Unknown"}"'
             for j, r in enumerate(batch)
@@ -130,24 +208,32 @@ def run():
         try:
             raw    = call_gemini(PROMPT_TEMPLATE.format(items=items))
             parsed = parse_gemini(raw)
+
             for item in parsed:
-                tk = item.get("title", "").strip().lower()
-                for r in batch:
-                    if r["job_title_clean"].strip().lower() == tk:
-                        key = (r["job_title_clean"].strip().lower(), (r.get("company") or "").strip().lower())
-                        gemini_results[key] = {
-                            "domain": item.get("domain", "Other/Noise"),
-                            "reason": item.get("reason", ""),
-                        }
-                        break
-            print(f"OK ({len(parsed)} classified)")
+                # Match by title + company (fixes title-only matching bug)
+                item_title   = item.get("title", "").strip().lower()
+                item_company = item.get("company", "").strip().lower()
+                ck = f"{item_title}|||{item_company}"
+
+                # Fallback: if company missing in response, match by title only (best effort)
+                if ck not in [k for k in batch_keys]:
+                    for bk in batch_keys:
+                        if bk.split("|||")[0] == item_title:
+                            ck = bk
+                            break
+
+                gemini_results[ck] = {
+                    "domain": item.get("domain", "Other/Noise"),
+                    "reason": item.get("reason", ""),
+                }
+
+            save_checkpoint(gemini_results)
+            print(f"OK ({len(parsed)} classified)", flush=True)
+
         except Exception as e:
-            print(f"FAILED: {e}")
+            print(f"FAILED: {e}", flush=True)
 
-        if i < total_batches - 1:
-            time.sleep(DELAY_SECS)
-
-    # ── 4. Write output CSV ────────────────────────────────────────────────────
+    # 5. Write output CSV
     fieldnames = [
         "job_title_clean", "company", "location", "week",
         "seek_domain", "mapper_domain",
@@ -161,9 +247,9 @@ def run():
         writer.writeheader()
 
         for r in noise_rows:
-            key = (r["job_title_clean"].strip().lower(), (r.get("company") or "").strip().lower())
-            g   = gemini_results.get(key, {"domain": "Other/Noise", "reason": "not processed"})
-            gd  = g["domain"]
+            ck = f"{r['job_title_clean'].strip().lower()}|||{(r.get('company') or '').strip().lower()}"
+            g  = gemini_results.get(ck, {"domain": "Other/Noise", "reason": "not processed"})
+            gd = g["domain"]
 
             if gd == "Not Logistics":
                 final = "Other/Noise"
@@ -185,6 +271,11 @@ def run():
                 "gemini_reason":   g["reason"],
                 "final_domain":    final,
             })
+
+    # Clean up checkpoint after successful completion
+    if CHECKPOINT_FILE.exists():
+        CHECKPOINT_FILE.unlink()
+        print("  (checkpoint deleted — run complete)")
 
     print(f"\n{'='*48}")
     print(f"  Other/Noise processed:    {len(noise_rows)}")
