@@ -47,9 +47,9 @@ CHECKPOINT_FILE = HERE / "gemini_checkpoint.json"
 
 # ── Config ────────────────────────────────────────────────────────────────────
 BATCH_SIZE       = 5    # titles per Gemini call
-REQUESTS_PER_MIN = 12   # free tier: 15 RPM — stay safely under
+REQUESTS_PER_MIN = 10   # free tier: 15 RPM — stay conservatively under
 MAX_RETRY_WAIT   = 60   # seconds — cap on retry wait (no runaway backoff)
-MAX_RETRIES      = 6
+MAX_RETRIES      = 2    # on 429: only retry twice then skip (save daily quota)
 
 VALID_DOMAINS = [
     "Warehouse", "Transport", "Freight Forwarding", "Planning", "Operations",
@@ -231,7 +231,11 @@ def run():
             print(f"OK ({len(parsed)} classified)", flush=True)
 
         except Exception as e:
-            print(f"FAILED: {e}", flush=True)
+            err = str(e)
+            if "Max retries exceeded" in err or "429" in err or "RESOURCE_EXHAUSTED" in err:
+                print(f"SKIPPED (quota): will retry next run via checkpoint", flush=True)
+            else:
+                print(f"FAILED: {e}", flush=True)
 
     # 5. Write output CSV
     fieldnames = [
