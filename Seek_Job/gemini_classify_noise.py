@@ -147,7 +147,8 @@ def call_gemini(prompt: str) -> str:
             err = str(e)
             if "429" in err or "RESOURCE_EXHAUSTED" in err:
                 # If daily quota exhausted, try rotating to another key immediately
-                if "PerDay" in err or "per_day" in err.lower() or "limit: 0" in err:
+                # Check for PerDay specifically — don't rotate on RPM (per-minute) limits
+                if "PerDay" in err or "per_day" in err.lower():
                     print(f"  daily quota exhausted on key #{_key_index + 1}", flush=True)
                     _exhausted.add(_key_index)
                     if _rotate_key():
