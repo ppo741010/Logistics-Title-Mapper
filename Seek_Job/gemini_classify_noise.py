@@ -129,6 +129,10 @@ def _rotate_key():
         next_idx = (_key_index + offset) % len(API_KEYS)
         if next_idx not in _exhausted:
             _key_index = next_idx
+            new_key = API_KEYS[_key_index]
+            # Update env vars so the SDK uses the new key (it prefers env vars over api_key param)
+            os.environ["GEMINI_API_KEY"] = new_key
+            os.environ["GOOGLE_API_KEY"] = new_key
             client = _make_client(_key_index)
             print(f"  [key rotation] switched to key #{_key_index + 1}", flush=True)
             return True
