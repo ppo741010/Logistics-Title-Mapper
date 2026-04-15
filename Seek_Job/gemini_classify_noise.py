@@ -10,26 +10,43 @@ Requires: GEMINI_API_KEY as env var or in a .env file nearby
 
 Features:
 - Checkpoint/resume: saves progress to gemini_checkpoint.json after each batch
-- Rate limiter: max 12 requests/min (free tier safe), configurable
+- Rate limiter: max 10 requests/min (free tier safe), configurable
 - Capped retry: max 60s wait between retries, no runaway exponential backoff
 - Company-aware matching: fixes title-only matching bug
+- Multi-key rotation: add GEMINI_API_KEY_2, GEMINI_API_KEY_3 etc. to .env for
+  automatic failover when daily quota (1500 RPD) is exhausted on one key
 """
 
 import csv, json, time, os, sys
 from pathlib import Path
 from collections import deque
 
-# ── API Key ───────────────────────────────────────────────────────────────────
+# ── API Keys (supports multiple for rotation) ─────────────────────────────────
 try:
     from dotenv import load_dotenv, find_dotenv
     load_dotenv(find_dotenv())
 except ImportError:
     pass
 
-GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY") or os.environ.get("GOOGLE_API_KEY")
-if not GEMINI_API_KEY:
-    print("ERROR: Set GEMINI_API_KEY as an environment variable or in a .env file.")
+def _load_keys() -> list:
+    keys = []
+    # Primary key
+    k = os.environ.get("GEMINI_API_KEY") or os.environ.get("GOOGLE_API_KEY")
+    if k:
+        keys.append(k)
+    # Extra keys: GEMINI_API_KEY_2, GEMINI_API_KEY_3, ...
+    for i in range(2, 10):
+        k = os.environ.get(f"GEMINI_API_KEY_{i}")
+        if k:
+            keys.append(k)
+    return keys
+
+API_KEYS = _load_keys()
+if not API_KEYS:
+    print("ERROR: Set GEMINI_API_KEY (and optionally GEMINI_API_KEY_2, _3...) in .env")
     sys.exit(1)
+
+print(f"✓ Loaded {len(API_KEYS)} API key(s)")
 
 try:
     from google import genai
@@ -37,7 +54,13 @@ except ImportError:
     print("ERROR: Run: pip install google-genai")
     sys.exit(1)
 
-client = genai.Client(api_key=GEMINI_API_KEY)
+_key_index   = 0
+_exhausted   = set()   # indices of keys with daily quota exhausted
+
+def _make_client(idx: int):
+    return genai.Client(api_key=API_KEYS[idx])
+
+client = _make_client(_key_index)
 
 # ── Paths ─────────────────────────────────────────────────────────────────────
 HERE            = Path(__file__).parent
@@ -98,8 +121,22 @@ class RateLimiter:
 rate_limiter = RateLimiter(REQUESTS_PER_MIN)
 
 
-# ── Gemini call with capped retry ─────────────────────────────────────────────
+# ── Gemini call with key rotation + capped retry ─────────────────────────────
+def _rotate_key():
+    """Switch to the next available API key. Returns True if switched."""
+    global client, _key_index
+    for offset in range(1, len(API_KEYS)):
+        next_idx = (_key_index + offset) % len(API_KEYS)
+        if next_idx not in _exhausted:
+            _key_index = next_idx
+            client = _make_client(_key_index)
+            print(f"  [key rotation] switched to key #{_key_index + 1}", flush=True)
+            return True
+    return False  # all keys exhausted
+
+
 def call_gemini(prompt: str) -> str:
+    global _key_index
     wait = 10
     for attempt in range(MAX_RETRIES):
         rate_limiter.wait()
@@ -107,7 +144,17 @@ def call_gemini(prompt: str) -> str:
             resp = client.models.generate_content(model="gemini-2.0-flash", contents=prompt)
             return resp.text
         except Exception as e:
-            if "429" in str(e) or "RESOURCE_EXHAUSTED" in str(e):
+            err = str(e)
+            if "429" in err or "RESOURCE_EXHAUSTED" in err:
+                # If daily quota exhausted, try rotating to another key immediately
+                if "PerDay" in err or "per_day" in err.lower() or "limit: 0" in err:
+                    print(f"  daily quota exhausted on key #{_key_index + 1}", flush=True)
+                    _exhausted.add(_key_index)
+                    if _rotate_key():
+                        wait = 10  # reset wait for new key
+                        continue
+                    else:
+                        raise Exception("All API keys exhausted for today")
                 capped = min(wait, MAX_RETRY_WAIT)
                 print(f"  429 — waiting {capped}s (attempt {attempt+1}/{MAX_RETRIES})", flush=True)
                 time.sleep(capped)
