@@ -3,8 +3,12 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import pandas as pd
 import io
+import logging
+from datetime import datetime, timezone
 
 from rules import analyze, clean_title
+
+logger = logging.getLogger("feedback")
 
 app = FastAPI(title="Logistics Title Mapper API", version="2.0.0")
 
@@ -28,6 +32,11 @@ class BulkAnalyzeRequest(BaseModel):
 
 class CleanPreviewRequest(BaseModel):
     titles: list[str]
+
+class FeedbackRequest(BaseModel):
+    rating: str          # "up" or "down"
+    comment: str = ""
+    page: str = ""
 
 
 # ── Endpoints ─────────────────────────────────────────────────────────────────
@@ -86,3 +95,11 @@ def clean_preview(req: CleanPreviewRequest):
         {"raw": t, "clean": clean_title(t)}
         for t in req.titles
     ]
+
+
+@app.post("/feedback")
+def submit_feedback(req: FeedbackRequest):
+    ts = datetime.now(timezone.utc).isoformat()
+    logger.info("FEEDBACK | %s | rating=%s | page=%s | comment=%s", ts, req.rating, req.page, req.comment)
+    print(f"FEEDBACK | {ts} | rating={req.rating} | page={req.page} | comment={req.comment}", flush=True)
+    return {"ok": True}

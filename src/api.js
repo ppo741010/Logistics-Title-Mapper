@@ -94,3 +94,15 @@ export async function checkAPIHealth() {
     return false;
   }
 }
+
+export async function submitFeedback(rating, comment = "", page = "") {
+  try {
+    await fetch(`${API_BASE}/feedback`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ rating, comment, page }),
+    });
+  } catch {
+    // silently ignore — feedback is non-critical
+  }
+}
