@@ -15,6 +15,10 @@ PRIORITY_DOMAIN_RULES = {
         "distribution center","devanner","labourer","fulfilment","fulfillment",
         "fulfilment manager","fulfillment manager","inbound","outbound","returns",
         "cold storage","receiving","despatch","put away",
+        # Extended — stores/physical ops titles missing from original list
+        "reach truck","container loader","coolstore","stores officer",
+        "stores coordinator","stores assistant","stores person","picking and packing",
+        "goods receipt","goods inward","goods receiving","dock coordinator",
     ],
     "Transport": [
         "transport manager","dispatch coordinator","dispatcher","dispatch",
@@ -44,6 +48,11 @@ PRIORITY_DOMAIN_RULES = {
         "logistics manager","logistics coordinator","logistics","operator",
         "controller","process","production","quality","qa","sap","decon",
         "consol","erp","e-commerce","ecommerce","omnichannel",
+        # Extended — senior/exec ops titles missing from original list
+        "head of operations","operations administrator","operations support",
+        "operations director","chief operations officer","operations lead",
+        "workforce planning","workforce analyst","workforce strategy",
+        "workforce manager","workforce scheduling",
     ],
     "Business Administration": [
         "office administrator","admin assistant","executive assistant",
@@ -80,6 +89,8 @@ FUZZY_ROLE_REPAIR = {
     "developer": "IT Support", "implementation": "IT Support",
     "solutions consultant": "IT Support",
     "operations manager": "Operations", "logistics": "Operations",
+    "head of operations": "Operations", "operations administrator": "Operations",
+    "stores officer": "Warehouse", "coolstore": "Warehouse", "reach truck": "Warehouse",
     "customer service": "Sales", "sales": "Sales",
     "business development": "Sales", "head of retail": "Sales",
     "commercial manager": "Sales",
