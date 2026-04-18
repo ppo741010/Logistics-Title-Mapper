@@ -103,14 +103,14 @@ function FeedbackModal({ page = "", onClose }) {
     setStep("comment");
   }
 
-  async function handleSubmit() {
-    await submitFeedback(rating, comment.trim(), page);
+  function handleSubmit() {
+    submitFeedback(rating, comment.trim(), page); // fire and forget
     setStep("done");
     setTimeout(onClose, 1800);
   }
 
-  async function handleSkip() {
-    await submitFeedback(rating, "", page);
+  function handleSkip() {
+    submitFeedback(rating, "", page); // fire and forget
     setStep("done");
     setTimeout(onClose, 1800);
   }
