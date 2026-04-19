@@ -95,12 +95,12 @@ export async function checkAPIHealth() {
   }
 }
 
-export async function submitFeedback(rating, comment = "", page = "") {
+export async function submitFeedback(rating, comment = "", page = "", title = "", result = "") {
   try {
     await fetch(`${API_BASE}/feedback`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ rating, comment, page }),
+      body: JSON.stringify({ rating, comment, page, title, result }),
     });
   } catch {
     // silently ignore — feedback is non-critical

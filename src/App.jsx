@@ -93,7 +93,7 @@ const HOURS_POSITIONS_PATTERN = /\b(\d+\.?\d*\s*h(rs?|ours?)(\s*p\.?w\.?|\s*per\
 
 // ── Feedback modal ────────────────────────────────────────────────────────────
 
-function FeedbackModal({ page = "", onClose }) {
+function FeedbackModal({ page = "", title = "", result = "", onClose }) {
   const [step, setStep] = useState("rate");   // "rate" | "comment" | "done"
   const [rating, setRating] = useState(null);
   const [comment, setComment] = useState("");
@@ -104,13 +104,13 @@ function FeedbackModal({ page = "", onClose }) {
   }
 
   function handleSubmit() {
-    submitFeedback(rating, comment.trim(), page); // fire and forget
+    submitFeedback(rating, comment.trim(), page, title, result); // fire and forget
     setStep("done");
     setTimeout(onClose, 1800);
   }
 
   function handleSkip() {
-    submitFeedback(rating, "", page); // fire and forget
+    submitFeedback(rating, "", page, title, result); // fire and forget
     setStep("done");
     setTimeout(onClose, 1800);
   }
@@ -951,10 +951,40 @@ function SingleAnalyzer() {
                   </div>
                 </Card>
               )}
+              <InlineFeedback title={title} result={result.domain} />
             </div>
           )}
         </div>
       </div>
+    </div>
+  );
+}
+
+function InlineFeedback({ title, result }) {
+  const [sent, setSent] = useState(null); // null | "up" | "down"
+
+  function handleRate(r) {
+    setSent(r);
+    submitFeedback(r, "", "single", title, result);
+  }
+
+  if (sent) {
+    return (
+      <div style={{ fontSize: 12, color: "#6b7280", textAlign: "center", padding: "10px 0" }}>
+        {sent === "up" ? "👍 Thanks!" : "👎 Got it, we'll review this."}
+      </div>
+    );
+  }
+
+  return (
+    <div style={{ display: "flex", alignItems: "center", gap: 10, justifyContent: "center", padding: "6px 0" }}>
+      <span style={{ fontSize: 12, color: "#6b7280" }}>Was this classification correct?</span>
+      {[["up", "👍"], ["down", "👎"]].map(([r, emoji]) => (
+        <button key={r} onClick={() => handleRate(r)}
+          style={{ background: "none", border: `1px solid #374151`, borderRadius: 8, padding: "4px 12px", cursor: "pointer", fontSize: 14, color: "#9ca3af", fontFamily: "inherit" }}>
+          {emoji}
+        </button>
+      ))}
     </div>
   );
 }

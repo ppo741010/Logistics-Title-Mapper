@@ -4,11 +4,20 @@ from pydantic import BaseModel
 import pandas as pd
 import io
 import logging
+import os
 from datetime import datetime, timezone
+from dotenv import load_dotenv
+from supabase import create_client
 
 from rules import analyze, clean_title
 
+load_dotenv()
+
 logger = logging.getLogger("feedback")
+
+_supabase_url = os.getenv("SUPABASE_URL")
+_supabase_key = os.getenv("SUPABASE_KEY")
+supabase = create_client(_supabase_url, _supabase_key) if _supabase_url and _supabase_key else None
 
 app = FastAPI(title="Logistics Title Mapper API", version="2.0.0")
 
@@ -35,6 +44,8 @@ class CleanPreviewRequest(BaseModel):
 
 class FeedbackRequest(BaseModel):
     rating: str          # "up" or "down"
+    title: str = ""      # 被分類的職稱
+    result: str = ""     # 分到哪個 domain
     comment: str = ""
     page: str = ""
 
@@ -100,6 +111,19 @@ def clean_preview(req: CleanPreviewRequest):
 @app.post("/feedback")
 def submit_feedback(req: FeedbackRequest):
     ts = datetime.now(timezone.utc).isoformat()
-    logger.info("FEEDBACK | %s | rating=%s | page=%s | comment=%s", ts, req.rating, req.page, req.comment)
-    print(f"FEEDBACK | {ts} | rating={req.rating} | page={req.page} | comment={req.comment}", flush=True)
+    logger.info("FEEDBACK | %s | rating=%s | title=%s | result=%s | page=%s | comment=%s",
+                ts, req.rating, req.title, req.result, req.page, req.comment)
+
+    if supabase:
+        try:
+            supabase.table("feedback").insert({
+                "title":   req.title,
+                "result":  req.result,
+                "rating":  req.rating,
+                "comment": req.comment,
+                "page":    req.page,
+            }).execute()
+        except Exception as e:
+            logger.error("Supabase feedback insert failed: %s", e)
+
     return {"ok": True}
