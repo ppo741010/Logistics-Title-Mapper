@@ -49,6 +49,11 @@ class FeedbackRequest(BaseModel):
     comment: str = ""
     page: str = ""
 
+class WaitlistRequest(BaseModel):
+    email: str
+    plan: str = "general"
+    source: str = "landing_page"
+
 
 # ── Endpoints ─────────────────────────────────────────────────────────────────
 
@@ -106,6 +111,20 @@ def clean_preview(req: CleanPreviewRequest):
         {"raw": t, "clean": clean_title(t)}
         for t in req.titles
     ]
+
+
+@app.post("/waitlist")
+def join_waitlist(req: WaitlistRequest):
+    if supabase:
+        try:
+            supabase.table("waitlist").insert({
+                "email":  req.email,
+                "plan":   req.plan,
+                "source": req.source,
+            }).execute()
+        except Exception as e:
+            logger.error("Supabase waitlist insert failed: %s", e)
+    return {"ok": True}
 
 
 @app.post("/feedback")
