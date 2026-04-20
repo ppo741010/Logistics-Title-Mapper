@@ -743,7 +743,7 @@ function LandingPage({ onEnter }) {
           Turn messy logistics job titles into structured data
         </h1>
         <p style={{ color: "#c7d2fe", fontSize: 17, maxWidth: 540, lineHeight: 1.75, margin: "0 0 38px" }}>
-          Built for recruiters, HR teams, and analysts who need to clean, classify, and normalize logistics job text — quickly and consistently.
+          A rule-based workflow tool that cleans and structures messy logistics job titles into reviewable, export-ready data.
         </p>
         <div style={{ display: "flex", gap: 12, flexWrap: "wrap", justifyContent: "center" }}>
           <button onClick={() => onEnter()} style={{ padding: "13px 32px", borderRadius: 9, background: "#fff", color: "#4f46e5", border: "none", fontWeight: 700, fontSize: 15, cursor: "pointer", fontFamily: "inherit", letterSpacing: "-0.01em" }}>
