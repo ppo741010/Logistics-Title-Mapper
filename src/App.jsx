@@ -617,8 +617,8 @@ function doDownloadXLSX(results, filename = "logistics_structured.xlsx") {
 // ── Design system ───────────────────────────────────────────────────────────
 
 const C = {
-  sidebar: "#16192a", sidebarHover: "#1f2440", sidebarActive: "#252b4a",
-  sidebarText: "#7c85a0", sidebarActiveText: "#ffffff",
+  sidebar: "#ffffff", sidebarHover: "#eef2ff", sidebarActive: "#eef2ff",
+  sidebarText: "#6b7280", sidebarActiveText: "#4f46e5",
   accent: "#3b6ef5", accentLight: "#eef2ff", accentBorder: "#c7d7fc",
   green: "#16a34a", greenLight: "#f0fdf4", greenBorder: "#bbf7d0",
   amber: "#d97706", amberLight: "#fffbeb", amberBorder: "#fcd34d",
@@ -721,35 +721,35 @@ function LandingPage({ onEnter }) {
   const audiences = ["Recruiters cleaning job ad data", "HR teams standardizing job title libraries", "Analysts normalizing workforce data", "Operations teams building role taxonomies"];
 
   return (
-    <div style={{ minHeight: "100vh", background: "#0d1021", fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, sans-serif", display: "flex", flexDirection: "column" }}>
+    <div style={{ minHeight: "100vh", background: "linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #1e3a5f 100%)", fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, sans-serif", display: "flex", flexDirection: "column" }}>
 
       {/* Nav */}
-      <div style={{ padding: "18px 48px", display: "flex", alignItems: "center", justifyContent: "space-between", borderBottom: "1px solid #1a1f38" }}>
+      <div style={{ padding: "18px 48px", display: "flex", alignItems: "center", justifyContent: "space-between", borderBottom: "1px solid rgba(255,255,255,0.1)" }}>
         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-          <div style={{ width: 34, height: 34, borderRadius: 9, background: "#1e2444", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 17, border: "1px solid #2a3060" }}>📦</div>
-          <span style={{ color: "#fff", fontWeight: 700, fontSize: 15, letterSpacing: "-0.01em" }}>Logistics Title Mapper</span>
+          <div style={{ width: 34, height: 34, borderRadius: 9, background: "rgba(255,255,255,0.15)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 17, border: "1px solid rgba(255,255,255,0.2)" }}>📦</div>
+          <span style={{ color: "#fff", fontWeight: 700, fontSize: 15, letterSpacing: "-0.01em" }}>Logititles</span>
         </div>
-        <button onClick={() => onEnter()} style={{ padding: "9px 22px", borderRadius: 8, background: C.accent, color: "#fff", border: "none", fontWeight: 700, fontSize: 13.5, cursor: "pointer", fontFamily: "inherit", letterSpacing: "0.01em" }}>
+        <button onClick={() => onEnter()} style={{ padding: "9px 22px", borderRadius: 8, background: "#fff", color: "#4f46e5", border: "none", fontWeight: 700, fontSize: 13.5, cursor: "pointer", fontFamily: "inherit", letterSpacing: "0.01em" }}>
           Enter App →
         </button>
       </div>
 
       {/* Hero */}
       <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "72px 24px 56px", textAlign: "center" }}>
-        <div style={{ display: "inline-block", padding: "4px 14px", borderRadius: 20, border: "1px solid #2a3060", background: "#131829", color: "#6b85f5", fontSize: 11, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 28 }}>
+        <div style={{ display: "inline-block", padding: "4px 14px", borderRadius: 20, border: "1px solid rgba(255,255,255,0.25)", background: "rgba(255,255,255,0.1)", color: "#c7d2fe", fontSize: 11, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 28 }}>
           Workflow Utility Tool · Logistics
         </div>
         <h1 style={{ color: "#ffffff", fontSize: 46, fontWeight: 800, maxWidth: 680, lineHeight: 1.18, margin: "0 0 22px", letterSpacing: "-0.02em" }}>
           Turn messy logistics job titles into structured data
         </h1>
-        <p style={{ color: "#8892b8", fontSize: 17, maxWidth: 540, lineHeight: 1.75, margin: "0 0 38px" }}>
+        <p style={{ color: "#c7d2fe", fontSize: 17, maxWidth: 540, lineHeight: 1.75, margin: "0 0 38px" }}>
           Built for recruiters, HR teams, and analysts who need to clean, classify, and normalize logistics job text — quickly and consistently.
         </p>
         <div style={{ display: "flex", gap: 12, flexWrap: "wrap", justifyContent: "center" }}>
-          <button onClick={() => onEnter()} style={{ padding: "13px 32px", borderRadius: 9, background: C.accent, color: "#fff", border: "none", fontWeight: 700, fontSize: 15, cursor: "pointer", fontFamily: "inherit", letterSpacing: "-0.01em" }}>
+          <button onClick={() => onEnter()} style={{ padding: "13px 32px", borderRadius: 9, background: "#fff", color: "#4f46e5", border: "none", fontWeight: 700, fontSize: 15, cursor: "pointer", fontFamily: "inherit", letterSpacing: "-0.01em" }}>
             Enter App →
           </button>
-          <button onClick={() => onEnter("analyzer")} style={{ padding: "13px 28px", borderRadius: 9, background: "transparent", color: "#8892b8", border: "1px solid #2a3060", fontWeight: 600, fontSize: 15, cursor: "pointer", fontFamily: "inherit" }}>
+          <button onClick={() => onEnter("analyzer")} style={{ padding: "13px 28px", borderRadius: 9, background: "transparent", color: "#fff", border: "1px solid rgba(255,255,255,0.35)", fontWeight: 600, fontSize: 15, cursor: "pointer", fontFamily: "inherit" }}>
             Try Single Analyzer
           </button>
         </div>
@@ -759,20 +759,20 @@ function LandingPage({ onEnter }) {
       <div style={{ padding: "0 48px 56px", maxWidth: 1100, margin: "0 auto", width: "100%", boxSizing: "border-box" }}>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 14 }}>
           {features.map(({ icon, title, desc }) => (
-            <div key={title} style={{ background: "#131829", border: "1px solid #1e2444", borderRadius: 12, padding: "20px 22px" }}>
+            <div key={title} style={{ background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.12)", borderRadius: 12, padding: "20px 22px" }}>
               <div style={{ fontSize: 22, marginBottom: 10 }}>{icon}</div>
-              <div style={{ color: "#e2e8f0", fontWeight: 700, fontSize: 14, marginBottom: 7 }}>{title}</div>
-              <div style={{ color: "#6b7694", fontSize: 13, lineHeight: 1.65 }}>{desc}</div>
+              <div style={{ color: "#ffffff", fontWeight: 700, fontSize: 14, marginBottom: 7 }}>{title}</div>
+              <div style={{ color: "#c7d2fe", fontSize: 13, lineHeight: 1.65 }}>{desc}</div>
             </div>
           ))}
         </div>
       </div>
 
       {/* Who it's for */}
-      <div style={{ background: "#0b0e1d", borderTop: "1px solid #1a1f38", padding: "28px 48px", display: "flex", alignItems: "center", justifyContent: "center", gap: 8, flexWrap: "wrap" }}>
-        <span style={{ color: "#4a527a", fontSize: 12, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.08em", marginRight: 8 }}>Built for:</span>
+      <div style={{ background: "rgba(0,0,0,0.2)", borderTop: "1px solid rgba(255,255,255,0.1)", padding: "28px 48px", display: "flex", alignItems: "center", justifyContent: "center", gap: 8, flexWrap: "wrap" }}>
+        <span style={{ color: "#a5b4fc", fontSize: 12, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.08em", marginRight: 8 }}>Built for:</span>
         {audiences.map((a, i) => (
-          <span key={i} style={{ color: "#8892b8", fontSize: 13, padding: "4px 14px", background: "#131829", borderRadius: 20, border: "1px solid #1e2444" }}>{a}</span>
+          <span key={i} style={{ color: "#e0e7ff", fontSize: 13, padding: "4px 14px", background: "rgba(255,255,255,0.08)", borderRadius: 20, border: "1px solid rgba(255,255,255,0.15)" }}>{a}</span>
         ))}
       </div>
     </div>
@@ -1829,27 +1829,27 @@ export default function App() {
       <div style={{ width: 218, background: C.sidebar, display: "flex", flexDirection: "column", flexShrink: 0 }}>
         <div style={{ padding: "22px 18px 18px" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 6 }}>
-            <div style={{ width: 32, height: 32, borderRadius: 8, background: "#2d3550", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 16 }}>📦</div>
+            <div style={{ width: 32, height: 32, borderRadius: 8, background: "#eef2ff", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 16 }}>📦</div>
             <div>
-              <div style={{ fontSize: 13, fontWeight: 700, color: "#fff", lineHeight: 1.2 }}>Logistics<br />Title Mapper</div>
+              <div style={{ fontSize: 13, fontWeight: 700, color: "#1e1b4b", lineHeight: 1.2 }}>Logititles</div>
             </div>
           </div>
-          <div style={{ fontSize: 10, color: "#3d4668", marginTop: 4, textTransform: "uppercase", letterSpacing: "0.1em" }}>Normalization Tool · v2</div>
+          <div style={{ fontSize: 10, color: "#a5b4fc", marginTop: 4, textTransform: "uppercase", letterSpacing: "0.1em" }}>Normalization Tool · v2</div>
         </div>
 
         <nav style={{ flex: 1, padding: "4px 10px" }}>
           {NAV.map(n => (
             <button key={n.id} onClick={() => setPage(n.id)}
-              style={{ display: "flex", alignItems: "center", gap: 10, width: "100%", padding: "9px 11px", borderRadius: 8, border: "none", cursor: "pointer", textAlign: "left", background: page === n.id ? C.sidebarActive : "transparent", color: page === n.id ? "#fff" : C.sidebarText, fontSize: 13.5, fontWeight: page === n.id ? 600 : 400, marginBottom: 2, fontFamily: "inherit", transition: "background 0.12s" }}>
+              style={{ display: "flex", alignItems: "center", gap: 10, width: "100%", padding: "9px 11px", borderRadius: 8, border: "none", cursor: "pointer", textAlign: "left", background: page === n.id ? C.sidebarActive : "transparent", color: page === n.id ? C.sidebarActiveText : C.sidebarText, fontSize: 13.5, fontWeight: page === n.id ? 600 : 400, marginBottom: 2, fontFamily: "inherit", transition: "background 0.12s" }}>
               <span style={{ fontSize: 15, width: 20, textAlign: "center", opacity: page === n.id ? 1 : 0.7 }}>{n.icon}</span>
               {n.label}
             </button>
           ))}
         </nav>
 
-        <div style={{ padding: "14px 18px", borderTop: "1px solid #232840" }}>
+        <div style={{ padding: "14px 18px", borderTop: "1px solid #e5e7eb" }}>
           <button onClick={() => setShowLanding(true)}
-            style={{ background: "none", border: "none", cursor: "pointer", fontSize: 11, color: "#3d4668", fontFamily: "inherit", padding: 0, lineHeight: 1.8, display: "block" }}>
+            style={{ background: "none", border: "none", cursor: "pointer", fontSize: 11, color: "#9ca3af", fontFamily: "inherit", padding: 0, lineHeight: 1.8, display: "block" }}>
             ← Back to Landing Page
           </button>
           <button
