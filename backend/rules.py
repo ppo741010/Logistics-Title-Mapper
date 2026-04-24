@@ -40,6 +40,32 @@ LEVEL_MAPPING: dict[str, str] = {
     k.lower(): v for k, v in _cfg["LEVEL_MAPPING"].items()
 }
 
+# ── Salary benchmarks (from logistics_config.json) ───────────────────────────
+
+_SALARY_NZ: dict[str, int] = _cfg.get("SALARY_BENCHMARK_NZ", {})
+_SALARY_AU: dict[str, int] = _cfg.get("SALARY_BENCHMARK_AU", {})
+
+def get_salary_benchmark(domain: str, country: str) -> dict | None:
+    """Return salary benchmark for domain + country. None if country unknown."""
+    c = country.strip().upper()
+    if c in ("NZ", "NZL", "NEW ZEALAND"):
+        median = _SALARY_NZ.get(domain)
+        currency = "NZD"
+    elif c in ("AU", "AUS", "AUSTRALIA"):
+        median = _SALARY_AU.get(domain)
+        currency = "AUD"
+    else:
+        return None
+    if not median:
+        return None
+    low  = round(median * 0.88 / 1000) * 1000
+    high = round(median * 1.12 / 1000) * 1000
+    return {
+        "currency": currency,
+        "median":   median,
+        "range":    f"{currency} ${low:,} – ${high:,}",
+    }
+
 # ── Skill normalisation (from skill_normalize.json) ──────────────────────────
 
 SKILL_SYNONYMS: dict[str, str] = _normalize["skill_synonyms"]
@@ -371,7 +397,8 @@ def analyze(raw_title: str, description: str = '', country: str = '') -> dict:
         skills    = get_skills(domain, description)
         seniority = "Review Required" if domain == "Other/Noise" else get_seniority(raw_title)
 
-    work_nature = "Review Required" if domain == "Other/Noise" else get_work_nature(raw_title)
+    work_nature      = "Review Required" if domain == "Other/Noise" else get_work_nature(raw_title)
+    salary_benchmark = get_salary_benchmark(domain, country) if domain != "Other/Noise" else None
 
     # Flags
     flags = []
@@ -382,7 +409,9 @@ def analyze(raw_title: str, description: str = '', country: str = '') -> dict:
     if source == "description":
         flags.append("Domain inferred from description only — title keyword was ambiguous")
     if not country:
-        flags.append("Country not provided — seniority inference may be less accurate")
+        flags.append("Provide country (NZ or AU) to see salary benchmark")
+    elif salary_benchmark is None:
+        flags.append("Country not recognised — use NZ or AU for salary benchmark")
     if len(description) < 30:
         flags.append("Description is short — output is based mainly on title text")
     if len(raw_title) > 60:
@@ -397,15 +426,16 @@ def analyze(raw_title: str, description: str = '', country: str = '') -> dict:
     needs_review   = domain == "Other/Noise" or confidence < 70 or has_cross_flag
 
     return {
-        "raw_title":        raw_title,
-        "clean_title":      clean,
-        "domain":           domain,
-        "work_nature":      work_nature,
-        "seniority":        seniority,
-        "skills":           skills,
-        "confidence":       confidence,
-        "matched_keywords": matched_kw,
-        "flags":            flags,
+        "raw_title":         raw_title,
+        "clean_title":       clean,
+        "domain":            domain,
+        "work_nature":       work_nature,
+        "seniority":         seniority,
+        "skills":            skills,
+        "confidence":        confidence,
+        "salary_benchmark":  salary_benchmark,
+        "matched_keywords":  matched_kw,
+        "flags":             flags,
         "has_cross_flag":   has_cross_flag,
         "needs_review":     needs_review,
         "noise_reason":     noise_reason,
