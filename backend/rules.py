@@ -1,220 +1,69 @@
 """
-Classification data and core rule engine —
-ported directly from src/App.jsx
+Classification engine — logistics-title-mapper
+Data loaded from json/ (source of truth: seek-pipeline/json/)
+Classification flow:
+  Step 1 — PRIORITY_DOMAIN_RULES keyword match (title)
+  Step 2 — FUZZY_ROLE_REPAIR fuzzy match (title)
+  Step 3 — PRIORITY_DOMAIN_RULES keyword match (description)
+  Step 4 — Claude Haiku AI fallback (only when Steps 1-3 all fail)
+Skills/level enrichment: skills_knowledge_map exact lookup → DOMAIN_SKILL_FIXED fallback
 """
 
+import json
+import os
 import re
+from pathlib import Path
 
-# ── Classification data ──────────────────────────────────────────────────────
+from dotenv import load_dotenv
 
-PRIORITY_DOMAIN_RULES = {
-    "Warehouse": [
-        "warehouse manager","warehouse supervisor","warehouse coordinator",
-        "warehouse assistant","warehouse","storeperson","store person","forklift",
-        "picker","packer","pick pack","inventory","stock","distribution centre",
-        "distribution center","devanner","labourer","fulfilment","fulfillment",
-        "fulfilment manager","fulfillment manager","inbound","outbound","returns",
-        "cold storage","receiving","despatch","put away",
-        # Extended — stores/physical ops titles missing from original list
-        "reach truck","container loader","coolstore","stores officer",
-        "stores coordinator","stores assistant","stores person","picking and packing",
-        "goods receipt","goods inward","goods receiving","dock coordinator",
-    ],
-    "Transport": [
-        "transport manager","dispatch coordinator","dispatcher","dispatch",
-        "allocator","delivery","driver","courier","linehaul","fleet","route",
-    ],
-    "Freight Forwarding": [
-        "freight","customs","brokerage","import","export",
-        "airfreight","seafreight","forwarding",
-    ],
-    "Planning": [
-        "supply chain","demand planner","planner","planning","procurement",
-        "purchasing","purchaser","buyer","business analyst","scheduler",
-        "sourcing","replenishment","forecast",
-    ],
-    "Finance": [
-        "accounts payable","accounts receivable","accounts payable/receivable",
-        "accountant","accounts","payroll","finance","billing","costing",
-        "fp&a","financial planning","financial analyst","treasury","budgeting",
-    ],
-    "IT Support": [
-        "developer","architect","systems","technology","application support",
-        "technical support","it support","software support","application specialist",
-        "hris specialist","technical consultant",
-    ],
-    "Operations": [
-        "operations manager","operations supervisor","operations coordinator",
-        "logistics manager","logistics coordinator","logistics","operator",
-        "controller","process","production","quality","qa","sap","decon",
-        "consol","erp","e-commerce","ecommerce","omnichannel",
-        # Extended — senior/exec ops titles missing from original list
-        "head of operations","operations administrator","operations support",
-        "operations director","chief operations officer","operations lead",
-        "workforce planning","workforce analyst","workforce strategy",
-        "workforce manager","workforce scheduling",
-    ],
-    "Business Administration": [
-        "office administrator","admin assistant","executive assistant",
-        "personal assistant","receptionist","office support","clerical",
-        "office manager","hr business partner","hr advisor","hr coordinator",
-        "hr transformation","hr specialist",
-    ],
-    "Sales": [
-        "customer service","customer support","sales operations","sales coordinator",
-        "sales manager","sales","business development","key account","merchandiser",
-        "representative","account manager","commercial","commercial manager",
-        "commercial development","business to business","b2b","b2c","activation","channel",
-    ],
+_BASE = Path(__file__).parent
+load_dotenv(_BASE / ".env")
+
+# ── Load JSON config files ───────────────────────────────────────────────────
+
+def _load(filename: str) -> dict:
+    return json.loads((_BASE / "json" / filename).read_text(encoding="utf-8"))
+
+_cfg        = _load("logistics_config.json")
+_normalize  = _load("skill_normalize.json")
+_skills_map = _load("skills_knowledge_map.json")
+
+# ── Classification data (from logistics_config.json) ─────────────────────────
+
+PRIORITY_DOMAIN_RULES: dict[str, list[str]] = _cfg["PRIORITY_DOMAIN_RULES"]
+FUZZY_ROLE_REPAIR:     dict[str, str]        = _cfg["FUZZY_ROLE_REPAIR"]
+DOMAIN_SKILL_FIXED:    dict[str, list[str]]  = _cfg["DOMAIN_SKILL_FIXED"]
+WORK_NATURE_MAPPING:   dict[str, list[str]]  = _cfg["WORK_NATURE_MAPPING"]
+
+# JSON keys are Title Case → lowercase for matching
+LEVEL_MAPPING: dict[str, str] = {
+    k.lower(): v for k, v in _cfg["LEVEL_MAPPING"].items()
 }
 
-FUZZY_ROLE_REPAIR = {
-    "checkout/retail": "Other/Noise", "retail": "Other/Noise",
-    "cleaning": "Other/Noise", "electrician": "Other/Noise",
-    "surveyor": "Other/Noise", "agronomist": "Other/Noise",
-    "cleaner": "Other/Noise", "estimator": "Other/Noise",
-    "powerline": "Other/Noise", "kiwifruit": "Other/Noise",
-    "faller": "Other/Noise", "health consultant": "Other/Noise",
-    "office administrator": "Business Administration",
-    "hr business partner": "Business Administration",
-    "admin assistant": "Business Administration",
-    "executive assistant": "Business Administration",
-    "receptionist": "Business Administration",
-    "analytics": "Planning", "category manager": "Planning",
-    "supply manager": "Planning", "materials manager": "Planning",
-    "freight": "Freight Forwarding",
-    "dispatch coordinator": "Transport", "allocator": "Transport", "driver": "Transport",
-    "warehouse manager": "Warehouse", "inventory": "Warehouse", "forklift": "Warehouse",
-    "accounts payable": "Finance", "accountant": "Finance", "payroll": "Finance",
-    "developer": "IT Support", "implementation": "IT Support",
-    "solutions consultant": "IT Support",
-    "operations manager": "Operations", "logistics": "Operations",
-    "head of operations": "Operations", "operations administrator": "Operations",
-    "stores officer": "Warehouse", "coolstore": "Warehouse", "reach truck": "Warehouse",
-    "customer service": "Sales", "sales": "Sales",
-    "business development": "Sales", "head of retail": "Sales",
-    "commercial manager": "Sales",
+# ── Skill normalisation (from skill_normalize.json) ──────────────────────────
+
+SKILL_SYNONYMS: dict[str, str] = _normalize["skill_synonyms"]
+_ABBREV_SET:    set[str]        = set(_normalize["abbreviations"])
+_JUNK_VALUES:   set[str]        = set(_normalize["junk_values"] + _normalize["soft_skills"])
+
+# ── Exact title lookup (from skills_knowledge_map.json) ──────────────────────
+
+_SKILLS_KNOWLEDGE_MAP: dict[str, dict] = {
+    k.lower(): v
+    for k, v in _skills_map.items()
+    if not k.startswith("_")
 }
 
-LEVEL_MAPPING = {
-    "ceo": "5. Executive / Strategic", "gm": "5. Executive / Strategic",
-    "director": "5. Executive / Strategic", "head of": "5. Executive / Strategic",
-    "executive": "5. Executive / Strategic",
-    "manager": "4. Expert / Specialist",
-    "consultant": "4. Expert / Specialist", "analyst": "4. Expert / Specialist",
-    "strategist": "4. Expert / Specialist",
-    "specialist": "3. Senior / Professional",
-    "senior": "3. Senior / Professional", "team lead": "3. Senior / Professional",
-    "principal": "3. Senior / Professional", "advanced": "3. Senior / Professional",
-    "coordinator": "2. Intermediate / Staff", "supervisor": "2. Intermediate / Staff",
-    "officer": "2. Intermediate / Staff", "administrator": "2. Intermediate / Staff",
-    "representative": "2. Intermediate / Staff", "operator": "2. Intermediate / Staff",
-    "driver": "2. Intermediate / Staff", "planner": "2. Intermediate / Staff",
-    "junior": "1. Junior / Entry", "graduate": "1. Junior / Entry",
-    "trainee": "1. Junior / Entry", "entry": "1. Junior / Entry",
-    "assistant": "1. Junior / Entry", "picker": "1. Junior / Entry",
-    "packer": "1. Junior / Entry", "handler": "1. Junior / Entry",
+# Map skills_knowledge_map level values → UI display strings
+_LEVEL_DISPLAY = {
+    "Entry":      "1. Junior / Entry",
+    "Mid":        "2. Intermediate / Staff",
+    "Senior":     "3. Senior / Professional",
+    "Management": "4. Expert / Specialist",
+    "Executive":  "5. Executive / Strategic",
 }
 
-WORK_NATURE_MAPPING = {
-    "Management": [
-        "manager","director","head","gm","chief","executive",
-        "superintendent","principal",
-    ],
-    "Specialist / Support": [
-        "analyst","planner","consultant","engineer","accountant","specialist",
-        "officer","admin","administrator","representative","agent","support",
-        "architect","business development","customer service","merchandiser",
-        "key account","sales","advisor","accounts","finance","billing","payroll",
-    ],
-    "Operational": [
-        "coordinator","supervisor","operator","driver","picker","storeman",
-        "clerk","handler","assistant","staff","loader","sorter","packer",
-        "dispatch","storeperson","controller","tally","devanner","mechanic",
-    ],
-}
-
-DOMAIN_SKILL_FIXED = {
-    "Business Administration": ["Leadership","Stakeholder Management","Strategic Planning","KPI Management"],
-    "Operations":              ["Process Optimization","Operational Excellence","Resource Allocation","SOP Development"],
-    "Finance":                 ["Cost Analysis","Accounts Payable/Receivable","ERP Proficiency","Financial Reporting"],
-    "Planning":                ["Demand Forecasting","Inventory Optimization","Supply Chain Planning","S&OP"],
-    "Freight Forwarding":      ["Incoterms","Customs Clearance","Export/Import Documentation","Consolidation"],
-    "Warehouse":               ["Inventory Accuracy","WMS","RF Scanning","Manual Handling","Safety Compliance"],
-    "Transport":               ["TMS","Route Optimization","Fleet Management","Last Mile Delivery","Compliance"],
-    "Sales":                   ["CRM","Quotation","Market Analysis","Revenue Growth","Customer Service"],
-    "IT Support":              ["Systems Integration","ERP Maintenance","Data Governance","IT Infrastructure"],
-    "Other/Noise":             [],
-}
-
-SKILL_SYNONYMS = {
-    "erp": "ERP Systems", "sap/erp": "ERP Systems", "erp software": "ERP Systems",
-    "wms": "WMS", "warehouse management system": "WMS", "wms software": "WMS",
-    "tms": "TMS", "transport management system": "TMS", "tms software": "TMS",
-    "crm": "CRM", "customer relationship management": "CRM", "crm software": "CRM",
-    "ms excel": "Microsoft Excel", "microsoft excel": "Microsoft Excel",
-    "advanced excel": "Microsoft Excel (Advanced)",
-    "forklift operation": "Forklift Operation", "sql": "SQL",
-    "data governance": "Data Governance",
-    "supply chain management": "Supply Chain Management",
-    "inventory control": "Inventory Control",
-    "inventory management": "Inventory Management",
-    "rf scanning": "RF Scanning", "sap": "SAP", "s&op": "S&OP",
-    "kpi": "KPI", "kpi management": "KPI Management",
-    "mrp": "MRP", "sop": "SOP", "edi": "EDI", "vmi": "VMI",
-    "ohs": "OHS", "ehs": "EHS", "sla": "SLA",
-    "power bi": "Power BI", "powerbi": "Power BI", "power-bi": "Power BI",
-    "tableau": "Tableau",
-    "python": "Python", "python scripting": "Python",
-    "cold chain": "Cold Chain", "cold storage": "Cold Chain",
-    "temperature controlled": "Cold Chain",
-    "last mile": "Last Mile Delivery", "last mile delivery": "Last Mile Delivery",
-    "last-mile": "Last Mile Delivery",
-    "cross docking": "Cross-Docking", "cross-docking": "Cross-Docking",
-    "cross dock": "Cross-Docking",
-    "pick and pack": "Pick & Pack", "pick & pack": "Pick & Pack", "pick pack": "Pick & Pack",
-    "3pl management": "3PL Management", "third party logistics": "3PL Management",
-    "3pl": "3PL Management",
-    "dangerous goods": "Dangerous Goods", "dg": "Dangerous Goods",
-    "hazmat": "Dangerous Goods", "hazchem": "Dangerous Goods",
-    "haccp": "HACCP", "food safety": "HACCP",
-    "iso 9001": "ISO 9001", "iso9001": "ISO 9001",
-    "customs compliance": "Customs Compliance",
-    "customs regulations": "Customs Compliance",
-    "tender management": "Tender Management", "rfq": "Tender Management",
-    "request for quotation": "Tender Management",
-    "vendor management": "Vendor Management",
-    "supplier management": "Vendor Management",
-    "supplier relations": "Vendor Management",
-    "contract negotiation": "Contract Negotiation",
-    "contract management": "Contract Negotiation",
-    "stakeholder management": "Stakeholder Management",
-    "stakeholder engagement": "Stakeholder Management",
-    "team leadership": "Team Leadership", "people management": "Team Leadership",
-    "leading teams": "Team Leadership",
-    "communication": "Communication Skills",
-    "written communication": "Communication Skills",
-    "verbal communication": "Communication Skills",
-    "continuous improvement": "Continuous Improvement",
-    "lean": "Lean Methodology",
-    "lean six sigma": "Lean Six Sigma", "six sigma": "Lean Six Sigma",
-}
-
-REMOVE_PHRASES = [
-    "immediate start","apply now","great opportunity","exciting opportunity",
-    "career growth","wanted","needed","join our team","above award rate",
-    "great money","packag","distrib","remuner","salary package",
-    "competitive package","competitive salary","bonus",
-]
-REMOVE_SHIFT = [
-    "night shift","day shift","afternoon shift","am shift","pm shift",
-    "overnight","morning shift","part time","full time","casual",
-]
-REMOVE_CONTRACT = [
-    "ftc","fixed term","fixed-term","contract role","contract position",
-    "temp role","temporary role","temp to perm","maternity cover",
-    "parental leave cover","secondment","ongoing","permanent role","casual role",
-]
+# ── Hardcoded rules (logistics-title-mapper specific, not in JSON) ────────────
 
 TYPO_MAP = {
     "assisstant": "assistant", "coodrinator": "coordinator", "sepcialist": "specialist",
@@ -245,6 +94,22 @@ CROSS_FUNCTIONAL_PAIRS = [
      "Cross-functional signal: Customer Service + Dispatch — may bridge Sales and Transport"),
 ]
 
+REMOVE_PHRASES = [
+    "immediate start", "apply now", "great opportunity", "exciting opportunity",
+    "career growth", "wanted", "needed", "join our team", "above award rate",
+    "great money", "packag", "distrib", "remuner", "salary package",
+    "competitive package", "competitive salary", "bonus",
+]
+REMOVE_SHIFT = [
+    "night shift", "day shift", "afternoon shift", "am shift", "pm shift",
+    "overnight", "morning shift", "part time", "full time", "casual",
+]
+REMOVE_CONTRACT = [
+    "ftc", "fixed term", "fixed-term", "contract role", "contract position",
+    "temp role", "temporary role", "temp to perm", "maternity cover",
+    "parental leave cover", "secondment", "ongoing", "permanent role", "casual role",
+]
+
 # ── Compiled regex patterns ──────────────────────────────────────────────────
 
 _SALARY_RE = re.compile(
@@ -272,84 +137,110 @@ _LOCATION_RE = re.compile(
     r'|APAC|ANZ|Remote|Hybrid|On-?site).*',
     re.IGNORECASE,
 )
-_EMOJI_RE = re.compile(
-    r'[\U0001F300-\U0001FAFF]|[\u2600-\u27BF]|[\uFE00-\uFE0F]'
-)
+_EMOJI_RE       = re.compile(r'[\U0001F300-\U0001FAFF]|[☀-➿]|[︀-️]')
 _MULTI_SEP_RE   = re.compile(r'(\s*[-–]\s*){2,}')
 _TRAILING_RE    = re.compile(r'[-–,|&]+$')
 _TITLE_CASE_RE  = re.compile(r'\b\w')
 
+# ── AI fallback (Claude Haiku) ───────────────────────────────────────────────
+
+_AI_SYSTEM_PROMPT = """You are a logistics job title domain classifier for the NZ/AU market.
+
+Classify the job title into exactly ONE domain:
+Warehouse, Transport, Freight Forwarding, Planning, Operations,
+Finance, Sales, IT Support, Business Administration, Other/Noise
+
+Rules:
+- Warehouse: physical execution inside a DC/warehouse (forklift, picker, storeperson, DC supervisor)
+- Transport: movement of goods outside the facility (driver, fleet, courier, linehaul, allocator)
+- Freight Forwarding: cross-border, customs, import/export (customs broker, freight forwarder)
+- Planning: forward-looking demand/supply/procurement (demand planner, buyer, S&OP, scheduler)
+- Operations: cross-functional coordination and execution management (operations manager, logistics coordinator)
+- Finance: financial control and reporting (accountant, payroll, AP/AR, financial analyst)
+- Sales: revenue-generating and customer-facing (sales rep, account manager, customer service at logistics firm)
+- IT Support: systems and technology roles (ERP/WMS/TMS consultant, developer, systems analyst)
+- Business Administration: internal enabling functions (HR, receptionist, admin officer)
+- Other/Noise: no logistics/supply chain connection
+
+Return ONLY valid JSON, no markdown:
+{"domain": "Warehouse", "confidence": 72, "reason": "one line"}"""
+
+_VALID_DOMAINS = {
+    "Warehouse", "Transport", "Freight Forwarding", "Planning", "Operations",
+    "Finance", "Sales", "IT Support", "Business Administration", "Other/Noise",
+}
+
+def _ai_classify(title: str, description: str = '') -> dict | None:
+    """Claude Haiku fallback — only called when rule engine returns unmatched Other/Noise."""
+    api_key = os.getenv("ANTHROPIC_API_KEY")
+    if not api_key:
+        return None
+    try:
+        import anthropic
+        client = anthropic.Anthropic(api_key=api_key)
+        user_msg = f"Job title: {title}"
+        if description:
+            user_msg += f"\nContext: {description[:200]}"
+
+        resp = client.messages.create(
+            model="claude-haiku-4-5-20251001",
+            max_tokens=120,
+            system=_AI_SYSTEM_PROMPT,
+            messages=[{"role": "user", "content": user_msg}],
+        )
+        text = resp.content[0].text.strip()
+        if text.startswith("```"):
+            text = "\n".join(text.split("\n")[1:]).rsplit("```", 1)[0].strip()
+
+        parsed = json.loads(text)
+        domain = parsed.get("domain", "Other/Noise")
+        if domain not in _VALID_DOMAINS:
+            domain = "Other/Noise"
+        return {
+            "domain":           domain,
+            "confidence":       min(int(parsed.get("confidence", 55)), 70),
+            "source":           "ai",
+            "matched_keywords": [],
+            "ai_reason":        parsed.get("reason", ""),
+        }
+    except Exception:
+        return None
+
+# ── Helper: skills_knowledge_map lookup ─────────────────────────────────────
+
+def _map_lookup(title: str) -> dict | None:
+    """Exact (case-insensitive) lookup in skills_knowledge_map."""
+    return _SKILLS_KNOWLEDGE_MAP.get(title.lower().strip())
+
+# ── Core functions ───────────────────────────────────────────────────────────
 
 def _title_case(s: str) -> str:
     return _TITLE_CASE_RE.sub(lambda m: m.group().upper(), s)
 
 
-# ── Core logic ───────────────────────────────────────────────────────────────
-
 def clean_title(raw: str) -> str:
-    t = raw.strip()
-    # Strip emoji
-    t = _EMOJI_RE.sub("", t).strip()
-    # Normalize ALL-CAPS
-    letters = re.sub(r'[^a-zA-Z]', '', t)
-    if letters and sum(1 for c in letters if c.isupper()) / len(letters) > 0.7:
-        t = t.lower()
-    # Remove noise phrases and shift patterns (prefix match — e.g. "packag" removes "package")
-    for phrase in REMOVE_PHRASES + REMOVE_SHIFT:
-        t = re.sub(rf'\b{re.escape(phrase)}\w*', '', t, flags=re.IGNORECASE)
-    # Fix typos
+    t = str(raw).strip()
+    t = _EMOJI_RE.sub("", t)
+    t = _SALARY_RE.sub("", t)
+    t = _CONTRACT_DURATION_RE.sub("", t)
+    t = _HOURS_POSITIONS_RE.sub("", t)
+    t = _LOCATION_RE.sub("", t)
+    tl = t.lower()
+    for phrase in REMOVE_PHRASES + REMOVE_SHIFT + REMOVE_CONTRACT:
+        tl = tl.replace(phrase, "")
     for typo, fix in TYPO_MAP.items():
-        t = re.sub(re.escape(typo), fix, t, flags=re.IGNORECASE)
-    # Remove salary, contract duration, hours/positions
-    t = _SALARY_RE.sub('', t)
-    t = _CONTRACT_DURATION_RE.sub('', t)
-    t = _HOURS_POSITIONS_RE.sub('', t)
-    # Remove contract type keywords
-    for phrase in REMOVE_CONTRACT:
-        t = re.sub(rf'\b{re.escape(phrase)}\b', '', t, flags=re.IGNORECASE)
-    # Remove bracketed content first (before location strip eats the closing bracket)
-    t = re.sub(r'\(.*?\)', '', t)
-    t = re.sub(r'\[.*?\]', '', t)
-    # Strip location suffix
-    t = _LOCATION_RE.sub('', t)
-    # Expand abbreviations
-    abbrevs = [
-        (r'\bSr\.(?=\s|$)',  'Senior'), (r'\bJr\.(?=\s|$)',  'Junior'),
-        (r'\bMgr\.?(?=\s|$)', 'Manager'), (r'\bCoord\.?(?=\s|$)', 'Coordinator'),
-        (r'\bAsst\.?(?=\s|$)', 'Assistant'), (r'\bSupvr?\.?(?=\s|$)', 'Supervisor'),
-        (r'\bDir\.?(?=\s|$)', 'Director'), (r'\bExec\.?(?=\s|$)', 'Executive'),
-        (r'\bBD\b', 'Business Development'), (r'\bOps\b', 'Operations'),
-        (r'\bGM\b', 'General Manager'), (r'\bVP\b', 'Vice President'),
-        (r'\bSVP\b', 'Senior Vice President'), (r'\bEVP\b', 'Executive Vice President'),
-        (r'\bCOO\b', 'Chief Operations Officer'), (r'\bCFO\b', 'Chief Financial Officer'),
-        (r'\bCTO\b', 'Chief Technology Officer'),
-        (r'\bDC\b', 'Distribution Centre'),
-        (r"\bInt['']?l\b", 'International'), (r'\bNatl\b', 'National'),
-        (r'\bTL\b', 'Team Lead'),
-        (r'\bFP&A\b', 'Financial Planning & Analysis'),
-        (r'\bAP/AR\b', 'Accounts Payable/Receivable'),
-        (r'\bA/P\b',   'Accounts Payable'),
-        (r'\bA/R\b',   'Accounts Receivable'),
-        (r'\bB2B\b', 'Business to Business'), (r'\bB2C\b', 'Business to Consumer'),
-    ]
-    for pattern, replacement in abbrevs:
-        t = re.sub(pattern, replacement, t, flags=re.IGNORECASE)
-    # Collapse multiple separators and clean trailing chars
-    t = _MULTI_SEP_RE.sub(' - ', t)
-    # Remove orphaned + signs not between word characters
-    t = re.sub(r'\s*\+\s*', ' ', t)
+        tl = tl.replace(typo, fix)
+    t = _MULTI_SEP_RE.sub(" – ", tl)
+    t = _TRAILING_RE.sub("", t).strip()
     t = re.sub(r'\s+', ' ', t).strip()
-    t = _TRAILING_RE.sub('', t).strip()
-    # Remove leading separators
-    t = re.sub(r'^[-–,|&\s]+', '', t).strip()
-    return _title_case(t)
+    return _title_case(t) if t else raw.strip()
 
 
 def classify(title: str, description: str = '') -> dict:
     tl = title.lower()
     dl = description.lower()
 
-    # Score every domain against title keywords
+    # Step 1 — keyword match on title
     domain_scores: dict[str, int] = {}
     domain_matches: dict[str, list[str]] = {}
     for domain, kws in PRIORITY_DOMAIN_RULES.items():
@@ -384,7 +275,7 @@ def classify(title: str, description: str = '') -> dict:
             "source": "title", "matched_keywords": domain_matches[best_domain],
         }
 
-    # Fuzzy repair fallback
+    # Step 2 — FUZZY_ROLE_REPAIR fallback
     for key, domain in FUZZY_ROLE_REPAIR.items():
         if key in tl:
             if domain == "Other/Noise":
@@ -393,21 +284,30 @@ def classify(title: str, description: str = '') -> dict:
                     "matched_keywords": [key],
                     "noise_reason": "fuzzy_noise", "noise_keyword": key,
                 }
-            return {"domain": domain, "confidence": 74, "source": "fuzzy", "matched_keywords": [key]}
+            return {
+                "domain": domain, "confidence": 74,
+                "source": "fuzzy", "matched_keywords": [key],
+            }
 
-    # Description fallback
+    # Step 3 — keyword match on description
     if description:
         desc_scores: dict[str, int] = {}
         for domain, kws in PRIORITY_DOMAIN_RULES.items():
             for kw in kws:
                 if kw in dl:
-                    desc_scores[domain] = desc_scores.get(domain, 0) + (len(kw.split()) if ' ' in kw else 1)
+                    desc_scores[domain] = desc_scores.get(domain, 0) + (
+                        len(kw.split()) if ' ' in kw else 1
+                    )
         if desc_scores:
             best = max(desc_scores.items(), key=lambda x: x[1])
             score = best[1]
             confidence = 72 if score >= 4 else 65 if score >= 2 else 58
-            return {"domain": best[0], "confidence": confidence, "source": "description", "matched_keywords": []}
+            return {
+                "domain": best[0], "confidence": confidence,
+                "source": "description", "matched_keywords": [],
+            }
 
+    # All rule-based steps failed
     return {
         "domain": "Other/Noise", "confidence": 30,
         "source": "unmatched", "matched_keywords": [],
@@ -445,20 +345,40 @@ def get_skills(domain: str, description: str) -> list[str]:
 def analyze(raw_title: str, description: str = '', country: str = '') -> dict:
     clean = clean_title(raw_title)
     result = classify(raw_title, description)
-    domain     = result["domain"]
+
+    # Step 4 — AI fallback for truly unmatched titles
+    ai_used = False
+    if result["source"] == "unmatched":
+        ai_result = _ai_classify(raw_title, description)
+        if ai_result and ai_result["domain"] != "Other/Noise":
+            result = ai_result
+            ai_used = True
+
+    domain    = result["domain"]
     confidence = result["confidence"]
-    source     = result["source"]
+    source    = result["source"]
     matched_kw = result.get("matched_keywords", [])
     noise_reason  = result.get("noise_reason")
     noise_keyword = result.get("noise_keyword")
+    ai_reason     = result.get("ai_reason")
 
-    seniority   = "Review Required" if domain == "Other/Noise" else get_seniority(raw_title)
+    # Skills + level: try exact map lookup first, then fallback
+    map_entry = _map_lookup(raw_title) or _map_lookup(clean)
+    if map_entry and domain != "Other/Noise":
+        skills   = [s.strip() for s in map_entry["skills"].split(",") if s.strip()][:6]
+        seniority = _LEVEL_DISPLAY.get(map_entry["level"], get_seniority(raw_title))
+    else:
+        skills    = get_skills(domain, description)
+        seniority = "Review Required" if domain == "Other/Noise" else get_seniority(raw_title)
+
     work_nature = "Review Required" if domain == "Other/Noise" else get_work_nature(raw_title)
-    skills      = get_skills(domain, description)
 
+    # Flags
     flags = []
     if domain == "Other/Noise":
         flags.append("Title does not match a known logistics domain — verify before use")
+    if ai_used:
+        flags.append("Domain inferred by AI — rule-based match not found")
     if source == "description":
         flags.append("Domain inferred from description only — title keyword was ambiguous")
     if not country:
@@ -490,5 +410,7 @@ def analyze(raw_title: str, description: str = '', country: str = '') -> dict:
         "needs_review":     needs_review,
         "noise_reason":     noise_reason,
         "noise_keyword":    noise_keyword,
+        "ai_used":          ai_used,
+        "ai_reason":        ai_reason,
         "country":          country,
     }

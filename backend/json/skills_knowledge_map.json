@@ -1,0 +1,3978 @@
+{
+  "_META": {
+    "source": "Original 866 entries generated from NZ/AU SEEK job data via Gemini and Groq APIs (intern project). Expanded and fully regenerated April 2025.",
+    "generated_by": "regenerate_skills_map.py — Claude Haiku (claude-haiku-4-5-20251001) with ASCM SCOR, ILO ISCO-08, O*NET Job Zones as classification anchors.",
+    "version": "v1.5.0 (2026-04-25) — 992 entries",
+    "usage": "Loaded by classify_jobs_nz_v2.py and classify_jobs_au_v2.py as a precision lookup layer. Matched against Job_Title_Clean first, then raw Job_Title as fallback. skills value is merged into AI_Skills_v2 alongside DOMAIN_SKILL_FIXED. level value provides a seniority hint that takes priority over LEVEL_MAPPING keyword inference when an exact title match is found.",
+    "level_values": "Entry / Mid / Senior / Management / Executive",
+    "update_instructions": "Re-run regenerate_skills_map.py to regenerate all entries. Add new titles to the NEW_TITLES list in that script before running."
+  },
+  "Admin Assistant / Accounts Receivable": {
+    "skills": "Accounts Receivable Processing, Invoice Management, Data Entry, Bookkeeping",
+    "level": "Entry"
+  },
+  "Business Process Analyst": {
+    "skills": "Process Mapping, Requirements Analysis, Business Process Optimization, Systems Analysis",
+    "level": "Mid"
+  },
+  "Category Coordinator": {
+    "skills": "Category Management, Procurement Coordination, Supplier Management, Demand Planning",
+    "level": "Mid"
+  },
+  "Commercial Finance Analyst": {
+    "skills": "Financial Analysis, Pricing Strategy, Cost Analysis, P&L Management",
+    "level": "Mid"
+  },
+  "Cost Management Accountant": {
+    "skills": "Cost Accounting, Variance Analysis, Budget Management, Cost Control",
+    "level": "Mid"
+  },
+  "Customer Operations Manager (Outset - Bikes)": {
+    "skills": "Customer Operations, Order Fulfillment, Process Management, Team Leadership",
+    "level": "Management"
+  },
+  "Customer Service Team Lead at Wonky Box – Part Time": {
+    "skills": "Customer Service Management, Team Leadership, Customer Relations, Issue Resolution",
+    "level": "Management"
+  },
+  "Logistics & Warehouse Manager": {
+    "skills": "Warehouse Management, Inventory Control, Logistics Coordination, Team Leadership",
+    "level": "Management"
+  },
+  "Payroll Delivery Officer": {
+    "skills": "Payroll Processing, Compliance Administration, Data Management, Payroll Systems",
+    "level": "Entry"
+  },
+  "Payroll Support Consultant": {
+    "skills": "Payroll Administration, Payroll Systems, Employee Relations, Compliance Knowledge",
+    "level": "Mid"
+  },
+  "Processing Officer Levin": {
+    "skills": "Data Processing, Administrative Procedures, Document Management, Compliance",
+    "level": "Entry"
+  },
+  "Procurement Administrator": {
+    "skills": "Procurement Administration, Purchase Order Management, Supplier Coordination, Contract Management",
+    "level": "Entry"
+  },
+  "Product Support Specialist": {
+    "skills": "Technical Support, Product Knowledge, Customer Communication, Troubleshooting",
+    "level": "Entry"
+  },
+  "Production Manager": {
+    "skills": "Production Planning, Quality Control, Manufacturing Operations, Team Leadership",
+    "level": "Management"
+  },
+  "Technical BA": {
+    "skills": "Requirements Analysis, Technical Documentation, Systems Analysis, Stakeholder Management",
+    "level": "Mid"
+  },
+  "Warehouse Person - Belfast Branch": {
+    "skills": "Warehouse Operations, Stock Management, Material Handling, Forklift Operation",
+    "level": "Entry"
+  },
+  "Assistant Accountant": {
+    "skills": "General Accounting, Financial Records, Bookkeeping, Account Reconciliation",
+    "level": "Entry"
+  },
+  "Business Development Manager - Transam Logistics": {
+    "skills": "Business Development, Client Relationship Management, Sales Strategy, Market Analysis",
+    "level": "Management"
+  },
+  "Commercial Manager - Bulk LPG": {
+    "skills": "Commercial Management, Pricing Strategy, Contract Negotiation, Customer Account Management",
+    "level": "Management"
+  },
+  "Consol PT": {
+    "skills": "Consolidation Operations, Logistics Coordination, Shipment Management, Warehouse Operations",
+    "level": "Entry"
+  },
+  "Customer Experience Advisor": {
+    "skills": "Customer Journey Mapping, Service Recovery, CRM Systems",
+    "level": "Mid"
+  },
+  "Customer Service Representative / Administrator": {
+    "skills": "Order Management, Customer Communication, Issue Resolution",
+    "level": "Entry"
+  },
+  "Demand Planner": {
+    "skills": "Demand Forecasting, Statistical Analysis, S&OP Process",
+    "level": "Mid"
+  },
+  "Demand Planning Coordinator": {
+    "skills": "Demand Forecasting, Data Analysis, Inventory Planning",
+    "level": "Mid"
+  },
+  "Dispatch Administrator": {
+    "skills": "Route Optimization, Dispatch Software, Order Coordination",
+    "level": "Mid"
+  },
+  "Dispatch Assistant - Night Shift": {
+    "skills": "Route Planning, Dispatch Systems, Order Processing",
+    "level": "Entry"
+  },
+  "Distribution Lineman": {
+    "skills": "Electrical Systems Installation, Ladder Work, Safety Protocols",
+    "level": "Entry"
+  },
+  "Freight Sorter - morning shifts": {
+    "skills": "Package Sorting, Material Handling, Warehouse Operations",
+    "level": "Entry"
+  },
+  "Import Air Operations": {
+    "skills": "Customs Clearance, Air Freight Documentation, Cargo Handling",
+    "level": "Mid"
+  },
+  "Key Account Manager": {
+    "skills": "Account Management, Sales Strategy, Relationship Building",
+    "level": "Management"
+  },
+  "Line Mechanic / Distribution Line Mechanic": {
+    "skills": "High-Voltage Systems, Troubleshooting, Safety Compliance",
+    "level": "Mid"
+  },
+  "Local Buyer/Purchaser": {
+    "skills": "Procurement, Vendor Negotiation, Purchase Order Management",
+    "level": "Mid"
+  },
+  "NetSuite Functional Consultant": {
+    "skills": "NetSuite Configuration, Supply Chain Module Integration, System Testing",
+    "level": "Senior"
+  },
+  "Processing Officer - AirPost": {
+    "skills": "Parcel Processing, Customs Documentation, Cargo Tracking",
+    "level": "Entry"
+  },
+  "Procurement Specialist": {
+    "skills": "Procurement Strategy, Vendor Management, Cost Analysis",
+    "level": "Senior"
+  },
+  "Product Specialist": {
+    "skills": "Product Knowledge, Technical Support, Sales Enablement",
+    "level": "Mid"
+  },
+  "Project Business Analyst": {
+    "skills": "Requirements Gathering, Process Improvement, Project Tracking",
+    "level": "Mid"
+  },
+  "Purchasing Coordinator": {
+    "skills": "Purchase Order Processing, Vendor Coordination, Procurement Documentation",
+    "level": "Entry"
+  },
+  "Sea Logistics Reefer Operational Care Manager, Cooltainer": {
+    "skills": "Cold Chain Management, Temperature Monitoring, Container Operations",
+    "level": "Management"
+  },
+  "Senior Purchasing & Supply Specialist": {
+    "skills": "Strategic Sourcing, Supplier Relationship Management, Supply Chain Optimization",
+    "level": "Senior"
+  },
+  "Senior Systems Accountant": {
+    "skills": "General Ledger Accounting, ERP Systems, Financial Reconciliation, Internal Controls",
+    "level": "Senior"
+  },
+  "SmartComm Business Analyst": {
+    "skills": "Business Requirements Analysis, Systems Design, Stakeholder Communication, Process Documentation",
+    "level": "Mid"
+  },
+  "Supply Chain Manager": {
+    "skills": "End-To-End Supply Chain Planning, Vendor Management, Inventory Optimization, P&L Responsibility",
+    "level": "Management"
+  },
+  "Supply Chain Portfolio Lead - Distribution Equipment": {
+    "skills": "Asset Portfolio Management, Distribution Network Design, Capital Planning, Stakeholder Leadership",
+    "level": "Executive"
+  },
+  "Supply Planner": {
+    "skills": "Demand Forecasting, Inventory Planning, Supply-Demand Balancing, MRP Systems",
+    "level": "Mid"
+  },
+  "Surface Access Planning Manager": {
+    "skills": "Network Planning, Infrastructure Coordination, Scheduling & Sequencing, Regulatory Compliance",
+    "level": "Management"
+  },
+  "TSI Freight Network Manager": {
+    "skills": "Freight Network Optimization, Route Planning, Carrier Management, Cost Control",
+    "level": "Management"
+  },
+  "Vendor Replenishment Planner": {
+    "skills": "Vendor-Managed Inventory, Demand Forecasting, Order Management, Procurement Coordination",
+    "level": "Mid"
+  },
+  "Warehouse Manager": {
+    "skills": "Warehouse Operations Management, Inventory Control, Staff Supervision, Health & Safety",
+    "level": "Management"
+  },
+  "Warehouse Supervisor": {
+    "skills": "Warehouse Operations, Pick & Pack Execution, Team Leadership, Safety Compliance",
+    "level": "Management"
+  },
+  "Accounts Payable Officer": {
+    "skills": "Invoice Processing, Payment Reconciliation, Vendor Management, General Ledger",
+    "level": "Entry"
+  },
+  "Afternoon Store Person": {
+    "skills": "Goods Receipt, Stock Handling, Inventory Management, Forklift Operation",
+    "level": "Entry"
+  },
+  "Application Support Consultant": {
+    "skills": "Technical Support, ERP Administration, Troubleshooting, User Training",
+    "level": "Mid"
+  },
+  "Business Process Mapping Specialist": {
+    "skills": "Process Modelling, Business Analysis, Documentation, Continuous Improvement",
+    "level": "Senior"
+  },
+  "CEO (Ports & Logistics divisions)": {
+    "skills": "Strategic Business Leadership, P&L Management, Stakeholder Relations, Regulatory Affairs",
+    "level": "Executive"
+  },
+  "Finance Clerk (Accounts Payable)": {
+    "skills": "Invoice Processing, Data Entry, Payment Reconciliation, Filing Systems",
+    "level": "Entry"
+  },
+  "Linehaul Dispatcher": {
+    "skills": "Route Optimization, Load Planning, Driver Coordination, Transport Scheduling",
+    "level": "Mid"
+  },
+  "Logistics & Operations Coordinator": {
+    "skills": "Order Coordination, Inventory Tracking, Stakeholder Communication, Data Management",
+    "level": "Entry"
+  },
+  "Logistics Administrator": {
+    "skills": "Order Processing, Documentation Management, Data Entry, Vendor Coordination",
+    "level": "Entry"
+  },
+  "Logistics Assistant- Christchurch": {
+    "skills": "Order Fulfillment, Stock Management, Goods Handling, Basic IT Systems",
+    "level": "Entry"
+  },
+  "Logistics Coordinator": {
+    "skills": "Order Fulfillment, Inventory Management, Transport Scheduling",
+    "level": "Mid"
+  },
+  "Logistics Operations Assistant": {
+    "skills": "Warehouse Operations, Data Entry, Order Processing",
+    "level": "Entry"
+  },
+  "Masonry Yard Distribution Manager": {
+    "skills": "Inventory Management, Route Optimization, Team Leadership",
+    "level": "Management"
+  },
+  "National Logistics Manager": {
+    "skills": "Supply Chain Strategy, Network Optimization, Stakeholder Management",
+    "level": "Executive"
+  },
+  "Operations Cadet": {
+    "skills": "Process Improvement, Data Analysis, Warehouse Operations",
+    "level": "Entry"
+  },
+  "Operations Manager": {
+    "skills": "Process Management, Resource Planning, Performance Metrics",
+    "level": "Management"
+  },
+  "Pick Packer": {
+    "skills": "Order Picking, Inventory Accuracy, Warehouse Safety",
+    "level": "Entry"
+  },
+  "Process Specialist SAP Roll-out": {
+    "skills": "SAP Configuration, Process Mapping, Change Management",
+    "level": "Senior"
+  },
+  "Procurement Manager (HAM)": {
+    "skills": "Vendor Management, Purchase Order Management, Contract Negotiation",
+    "level": "Management"
+  },
+  "Store Person": {
+    "skills": "Stock Receiving, Inventory Rotation, Warehouse Organization",
+    "level": "Entry"
+  },
+  "Store Person - Ormiston": {
+    "skills": "Stock Receiving, Inventory Rotation, Warehouse Organization",
+    "level": "Entry"
+  },
+  "Store Person Truck Loader": {
+    "skills": "Load Planning, Warehouse Operations, Manual Handling",
+    "level": "Entry"
+  },
+  "Storeperson": {
+    "skills": "Stock Receiving, Inventory Rotation, Warehouse Organization",
+    "level": "Entry"
+  },
+  "Supply Chain Assistant - Auckland": {
+    "skills": "Order Processing, Inventory Support, Data Entry",
+    "level": "Entry"
+  },
+  "Supply Chain Coordinator": {
+    "skills": "Demand Planning, Supplier Coordination, Logistics Scheduling",
+    "level": "Mid"
+  },
+  "Transport Planner": {
+    "skills": "Route Optimization, Fleet Management, Load Planning",
+    "level": "Mid"
+  },
+  "Warehouse & Dispatch Storeperson": {
+    "skills": "Order Picking, Load Planning, Warehouse Safety",
+    "level": "Entry"
+  },
+  "Warehouse - Pick Packer & Runner": {
+    "skills": "Order Picking, Stock Movement, Warehouse Safety",
+    "level": "Entry"
+  },
+  "Warehouse - Staff Needed": {
+    "skills": "Warehouse Operations, Inventory Management, Manual Handling",
+    "level": "Entry"
+  },
+  "Warehouse Assistant": {
+    "skills": "Stock Receiving, Order Picking, Warehouse Organization",
+    "level": "Entry"
+  },
+  "Warehouse Assistant - Outbound": {
+    "skills": "Order Picking, Pallet Jack Operation, Inventory Accuracy",
+    "level": "Entry"
+  },
+  "Warehouse Assistant - Replenishment (Night-Shift) Team Leader": {
+    "skills": "Inventory Replenishment, Team Supervision, Shift Coordination, Warehouse Management Systems",
+    "level": "Management"
+  },
+  "Warehouse Coordinator": {
+    "skills": "Warehouse Management Systems, Inventory Management, Order Coordination, Supply Chain Communication",
+    "level": "Mid"
+  },
+  "Warehouse Dispatch / Customer Service": {
+    "skills": "Order Dispatch, Customer Communication, Shipment Tracking, Inventory Visibility",
+    "level": "Mid"
+  },
+  "Warehouse Employee": {
+    "skills": "Stock Handling, Warehouse Safety, Basic Inventory Systems",
+    "level": "Entry"
+  },
+  "Warehouse Operations": {
+    "skills": "Warehouse Management Systems, Inventory Management, Process Optimization, Performance Metrics",
+    "level": "Mid"
+  },
+  "Warehouse Operator - Permanent & Fixed Term Roles": {
+    "skills": "Forklift Operation, Inventory Management, Warehouse Safety, Material Handling",
+    "level": "Entry"
+  },
+  "Warehouse Shipping Administrator": {
+    "skills": "Shipping Documentation, Carrier Management, Order Processing, Customs Compliance",
+    "level": "Mid"
+  },
+  "Warehouse Storeperson": {
+    "skills": "Stock Rotation, Inventory Control, Forklift Operation, Warehouse Organization",
+    "level": "Entry"
+  },
+  "Warehouse Team Member - CFF and Grocery": {
+    "skills": "Perishable Handling, Temperature Control Compliance, Order Picking, Stock Rotation",
+    "level": "Entry"
+  },
+  "Warehouse and Logistics Manager": {
+    "skills": "Warehouse Operations Management, Team Leadership, Budget Management, Supply Chain Optimization",
+    "level": "Management"
+  },
+  "Warehouse/DC Operator": {
+    "skills": "Forklift Operation, Warehouse Management Systems, Inventory Accuracy, Safety Compliance",
+    "level": "Entry"
+  },
+  "Business Analyst": {
+    "skills": "Requirements Analysis, Process Mapping, Data Analysis, Stakeholder Management",
+    "level": "Mid"
+  },
+  "Business Analyst - ERP Project": {
+    "skills": "ERP Systems Configuration, Process Design, Requirements Gathering, System Testing",
+    "level": "Senior"
+  },
+  "Chiller Storeperson": {
+    "skills": "Cold Chain Management, Temperature Monitoring, Perishable Goods Handling, FIFO Compliance",
+    "level": "Entry"
+  },
+  "Connections Officer": {
+    "skills": "Stakeholder Communication, Process Documentation, Relationship Management, Data Collection",
+    "level": "Mid"
+  },
+  "Credit Controller/Accounts Receivable": {
+    "skills": "Accounts Receivable Management, Credit Analysis, Collections, Financial Systems",
+    "level": "Mid"
+  },
+  "Distribution Centre Supervisor (Drury - Full Time)": {
+    "skills": "Team Supervision, Shift Management, Warehouse Operations, Performance Monitoring",
+    "level": "Management"
+  },
+  "Distribution Line Mechanic": {
+    "skills": "Conveyor System Maintenance, Equipment Troubleshooting, Preventive Maintenance, Mechanical Repair",
+    "level": "Mid"
+  },
+  "Distribution Store Person – Day Shift": {
+    "skills": "Stock Management, Order Picking, Inventory Organization, Warehouse Safety",
+    "level": "Entry"
+  },
+  "Distribution Team Member – Textile Cutter": {
+    "skills": "Fabric Cutting, Quality Control, Safety Compliance",
+    "level": "Entry"
+  },
+  "Dry Goods Storeperson": {
+    "skills": "Stock Management, Warehouse Operations, Product Handling",
+    "level": "Entry"
+  },
+  "Ecommerce Inventory & Demand Planning Specialist": {
+    "skills": "Demand Forecasting, Inventory Optimisation, ERP Systems",
+    "level": "Mid"
+  },
+  "Freight Planning & Communications Lead": {
+    "skills": "Freight Coordination, Transport Planning, Stakeholder Communication",
+    "level": "Management"
+  },
+  "GM - Retail Freight": {
+    "skills": "Freight Network Strategy, P&L Management, Retail Distribution",
+    "level": "Executive"
+  },
+  "GM – Innovation & Systems (Group)": {
+    "skills": "Systems Strategy, Digital Transformation, Process Improvement",
+    "level": "Executive"
+  },
+  "GM, Wholesale Freight": {
+    "skills": "Wholesale Distribution, Freight Network Optimisation, Strategic Leadership",
+    "level": "Executive"
+  },
+  "Graduate Local Purchaser/Buyer": {
+    "skills": "Procurement, Supplier Negotiation, Purchase Order Management",
+    "level": "Entry"
+  },
+  "Inventory Manager": {
+    "skills": "Inventory Control, Stock Forecasting, Warehouse Systems",
+    "level": "Mid"
+  },
+  "Kathmandu Purchasing & Production Specialist": {
+    "skills": "International Sourcing, Supplier Management, Quality Assurance",
+    "level": "Mid"
+  },
+  "Manager, Wholesale Freight": {
+    "skills": "Wholesale Logistics, Team Leadership, Freight Operations",
+    "level": "Management"
+  },
+  "Procurement Specialist – Sourcing & Supply": {
+    "skills": "Vendor Management, Procurement Analytics, Contract Negotiation",
+    "level": "Mid"
+  },
+  "Retail Planner": {
+    "skills": "Demand Planning, Retail Forecasting, Inventory Allocation",
+    "level": "Mid"
+  },
+  "Senior Business Analyst": {
+    "skills": "Requirements Analysis, Process Modelling, Business Intelligence",
+    "level": "Senior"
+  },
+  "Senior Project Manager – IT & Business Systems - Spicers": {
+    "skills": "ERP Implementation, Project Management, Systems Integration",
+    "level": "Senior"
+  },
+  "Senior System Accountant": {
+    "skills": "Financial Systems, GL Accounting, System Configuration",
+    "level": "Senior"
+  },
+  "Senior Warehouse Operator - Future Leader pathway": {
+    "skills": "Warehouse Operations, Forklift & Equipment Operation, Team Coordination",
+    "level": "Mid"
+  },
+  "Software Implementation Specialist": {
+    "skills": "ERP Implementation, Change Management, Technical Configuration",
+    "level": "Mid"
+  },
+  "Solutions Consultant": {
+    "skills": "Business Requirements Analysis, Solution Design, Client Engagement",
+    "level": "Senior"
+  },
+  "Supply Planner – Heritage Market": {
+    "skills": "Supply Planning, Demand Forecasting, Supplier Coordination",
+    "level": "Mid"
+  },
+  "Warehouse Assistant - North Harbour": {
+    "skills": "Inventory Management, Order Picking, Forklift Operation, Warehouse Safety Compliance",
+    "level": "Entry"
+  },
+  "Warehouse Person – Silverdale Branch": {
+    "skills": "Stock Receiving, Goods Putaway, Inventory Control, Warehouse Safety Compliance",
+    "level": "Entry"
+  },
+  "Account Representative": {
+    "skills": "Sales Management, Customer Relationship Management, Quote Preparation, Account Management",
+    "level": "Mid"
+  },
+  "Administration Lead": {
+    "skills": "Administrative Operations, Team Coordination, Documentation Management, Scheduling & Planning",
+    "level": "Management"
+  },
+  "Assembly & Process Worker": {
+    "skills": "Assembly Operations, Quality Inspection, Process Adherence, Production Documentation",
+    "level": "Entry"
+  },
+  "Business Analyst (Automation and Reporting)": {
+    "skills": "Process Automation, Data Analytics, Business Intelligence, Requirements Gathering",
+    "level": "Mid"
+  },
+  "Business Analyst - Fixed Term": {
+    "skills": "Requirements Analysis, Process Mapping, Data Modelling, Stakeholder Management",
+    "level": "Mid"
+  },
+  "Business Development Manager": {
+    "skills": "Market Analysis, Strategic Planning, Sales Pipeline Management, Business Growth Strategy",
+    "level": "Management"
+  },
+  "Business Lead": {
+    "skills": "Business Strategy, Operational Leadership, Performance Management, Strategic Planning",
+    "level": "Executive"
+  },
+  "COO (Ports & Logistics divisions)": {
+    "skills": "Port Operations Management, Supply Chain Strategy, Operational Efficiency, Financial Planning",
+    "level": "Executive"
+  },
+  "Centralised Labour Allocator": {
+    "skills": "Workforce Planning, Resource Scheduling, Labor Management System, Demand Forecasting",
+    "level": "Mid"
+  },
+  "Consultant / Senior Consultant – Data & Insights": {
+    "skills": "Data Analytics, Business Intelligence, Statistical Analysis, Strategic Reporting",
+    "level": "Senior"
+  },
+  "EHS Manager - Supply Chain": {
+    "skills": "Occupational Health & Safety, Risk Assessment, Safety Compliance, Incident Management",
+    "level": "Management"
+  },
+  "Exciting opportunity for a LN ERP Consultant": {
+    "skills": "ERP Configuration, Process Optimization, Systems Integration, Technical Support",
+    "level": "Senior"
+  },
+  "Financial Accountant": {
+    "skills": "General Ledger Accounting, Financial Reporting, Accounts Payable/Receivable, Reconciliation",
+    "level": "Mid"
+  },
+  "General Manager - Operations": {
+    "skills": "Operational Management, Strategic Planning, Performance Optimization, Team Leadership",
+    "level": "Executive"
+  },
+  "Health & Safety Manager, Ports & Logistics": {
+    "skills": "Occupational Health & Safety, Compliance Management, Safety Training, Hazard Assessment",
+    "level": "Management"
+  },
+  "IT System Administrator": {
+    "skills": "Systems Administration, Network Management, User Support, Security Management",
+    "level": "Mid"
+  },
+  "Internal Sales Administrator": {
+    "skills": "Sales Administration, Order Processing, Customer Service, CRM Systems",
+    "level": "Entry"
+  },
+  "Keg Delivery Driver / Picker & Packer": {
+    "skills": "Vehicle Operation, Order Picking, Pallet Jack Operation",
+    "level": "Entry"
+  },
+  "Operational Excellence Manager - NZ": {
+    "skills": "Lean Process Improvement, Performance Analytics, Continuous Improvement Methodologies",
+    "level": "Management"
+  },
+  "Production Manager Afternoon Shift - Auckland": {
+    "skills": "Production Scheduling, Quality Control, Equipment Maintenance Oversight",
+    "level": "Management"
+  },
+  "Purchasing Assistant Taylors Manufacturing": {
+    "skills": "Purchase Order Processing, Supplier Communication, Inventory Management",
+    "level": "Entry"
+  },
+  "REACH OPERATORS WANTED": {
+    "skills": "Reach Truck Operation, Warehouse Navigation, Pallet Handling",
+    "level": "Entry"
+  },
+  "Regional Manager": {
+    "skills": "Regional Performance Management, Stakeholder Relations, Strategic Planning",
+    "level": "Executive"
+  },
+  "Ship Lead": {
+    "skills": "Shipment Coordination, Team Supervision, Documentation Management",
+    "level": "Management"
+  },
+  "Storeman": {
+    "skills": "Stock Receiving, Warehouse Organization, Inventory Accuracy",
+    "level": "Entry"
+  },
+  "Storeperson Dayshift": {
+    "skills": "Stock Control, Goods Receipt, Warehouse Systems",
+    "level": "Entry"
+  },
+  "Storeperson and Driver": {
+    "skills": "Vehicle Operation, Stock Management, Route Navigation",
+    "level": "Entry"
+  },
+  "Tech Team Member": {
+    "skills": "IT Support, Systems Troubleshooting, Technical Documentation",
+    "level": "Entry"
+  },
+  "Vessel Planner - Mussels": {
+    "skills": "Production Planning, Harvest Scheduling, Capacity Planning",
+    "level": "Mid"
+  },
+  "Warehouse Storeperson Night Shift (10.00pm to 6.30am)": {
+    "skills": "Stock Receiving, Inventory Management, Warehouse Equipment Operation",
+    "level": "Entry"
+  },
+  "Accountant": {
+    "skills": "Financial Reporting, General Ledger Management, Reconciliation",
+    "level": "Mid"
+  },
+  "Accounts Receivable": {
+    "skills": "Receivables Collection, Invoice Processing, Credit Management",
+    "level": "Entry"
+  },
+  "Accounts Support": {
+    "skills": "Data Entry, Invoice Management, Financial Record Keeping",
+    "level": "Entry"
+  },
+  "Administrator - Steel Roofing": {
+    "skills": "Customer Management, Order Administration, Documentation Processing",
+    "level": "Entry"
+  },
+  "Assistant Procurement Manager": {
+    "skills": "Procurement Coordination, Supplier Management, Purchase Order Processing",
+    "level": "Mid"
+  },
+  "Business Analyst - Fixed Term Opportunity!": {
+    "skills": "Requirements Analysis, Process Documentation, Data Analysis",
+    "level": "Mid"
+  },
+  "Business Analyst – Strategy": {
+    "skills": "Strategic Analysis, Business Process Improvement, Data Analytics",
+    "level": "Senior"
+  },
+  "Business Support Fixed Term Contact": {
+    "skills": "Administrative Coordination, Data Entry, Customer Service, Document Management",
+    "level": "Entry"
+  },
+  "Business Transformational Analyst": {
+    "skills": "Process Improvement, Change Management, Business Process Modelling, Requirements Analysis",
+    "level": "Senior"
+  },
+  "Cable Jointer - HV Electricity Distribution - Hope based": {
+    "skills": "High Voltage Cable Installation, Electrical Safety Compliance, Cable Termination, Safety-Critical Work",
+    "level": "Mid"
+  },
+  "Commercial Analyst & Process Lead": {
+    "skills": "Cost Analysis, Process Optimisation, Procurement Analytics, Stakeholder Management",
+    "level": "Management"
+  },
+  "Consol (Casual)": {
+    "skills": "Warehouse Operations, Stock Movement, Order Picking, Equipment Operation",
+    "level": "Entry"
+  },
+  "Copy Centre Specialist, Warehouse Stationery, Lyall Bay (Full-time)": {
+    "skills": "Warehouse Stock Control, Inventory Management, Print Operations, Order Fulfillment",
+    "level": "Entry"
+  },
+  "Customer Care Representative": {
+    "skills": "Customer Service, Issue Resolution, Communication, CRM Systems",
+    "level": "Entry"
+  },
+  "Customer Experience Specialist": {
+    "skills": "Customer Journey Mapping, Service Delivery Optimisation, Feedback Analysis, Process Improvement",
+    "level": "Mid"
+  },
+  "Customer Experience Team Lead": {
+    "skills": "Team Leadership, Customer Service Strategy, Performance Management, Stakeholder Communication",
+    "level": "Management"
+  },
+  "Customer Operations Specialist": {
+    "skills": "Order Management, Customer Coordination, Process Optimisation, Data Management",
+    "level": "Mid"
+  },
+  "Customer Service Representative": {
+    "skills": "Customer Support, Issue Resolution, CRM Systems, Communication",
+    "level": "Entry"
+  },
+  "Customer Services Representative": {
+    "skills": "Customer Support, Problem Solving, CRM Systems, Service Delivery",
+    "level": "Entry"
+  },
+  "Data Administrator": {
+    "skills": "Data Management, Database Maintenance, Data Quality Assurance, SQL Queries",
+    "level": "Mid"
+  },
+  "Driver/Warehouse Person": {
+    "skills": "Vehicle Operation, Warehouse Operations, Stock Handling, Health & Safety Compliance",
+    "level": "Entry"
+  },
+  "ETL/Integration Developer": {
+    "skills": "ETL Development, Data Integration, SQL, Data Warehousing",
+    "level": "Mid"
+  },
+  "Electrician/Electrical Fitter - Hope, Tasman based - Electricity Distribution": {
+    "skills": "Electrical Installation, Fault Diagnosis, Safety Compliance, Test & Commissioning",
+    "level": "Mid"
+  },
+  "Experienced Storeperson - Warehouse": {
+    "skills": "Warehouse Management, Stock Control, Inventory Optimisation, Team Coordination",
+    "level": "Management"
+  },
+  "Export Logistics Coordinator": {
+    "skills": "Export Documentation, Supply Chain Coordination, Customs Compliance, Shipment Planning",
+    "level": "Mid"
+  },
+  "Finance Specialist (External Reporting)": {
+    "skills": "Financial Reporting, GAAP Compliance, Accounts Preparation, Audit Support",
+    "level": "Mid"
+  },
+  "Full Time Assembly Stores and Packing Person": {
+    "skills": "Assembly Operations, Warehouse Stock Control, Packing & Dispatch, Quality Checking",
+    "level": "Entry"
+  },
+  "Functional Partner": {
+    "skills": "Process Improvement, Stakeholder Management, Supply Chain Process Design",
+    "level": "Senior"
+  },
+  "IT Application & Support Engineer": {
+    "skills": "Systems Administration, Troubleshooting & Incident Resolution, ERP/WMS Support",
+    "level": "Mid"
+  },
+  "IT Service Manager": {
+    "skills": "IT Service Delivery, Incident & Problem Management, Team Leadership",
+    "level": "Management"
+  },
+  "Imports & Export Customer Services & Operations": {
+    "skills": "Trade Compliance, Customs Documentation, Shipment Coordination",
+    "level": "Mid"
+  },
+  "Inventory Assistant": {
+    "skills": "Stock Counting, Inventory Data Entry, Goods Receipt & Dispatch",
+    "level": "Entry"
+  },
+  "Inventory Control & Stock Accuracy Lead": {
+    "skills": "Cycle Counting, Inventory Reconciliation, ABC Analysis & Optimization",
+    "level": "Management"
+  },
+  "Inventory Controller / Supply Chain Coordinator": {
+    "skills": "Inventory Planning, Stock Level Management, Supply Chain Coordination",
+    "level": "Mid"
+  },
+  "Inventory Controller Supervisor (Cycle Counting)": {
+    "skills": "Cycle Counting Program Management, Team Supervision, Inventory Accuracy",
+    "level": "Management"
+  },
+  "Inwards / Outwards Goods Coordinator – Manufacturing": {
+    "skills": "Goods Receipt & Dispatch, Warehouse Coordination, Production Scheduling Support",
+    "level": "Mid"
+  },
+  "Logistics Dispatch Co-ordinator": {
+    "skills": "Transport Scheduling, Route Optimization, Shipment Tracking",
+    "level": "Mid"
+  },
+  "Logistics Inventory Controller & Material Handler": {
+    "skills": "Inventory Management, Warehouse Operations, Material Handling",
+    "level": "Entry"
+  },
+  "Logistics Operations Coordinator": {
+    "skills": "Order Fulfillment, Logistics Coordination, Warehouse Systems",
+    "level": "Mid"
+  },
+  "Logistics Operator & Administrator": {
+    "skills": "Warehouse Operations, Data Administration, Goods Handling",
+    "level": "Entry"
+  },
+  "Logistics Team Leader": {
+    "skills": "Team Leadership, Warehouse Operations Management, Performance Monitoring",
+    "level": "Management"
+  },
+  "Manufacturing and Logistics Operator": {
+    "skills": "Production Operations, Warehouse Handling, Safety Compliance",
+    "level": "Entry"
+  },
+  "Masonry Dispatch & Logistics Coordinator": {
+    "skills": "Transport Dispatch, Route Planning, Customer Coordination",
+    "level": "Mid"
+  },
+  "Master Data Administrator": {
+    "skills": "Data Quality Management, ERP Master Data, Data Governance",
+    "level": "Mid"
+  },
+  "Merchandise Planner": {
+    "skills": "Demand Forecasting, Inventory Planning, Assortment Management",
+    "level": "Mid"
+  },
+  "Operations Manager – Linehaul": {
+    "skills": "Linehaul Management, Transport Operations, Network Optimization",
+    "level": "Management"
+  },
+  "Operations Support Specialist": {
+    "skills": "Process Support, Data Analysis, Operational Reporting",
+    "level": "Entry"
+  },
+  "Process Worker": {
+    "skills": "Production Scheduling, Quality Control, Equipment Operation",
+    "level": "Entry"
+  },
+  "Processing Officer, Forklift role": {
+    "skills": "Forklift Operation, Inventory Management, Warehouse Safety",
+    "level": "Entry"
+  },
+  "Procurement and Billing Specialist - Operations & Logistics": {
+    "skills": "Procurement, Invoice Processing, Supplier Management",
+    "level": "Mid"
+  },
+  "Production Operator": {
+    "skills": "Production Scheduling, Quality Control, Equipment Operation",
+    "level": "Entry"
+  },
+  "Project Manager - Dunedin based - Electricity Distribution Industry": {
+    "skills": "Project Planning, Stakeholder Management, Budget Control",
+    "level": "Management"
+  },
+  "Reach Truck / Forklift Operator – Day & Afternoon Shifts": {
+    "skills": "Forklift Operation, Warehouse Safety, Inventory Accuracy",
+    "level": "Entry"
+  },
+  "Sales Support Assistant - Christchurch": {
+    "skills": "Order Processing, Customer Service, Administrative Support",
+    "level": "Entry"
+  },
+  "Sales Support, Sustainability & Supplier Assistant": {
+    "skills": "Supplier Relationship Management, Order Processing, Sustainability Reporting",
+    "level": "Mid"
+  },
+  "Scheduler / Project Coordinator – Construction Industry": {
+    "skills": "Project Scheduling, Resource Planning, Stakeholder Communication",
+    "level": "Mid"
+  },
+  "Shipping Administrator - Cold Chain/Dispatch": {
+    "skills": "Cold Chain Management, Shipping Documentation, Dispatch Coordination",
+    "level": "Mid"
+  },
+  "Shipping Co-ordinator": {
+    "skills": "Shipping Documentation, Logistics Coordination, Carrier Management",
+    "level": "Mid"
+  },
+  "Storeperson Morning Shift": {
+    "skills": "Inventory Management, Stock Replenishment, Warehouse Safety",
+    "level": "Entry"
+  },
+  "Technical Business Analyst": {
+    "skills": "Requirements Analysis, Process Mapping, Systems Documentation",
+    "level": "Mid"
+  },
+  "Warehouse & Delivery Legend Wanted!": {
+    "skills": "Warehouse Operations, Route Planning, Vehicle Safety",
+    "level": "Entry"
+  },
+  "Warehouse Assistant - pick/pack/load/replen": {
+    "skills": "Order Picking, Inventory Management, Warehouse Safety",
+    "level": "Entry"
+  },
+  "Warehouse Operator - Night Shift": {
+    "skills": "Warehouse Operations, Inventory Control, Equipment Operation",
+    "level": "Entry"
+  },
+  "Warehouse Stocktake (2 day assignment)": {
+    "skills": "Inventory Counting, Data Entry, Warehouse Safety",
+    "level": "Entry"
+  },
+  "Application Specialist - Digital and Technology": {
+    "skills": "Systems Support, User Training, Technical Documentation",
+    "level": "Mid"
+  },
+  "Assistant Production (Pâté)": {
+    "skills": "Production Scheduling, Food Safety, Quality Control",
+    "level": "Entry"
+  },
+  "Branch Manager": {
+    "skills": "Team Leadership, Financial Management, Operations Management",
+    "level": "Management"
+  },
+  "Business Analyst - Value Chain Mapping focus": {
+    "skills": "Process Mapping, Supply Chain Analysis, Stakeholder Engagement, Data Visualisation",
+    "level": "Mid"
+  },
+  "Casual Event Delivery Staff – Event Hire Company": {
+    "skills": "Equipment Handling, Customer Service, Vehicle Operation, Logistics Co-ordination",
+    "level": "Entry"
+  },
+  "Category Manager": {
+    "skills": "Procurement Strategy, Supplier Management, Category Analysis, Spend Analytics",
+    "level": "Senior"
+  },
+  "Checkout Team for MEGA Papanui": {
+    "skills": "Point Of Sale Systems, Cash Handling, Customer Service, Inventory Awareness",
+    "level": "Entry"
+  },
+  "Commercial Operations & Import–Export Manager": {
+    "skills": "Import/Export Compliance, Customs Documentation, Commercial Negotiation, Logistics Co-ordination",
+    "level": "Management"
+  },
+  "Commercial Specialist": {
+    "skills": "Contract Negotiation, Commercial Analysis, Supplier Relationship Management, Cost Optimisation",
+    "level": "Mid"
+  },
+  "Customer Care Assistant": {
+    "skills": "Customer Service, Order Tracking, CRM Systems, Communication",
+    "level": "Entry"
+  },
+  "Customer Service Manager": {
+    "skills": "Team Leadership, Customer Experience Strategy, Performance Management, Complaint Resolution",
+    "level": "Management"
+  },
+  "Customer Service Supervisor": {
+    "skills": "Team Supervision, Quality Assurance, Customer Conflict Resolution, Shift Management",
+    "level": "Management"
+  },
+  "Delivery Driver/Installer": {
+    "skills": "Vehicle Operation, Route Navigation, Customer Delivery, Equipment Installation",
+    "level": "Entry"
+  },
+  "Dispatch Coordinator": {
+    "skills": "Dispatch Planning, Route Optimisation, Carrier Management, Delivery Scheduling",
+    "level": "Mid"
+  },
+  "Dispatch Manager": {
+    "skills": "Team Leadership, Fleet Management, Route Optimisation, Performance Metrics",
+    "level": "Management"
+  },
+  "Dispatch Role In Veterinary Sector": {
+    "skills": "Veterinary Logistics, Dispatch Planning, Temperature Control Management, Confidentiality Compliance",
+    "level": "Entry"
+  },
+  "Dispatch Worker": {
+    "skills": "Order Dispatching, Delivery Scheduling, Carrier Co-ordination, Inventory Management",
+    "level": "Entry"
+  },
+  "Finance Business Partner": {
+    "skills": "Financial Analysis, Business Case Development, Cost Modelling, Stakeholder Reporting",
+    "level": "Senior"
+  },
+  "General Manager - Grocery": {
+    "skills": "P&L Management, Retail Operations, Team Leadership, Supply Chain Oversight",
+    "level": "Executive"
+  },
+  "Machine Operator": {
+    "skills": "Equipment Operation, Quality Control, Preventive Maintenance, Safety Compliance",
+    "level": "Entry"
+  },
+  "Manager, Coldstore Timaru": {
+    "skills": "Cold Chain Management, Team Leadership, Inventory Control, Temperature Monitoring",
+    "level": "Management"
+  },
+  "Manufacturing Labourers": {
+    "skills": "Equipment Operation, Material Handling, Quality Inspection, Safety Compliance",
+    "level": "Entry"
+  },
+  "Office Support": {
+    "skills": "Administrative Support, Data Entry, Scheduling, Clerical Organisation",
+    "level": "Entry"
+  },
+  "Operations Supervisor - Whanganui (On-site)": {
+    "skills": "Warehouse Operations Management, Staff Scheduling, Health & Safety Compliance, KPI Monitoring",
+    "level": "Management"
+  },
+  "Project Manager / Programme Manager / Product Manager": {
+    "skills": "Project Planning & Scheduling, Stakeholder Management, Budget Control, Risk Management",
+    "level": "Management"
+  },
+  "Quality Co-ordinator - Systems": {
+    "skills": "Quality Assurance Systems, Process Documentation, Audit Management, Corrective Action Tracking",
+    "level": "Mid"
+  },
+  "Senior Solutions Specialist": {
+    "skills": "Technical Problem Solving, Systems Integration, Customer Solution Design, Training & Mentoring",
+    "level": "Senior"
+  },
+  "Senior Storeperson": {
+    "skills": "Inventory Management, Stock Cycle Counting, Warehouse Safety, Equipment Operation",
+    "level": "Senior"
+  },
+  "Senior Technical Support Analyst": {
+    "skills": "Technical Troubleshooting, System Administration, IT Support Documentation, Knowledge Transfer",
+    "level": "Senior"
+  },
+  "Stock Controller": {
+    "skills": "Inventory Reconciliation, Stock Accuracy, Cycle Counting, WMS System Operations",
+    "level": "Mid"
+  },
+  "Storage Co-Ordinator": {
+    "skills": "Warehouse Organisation, Storage Planning, Inventory Tracking, Dispatch Coordination",
+    "level": "Mid"
+  },
+  "Supply Planning Manager": {
+    "skills": "Demand Forecasting, Supply Chain Planning, Inventory Optimization, Vendor Management",
+    "level": "Management"
+  },
+  "Supply Technician Antarctica": {
+    "skills": "Inventory Management, Cold Chain Operations, Remote Logistics, Equipment Maintenance",
+    "level": "Entry"
+  },
+  "Warehouse Operator": {
+    "skills": "Forklift Operation, Order Picking, Stock Rotation, Safety Procedures",
+    "level": "Entry"
+  },
+  "Warehouse Quality Assistant": {
+    "skills": "Quality Inspection, Stock Verification, Damage Assessment, Compliance Documentation",
+    "level": "Entry"
+  },
+  "Warehouse Storeman": {
+    "skills": "Stock Handling, Goods Receipt & Dispatch, Inventory Organization, WMS Data Entry",
+    "level": "Entry"
+  },
+  "Workforce Planner": {
+    "skills": "Labor Forecasting, Shift Planning, Capacity Analysis, Workforce Scheduling",
+    "level": "Mid"
+  },
+  "Accounts Payable Specialist": {
+    "skills": "Invoice Processing, Vendor Payment Management, Reconciliation, Accounting Software",
+    "level": "Mid"
+  },
+  "Business Analyst - HRIS Workday": {
+    "skills": "Workday Administration, HR Systems Analysis, Business Requirements Definition, Data Reporting",
+    "level": "Mid"
+  },
+  "Casual Afternoon Freight Sorter": {
+    "skills": "Manual Material Handling, Package Sorting, Safety Awareness, Pallet Operations",
+    "level": "Entry"
+  },
+  "Casual Freight Handler": {
+    "skills": "Cargo Handling, Loading & Unloading, Basic Equipment Operation, Weight Compliance",
+    "level": "Entry"
+  },
+  "Consol (FX)": {
+    "skills": "Freight Consolidation, Cargo Planning, Documentation Compliance, Cost Optimization",
+    "level": "Mid"
+  },
+  "Customer Operations Coordinator": {
+    "skills": "Order Processing, Customer Communication, Shipment Tracking, Issue Resolution",
+    "level": "Mid"
+  },
+  "Customer Replenishment Executive": {
+    "skills": "Demand Forecasting, Inventory Optimization, Supply Chain Analytics, Stakeholder Management",
+    "level": "Executive"
+  },
+  "Customer Service Representative (Rest of World)": {
+    "skills": "Order Management, Customer Communication, Issue Resolution, Systems Navigation",
+    "level": "Entry"
+  },
+  "Data Migration Specialist – Functional and Data Analyst": {
+    "skills": "Data Mapping, ETL Processes, Data Validation, ERP Systems, SQL",
+    "level": "Mid"
+  },
+  "ERP Delivery Lead": {
+    "skills": "ERP Implementation, Project Management, Process Design, Change Management, Stakeholder Coordination",
+    "level": "Management"
+  },
+  "Export Documentation Coordinator": {
+    "skills": "Export Compliance, Documentation Management, Customs Procedures, Regulatory Knowledge",
+    "level": "Entry"
+  },
+  "Field Trade Coach - Electricity Distribution Industry": {
+    "skills": "Technical Training Delivery, Safety Compliance, Equipment Operation, Performance Coaching",
+    "level": "Management"
+  },
+  "Functional Consultant - Fixed term": {
+    "skills": "Business Process Mapping, Systems Configuration, Requirements Analysis, Client Advisory",
+    "level": "Senior"
+  },
+  "General Manager Oceans & International": {
+    "skills": "Ocean Freight Management, International Trade, P&L Management, Carrier Relations",
+    "level": "Executive"
+  },
+  "General Manager Operations": {
+    "skills": "Operations Management, Strategic Planning, Budget Control, Team Leadership, KPI Management",
+    "level": "Executive"
+  },
+  "Graduate Business Analyst - Operations": {
+    "skills": "Process Analysis, Data Analysis, Requirements Gathering, Business Modeling",
+    "level": "Entry"
+  },
+  "IT Systems Administrator": {
+    "skills": "System Administration, User Support, Network Management, Backup & Recovery",
+    "level": "Mid"
+  },
+  "Inventory Controller": {
+    "skills": "Inventory Management, Stock Control, Cycle Counting, ERP Systems, Reconciliation",
+    "level": "Mid"
+  },
+  "Key Account (Mandarine Speaking)": {
+    "skills": "Account Management, Sales Coordination, Relationship Building, Order Processing, Mandarin Language",
+    "level": "Mid"
+  },
+  "Master Data Administrator (6x 12-week fixed terms)": {
+    "skills": "Master Data Management, Data Governance, ERP Data Maintenance, Data Quality Assurance",
+    "level": "Mid"
+  },
+  "Nightshift Storeperson": {
+    "skills": "Warehouse Operations, Stock Handling, Inventory Accuracy, Materials Handling Equipment",
+    "level": "Entry"
+  },
+  "Procurement & Logistics Administrator": {
+    "skills": "Purchase Order Processing, Vendor Coordination, Invoice Management, Logistics Support",
+    "level": "Entry"
+  },
+  "Production Team Leader": {
+    "skills": "Production Planning, Team Supervision, Quality Control, Safety Management, Performance Monitoring",
+    "level": "Management"
+  },
+  "Senior Accounts Payable": {
+    "skills": "Accounts Payable Processing, Invoice Management, Vendor Relations, Financial Reconciliation",
+    "level": "Senior"
+  },
+  "Senior Demand Planner": {
+    "skills": "Demand Forecasting, S&OP Process, Statistical Modeling, Inventory Planning, Analytics Tools",
+    "level": "Senior"
+  },
+  "Specialist Lead/ Senior Specialist Lead – HR Transformation": {
+    "skills": "Change Management, HR Systems Implementation, Organizational Design, Stakeholder Management",
+    "level": "Senior"
+  },
+  "Warehouse Storeperson Wiri": {
+    "skills": "Inventory Management, Warehouse Operations, Forklift Operation, Stock Control",
+    "level": "Entry"
+  },
+  "Account Payable & Accounts Receivable Administrator": {
+    "skills": "Accounts Payable Processing, Accounts Receivable Management, General Ledger, Reconciliation",
+    "level": "Entry"
+  },
+  "Application Support Engineer - Manufacturing Systems": {
+    "skills": "Manufacturing Systems Support, ERP Systems, Technical Troubleshooting, User Training",
+    "level": "Mid"
+  },
+  "Business Analyst - North Shore based": {
+    "skills": "Requirements Gathering, Process Mapping, Systems Analysis, Data Analysis",
+    "level": "Mid"
+  },
+  "Business Analyst Lead": {
+    "skills": "Requirements Management, Process Improvement, Stakeholder Engagement, Solution Design",
+    "level": "Management"
+  },
+  "Business Intelligence (BI) Analyst": {
+    "skills": "Data Analytics, Report Development, SQL, Data Visualization",
+    "level": "Mid"
+  },
+  "Coordinator - Accounting Software (20 hours a week)": {
+    "skills": "Accounting Software Administration, Data Entry, Process Coordination, Invoice Management",
+    "level": "Entry"
+  },
+  "Customer & Logistics Administrator": {
+    "skills": "Order Processing, Logistics Coordination, Customer Service, Inventory Tracking",
+    "level": "Entry"
+  },
+  "Customer Service Team Leader": {
+    "skills": "Team Leadership, Customer Service Management, Performance Monitoring, Conflict Resolution",
+    "level": "Management"
+  },
+  "Customer Services": {
+    "skills": "Customer Inquiry Resolution, Order Management, Communication, Service Quality",
+    "level": "Entry"
+  },
+  "ERP Tech Lead": {
+    "skills": "ERP Systems Architecture, Technical Implementation, System Configuration, Team Leadership",
+    "level": "Management"
+  },
+  "General Labourer – Night Shift": {
+    "skills": "Manual Handling, Warehouse Operations, Health & Safety Compliance, Equipment Operation",
+    "level": "Entry"
+  },
+  "Logistics, Production Planner & Admin Support": {
+    "skills": "Production Planning, Demand Forecasting, Supply Chain Coordination, Inventory Planning",
+    "level": "Mid"
+  },
+  "Materials Planner": {
+    "skills": "Demand Forecasting, Materials Planning, Procurement Coordination, Inventory Optimization",
+    "level": "Mid"
+  },
+  "Microsoft Dynamics 365 Business Central Functional Consultant": {
+    "skills": "Business Central Configuration, Functional Requirements Analysis, User Training, System Customization",
+    "level": "Senior"
+  },
+  "Outlet Sales & Inventory Coordinator": {
+    "skills": "Inventory Management, Sales Coordination, Stock Control, Point-of-Sale Systems",
+    "level": "Entry"
+  },
+  "Packing": {
+    "skills": "Order Fulfillment, Quality Inspection, Manual Dexterity, Packaging Standards",
+    "level": "Entry"
+  },
+  "Permanent Office/Warehouse Assistant - CHCH": {
+    "skills": "Warehouse Operations, Administrative Support, Inventory Management, Data Entry",
+    "level": "Entry"
+  },
+  "Technical Application Specialist": {
+    "skills": "Application Support, Technical Training, System Configuration, User Documentation",
+    "level": "Mid"
+  },
+  "Assistant Gas Distribution Fitter": {
+    "skills": "Gas Safety Compliance, Pipeline Installation, Pressure Testing",
+    "level": "Entry"
+  },
+  "Customer Service & Dispatch Coordinator": {
+    "skills": "Dispatch Management, Customer Communication, Order Routing",
+    "level": "Mid"
+  },
+  "Delivery Driver (Class 1 truck)": {
+    "skills": "Class 1 Truck Licence, Route Optimisation, Load Securing",
+    "level": "Entry"
+  },
+  "Despatch & Weighbridge Coordinator": {
+    "skills": "Dispatch Management, Weighbridge Operations, DOC Compliance",
+    "level": "Mid"
+  },
+  "Distribution Centre Pick-Packer": {
+    "skills": "Order Picking, Inventory Accuracy, Packing Standards",
+    "level": "Entry"
+  },
+  "Distribution System Operator (DSO) Strategy Lead": {
+    "skills": "Network Optimisation, Demand Forecasting, Strategic Planning",
+    "level": "Executive"
+  },
+  "Entrance role - Customer Service Freight Forwarding": {
+    "skills": "Freight Documentation, Customer Service, Order Processing",
+    "level": "Entry"
+  },
+  "Export and Logistics Co-ordinator": {
+    "skills": "Export Documentation, Customs Compliance, Shipment Coordination",
+    "level": "Mid"
+  },
+  "Food Process Workers": {
+    "skills": "Food Safety Standards, Production Line Operation, Quality Control",
+    "level": "Entry"
+  },
+  "Merchandise Planner - Cosmetics and Impulse": {
+    "skills": "Demand Forecasting, Inventory Planning, Category Analysis",
+    "level": "Mid"
+  },
+  "Night Admin and Packer": {
+    "skills": "Order Packing, Administrative Processing, Inventory Recording",
+    "level": "Entry"
+  },
+  "Operations Coordinator": {
+    "skills": "Process Coordination, Inventory Management, Stakeholder Communication",
+    "level": "Mid"
+  },
+  "Permanent Warehouse Person - CHCH": {
+    "skills": "Warehouse Operations, Stock Management, Forklift Operation",
+    "level": "Entry"
+  },
+  "Production Supervisor": {
+    "skills": "Production Planning, Team Leadership, Quality Assurance",
+    "level": "Management"
+  },
+  "Project Delivery Coordinator": {
+    "skills": "Project Planning, Timeline Management, Stakeholder Coordination",
+    "level": "Mid"
+  },
+  "Retail/Warehouse Assistant 30-35 hours per week": {
+    "skills": "Stock Replenishment, Point Of Sale Operation, Warehouse Basics",
+    "level": "Entry"
+  },
+  "Store Person - Auckland": {
+    "skills": "Inventory Management, Stock Receiving, Warehouse Organisation",
+    "level": "Entry"
+  },
+  "Store Person - Logistics": {
+    "skills": "Stock Control, Goods Receipt, Inventory Recording",
+    "level": "Entry"
+  },
+  "Storeperson - Warehouse": {
+    "skills": "Warehouse Operations, Stock Management, Inventory Accuracy",
+    "level": "Entry"
+  },
+  "Storesperson": {
+    "skills": "Inventory Management, Stock Receiving, Order Picking",
+    "level": "Entry"
+  },
+  "Storesperson - based in Alexandra, Central Otago": {
+    "skills": "Inventory Management, Stock Receiving, Order Picking",
+    "level": "Entry"
+  },
+  "Train Capacity Planner": {
+    "skills": "Demand Forecasting, Network Planning, Capacity Analysis",
+    "level": "Mid"
+  },
+  "VMI": {
+    "skills": "Vendor Managed Inventory, Demand Forecasting, Supply Chain Analytics",
+    "level": "Mid"
+  },
+  "Warehouse & Admin Support - Bin Inn": {
+    "skills": "Inventory Management, Data Entry, Stock Receiving",
+    "level": "Entry"
+  },
+  "Warehouse Assistance": {
+    "skills": "Order Picking, Stock Receiving, Inventory Management",
+    "level": "Entry"
+  },
+  "Warehouse Logistics & Pick-pack team mate - Full Time": {
+    "skills": "Order Picking, Warehouse Layout Optimization, Inventory Accuracy",
+    "level": "Entry"
+  },
+  "Warehouse Operations - Christchurch": {
+    "skills": "Warehouse Management Systems, Order Fulfillment, Inventory Control",
+    "level": "Mid"
+  },
+  "Warehouse Operative": {
+    "skills": "Order Picking, Material Handling, Stock Receiving",
+    "level": "Entry"
+  },
+  "Warehouse Operator - Christchurch RDC": {
+    "skills": "Warehouse Management Systems, Order Fulfillment, Inventory Control",
+    "level": "Entry"
+  },
+  "Warehouse Person": {
+    "skills": "Order Picking, Stock Receiving, Inventory Management",
+    "level": "Entry"
+  },
+  "Warehouse Picker / Packer": {
+    "skills": "Order Picking, Packing, Inventory Accuracy",
+    "level": "Entry"
+  },
+  "Warehouse Picker Packer": {
+    "skills": "Order Picking, Packing, Inventory Accuracy",
+    "level": "Entry"
+  },
+  "Warehouse and Inventory Manager": {
+    "skills": "Warehouse Management Systems, Inventory Control, Team Leadership, Process Optimization",
+    "level": "Management"
+  },
+  "Cargo Customer Services Officer": {
+    "skills": "Cargo Management, Customer Service, Documentation Processing",
+    "level": "Mid"
+  },
+  "Cargo Handlers": {
+    "skills": "Material Handling, Cargo Loading, Safety Compliance",
+    "level": "Entry"
+  },
+  "Finance Support – ERP Project Backfill": {
+    "skills": "ERP Systems, Financial Data Entry, Process Documentation",
+    "level": "Entry"
+  },
+  "Flower & Gift Packer": {
+    "skills": "Order Picking, Packing, Quality Inspection",
+    "level": "Entry"
+  },
+  "Import/Export Coordinator": {
+    "skills": "Customs Documentation, Trade Compliance, Logistics Coordination",
+    "level": "Mid"
+  },
+  "Nightshift Pick Packer": {
+    "skills": "Order Picking, Packing, Inventory Accuracy",
+    "level": "Entry"
+  },
+  "Part Time Freight Handler": {
+    "skills": "Material Handling, Forklift Operation, Load Planning",
+    "level": "Entry"
+  },
+  "Parts & Customer Service Specialist": {
+    "skills": "Parts Inventory Management, Customer Service, Order Processing",
+    "level": "Entry"
+  },
+  "Quality Controller & Inventory Administrator": {
+    "skills": "Quality Assurance, Inventory Management, Data Recording",
+    "level": "Mid"
+  },
+  "Sales Support Representative": {
+    "skills": "Order Management, CRM Systems, Customer Communication",
+    "level": "Entry"
+  },
+  "Senior Engineering Manager - Business Systems": {
+    "skills": "Systems Architecture, IT Project Management, Infrastructure Planning",
+    "level": "Management"
+  },
+  "Service Administrator": {
+    "skills": "Service Scheduling, Administrative Support, Client Management",
+    "level": "Entry"
+  },
+  "Warehouse Officer": {
+    "skills": "Warehouse Operations, Stock Control, WMS Systems",
+    "level": "Entry"
+  },
+  "Admin Coordinator": {
+    "skills": "Administrative Coordination, Data Management, Schedule Management",
+    "level": "Entry"
+  },
+  "Application Support Consultant (Learning and Teaching Experience)": {
+    "skills": "Technical Support, System Training, User Documentation",
+    "level": "Mid"
+  },
+  "Business Analyst - SaaS/Customer Success": {
+    "skills": "Requirements Analysis, SaaS Platforms, Customer Success Metrics",
+    "level": "Mid"
+  },
+  "Category & End User Specialist": {
+    "skills": "Category Management, Vendor Management, Procurement Analysis",
+    "level": "Mid"
+  },
+  "Category Manager - Procurement": {
+    "skills": "Procurement Strategy, Vendor Management, Cost Analysis",
+    "level": "Senior"
+  },
+  "Catering & Cafeteria Manager - Supply Chain": {
+    "skills": "Food Service Operations, Inventory Management, Supplier Coordination",
+    "level": "Management"
+  },
+  "Class 2 Driver": {
+    "skills": "Commercial Vehicle Operation, Route Planning, Health & Safety Compliance",
+    "level": "Entry"
+  },
+  "Clearance Representative": {
+    "skills": "Customs Documentation, Regulatory Compliance, Cargo Management",
+    "level": "Mid"
+  },
+  "Cold Stores Administrator": {
+    "skills": "Cold Chain Management, Temperature Monitoring, Stock Management",
+    "level": "Entry"
+  },
+  "Database Support Analyst": {
+    "skills": "Database Administration, SQL, Data Integrity Management",
+    "level": "Mid"
+  },
+  "Inventory Warehouse Controller": {
+    "skills": "Inventory Control, Warehouse Management, Stock Reconciliation",
+    "level": "Management"
+  },
+  "Lab Assistant & Order Fulfilment (10 roles, weekend evenings)": {
+    "skills": "Order Picking, Laboratory Support, Quality Control",
+    "level": "Entry"
+  },
+  "Line Mechanic - Electricity Distribution Industry - Alexandra based": {
+    "skills": "Electrical Systems Maintenance, Troubleshooting, Safety Protocols",
+    "level": "Mid"
+  },
+  "Logistics Receiptor & Warehouse Support - Mitre 10 Mega Wanaka": {
+    "skills": "Goods Receipt Processing, Inventory Accuracy, Warehouse Management Systems",
+    "level": "Entry"
+  },
+  "Logistics/Landscape Team Member- Mitre 10 MEGA Queenstown": {
+    "skills": "Warehouse Operations, Material Handling, Fleet Coordination",
+    "level": "Entry"
+  },
+  "Manufacturing Team Leader": {
+    "skills": "Production Supervision, Quality Control, Work Scheduling, Team Management",
+    "level": "Management"
+  },
+  "Office Administrative Assistant": {
+    "skills": "Administrative Support, Data Entry, Office Management",
+    "level": "Entry"
+  },
+  "Operations Analyst": {
+    "skills": "Process Analysis, Supply Chain Modelling, Performance Metrics",
+    "level": "Mid"
+  },
+  "Operations Assistant": {
+    "skills": "Operational Support, Data Management, Logistics Coordination",
+    "level": "Entry"
+  },
+  "Pick Packer - Auto Parts": {
+    "skills": "Order Picking, Inventory Management, Parts Identification",
+    "level": "Entry"
+  },
+  "Process Operator (Day Shift)": {
+    "skills": "Equipment Operation, Safety Compliance, Process Monitoring",
+    "level": "Entry"
+  },
+  "Processing Officer": {
+    "skills": "Transaction Processing, Compliance Verification, Documentation Management",
+    "level": "Entry"
+  },
+  "Processing Officer - Part Time, Upper Hutt": {
+    "skills": "Transaction Processing, Compliance Verification, Documentation Management",
+    "level": "Entry"
+  },
+  "Procurement Advisor": {
+    "skills": "Strategic Sourcing, Supplier Management, Procurement Analysis, Contract Negotiation",
+    "level": "Senior"
+  },
+  "Procurement Co-ordinator": {
+    "skills": "Purchase Order Processing, Supplier Coordination, Procurement Documentation",
+    "level": "Mid"
+  },
+  "Procurement Team Member": {
+    "skills": "Purchase Requisition Processing, Vendor Communication, Procurement Support",
+    "level": "Entry"
+  },
+  "Product Manager": {
+    "skills": "Product Strategy, Market Analysis, Lifecycle Management, Stakeholder Alignment",
+    "level": "Senior"
+  },
+  "Production Scheduler": {
+    "skills": "Production Planning, Demand Forecasting, Schedule Optimization, Capacity Planning",
+    "level": "Mid"
+  },
+  "Project Coordinator": {
+    "skills": "Project Documentation, Schedule Tracking, Stakeholder Communication, Resource Coordination",
+    "level": "Mid"
+  },
+  "Project Manager (Connections and Distribution)": {
+    "skills": "Project Management, Network Planning, Budget Control, Distribution Strategy",
+    "level": "Management"
+  },
+  "Promotional Analyst": {
+    "skills": "Sales Analysis, Campaign Performance Evaluation, Market Insights",
+    "level": "Mid"
+  },
+  "Senior SAP HR & SuccessFactors Expert": {
+    "skills": "SAP HCM Configuration, SuccessFactors Administration, HR Process Design, System Integration",
+    "level": "Senior"
+  },
+  "Senior SAP Integration and Workflow Expert": {
+    "skills": "SAP Integration, Workflow Design, API Configuration, System Architecture",
+    "level": "Senior"
+  },
+  "Senior SAP Payroll Expert (ECC)": {
+    "skills": "SAP Payroll Module Configuration, Payroll Process Automation, SAP ECC System Administration",
+    "level": "Senior"
+  },
+  "Senior SAP/Kronos Application Support Specialist": {
+    "skills": "SAP System Support, Kronos Time & Attendance Administration, User Training & Troubleshooting",
+    "level": "Senior"
+  },
+  "Supplier Performance Manager": {
+    "skills": "Supplier Scorecarding, Procurement Analytics, Contract Performance Management",
+    "level": "Mid"
+  },
+  "Systems Support Analyst": {
+    "skills": "IT Systems Troubleshooting, User Support & Ticketing, Systems Documentation",
+    "level": "Mid"
+  },
+  "Test Engineer": {
+    "skills": "Test Case Design & Execution, Quality Assurance Methodology, Defect Reporting & Tracking",
+    "level": "Mid"
+  },
+  "WAREHOUSE ASSISTANT": {
+    "skills": "Inventory Management, Order Picking & Packing, Warehouse Safety Compliance",
+    "level": "Entry"
+  },
+  "Warehouse & Customer Service Assistant - FIXED TERM": {
+    "skills": "Inventory Management, Customer Service Communication, Order Processing",
+    "level": "Entry"
+  },
+  "Warehouse Operators": {
+    "skills": "Inventory Management, Material Handling Equipment Operation, Warehouse Safety",
+    "level": "Entry"
+  },
+  "Warehouse Storeperson (Night Shift)": {
+    "skills": "Inventory Management, Goods Receipt & Dispatch, Stock Rotation (FIFO/LIFO)",
+    "level": "Entry"
+  },
+  "Warehouse Supervisor / Production": {
+    "skills": "Warehouse Operations Management, Team Leadership, Inventory Control & Accuracy",
+    "level": "Management"
+  },
+  "Warehouse assistant - Storeperson": {
+    "skills": "Inventory Management, Order Picking, Warehouse Documentation",
+    "level": "Entry"
+  },
+  "6 Month Fixed Term Customer Coordinator": {
+    "skills": "Customer Order Management, Data Entry & Administration, Scheduling & Coordination",
+    "level": "Entry"
+  },
+  "Accounts Administrator": {
+    "skills": "Accounts Payable/Receivable Processing, Reconciliation, General Ledger Management",
+    "level": "Entry"
+  },
+  "Accounts Officer": {
+    "skills": "Accounts Payable/Receivable Processing, Financial Reconciliation, Invoice Processing",
+    "level": "Mid"
+  },
+  "Administrative Accounts Assistant": {
+    "skills": "Accounts Data Entry, Invoice Processing, Basic Bookkeeping",
+    "level": "Entry"
+  },
+  "Administrator": {
+    "skills": "Data Entry & Management, Administrative Coordination, Office Systems Operation",
+    "level": "Entry"
+  },
+  "Administrator / Operations Support": {
+    "skills": "Administrative Coordination, Operations Documentation, Data Management",
+    "level": "Entry"
+  },
+  "Application Specialist": {
+    "skills": "Application Configuration, User Training, Technical Support & Troubleshooting",
+    "level": "Mid"
+  },
+  "Blind Cleaning and Repairs": {
+    "skills": "Blind Cleaning Techniques, Blind Repair & Maintenance, Customer Service",
+    "level": "Entry"
+  },
+  "Business Improvement Manager": {
+    "skills": "Process Improvement Methodology, Continuous Improvement (Lean/Six Sigma), Performance Analysis",
+    "level": "Management"
+  },
+  "Business Process Architect / BA": {
+    "skills": "Process Mapping, Requirements Analysis, Systems Design, Stakeholder Management",
+    "level": "Senior"
+  },
+  "Caravan yard person": {
+    "skills": "Vehicle Maintenance, Stock Management, Health & Safety Compliance",
+    "level": "Entry"
+  },
+  "Change Analyst": {
+    "skills": "Change Management, Process Improvement, Data Analysis, Stakeholder Communication",
+    "level": "Mid"
+  },
+  "Chilled, Frozen, Liquor Assistant (CFL)": {
+    "skills": "Temperature-Controlled Storage, Stock Rotation, Food Safety Compliance",
+    "level": "Entry"
+  },
+  "Courier Driver": {
+    "skills": "Route Planning, Vehicle Operation, Customer Service, Delivery Documentation",
+    "level": "Entry"
+  },
+  "Customer Services - parental leave cover": {
+    "skills": "Customer Inquiry Resolution, Order Management, Service Recovery",
+    "level": "Entry"
+  },
+  "Despatch Driver - Assistant": {
+    "skills": "Vehicle Operation, Load Preparation, Delivery Coordination, Route Logistics",
+    "level": "Entry"
+  },
+  "HR Business Partner - Finance, Procurement & Supply Chain": {
+    "skills": "Workforce Planning, Talent Development, HR Policy Implementation, Cross-Functional Stakeholder Management",
+    "level": "Management"
+  },
+  "Head of Retail Wealth Propositions and Distribution": {
+    "skills": "Product Strategy, Distribution Channel Management, Market Analysis, P&L Accountability",
+    "level": "Executive"
+  },
+  "ICT Commercial Manager": {
+    "skills": "IT Project Management, Commercial Negotiation, Vendor Management, IT Budget Control",
+    "level": "Management"
+  },
+  "Intermediate Quantity Surveyor": {
+    "skills": "Cost Estimation, Contract Management, Cost Control, Bill of Quantities Preparation",
+    "level": "Mid"
+  },
+  "Internal Sales Representative": {
+    "skills": "Sales Process, Product Knowledge, Customer Account Management, Sales Forecasting",
+    "level": "Mid"
+  },
+  "Lab Assistant & Order Fulfilment (2 graveyard shift roles)": {
+    "skills": "Laboratory Testing Procedures, Order Picking & Packing, Quality Control, Inventory Accuracy",
+    "level": "Entry"
+  },
+  "Lead Technical Business Analyst": {
+    "skills": "Requirements Gathering, Technical Documentation, Systems Integration, Solution Design",
+    "level": "Senior"
+  },
+  "Line Mechanic - Earthed Lines - Alexandra": {
+    "skills": "Electrical Systems Maintenance, Equipment Troubleshooting, Safety Protocols, Line Repair",
+    "level": "Mid"
+  },
+  "Management Accountant": {
+    "skills": "Financial Analysis, Budgeting & Forecasting, Cost Accounting, Management Reporting",
+    "level": "Mid"
+  },
+  "Merchandiser Part-time": {
+    "skills": "Visual Merchandising, Inventory Management, Stock Replenishment, Category Planning",
+    "level": "Entry"
+  },
+  "Night Shift Supervisor-Cleaning/Production": {
+    "skills": "Team Leadership, Production Scheduling, Quality Assurance, Health & Safety Management",
+    "level": "Management"
+  },
+  "Office Administrator": {
+    "skills": "Administrative Support, Scheduling & Calendar Management, Document Control, Office Operations",
+    "level": "Entry"
+  },
+  "Office Administrator - Wellington": {
+    "skills": "Administrative Support, Scheduling & Calendar Management, Document Control, Office Operations",
+    "level": "Entry"
+  },
+  "PM Operations Manager/ Class 5 Transport Professional": {
+    "skills": "Fleet Management, Route Optimization, Logistics Operations, Health & Safety Compliance",
+    "level": "Management"
+  },
+  "Procurement Manager/Senior Procurement Manager": {
+    "skills": "Supplier Management, Contract Negotiation, Procurement Analytics, Strategic Sourcing",
+    "level": "Management"
+  },
+  "Project Manager": {
+    "skills": "Project Planning, Stakeholder Management, Schedule & Budget Management, Risk Management",
+    "level": "Mid"
+  },
+  "Quality and Compliance Manager": {
+    "skills": "Quality Assurance, Compliance Management, Audit & Inspection, Process Documentation",
+    "level": "Management"
+  },
+  "Resource Consent Planners": {
+    "skills": "Planning Compliance, Regulatory Navigation, Environmental Assessment, Documentation Management",
+    "level": "Mid"
+  },
+  "Retail Assistant": {
+    "skills": "Point of Sale Operations, Stock Replenishment, Customer Service, Cash Handling",
+    "level": "Entry"
+  },
+  "Retail Superstars Wanted - MEGA Nelson": {
+    "skills": "Customer Service, Visual Merchandising, Sales Support, Stock Management",
+    "level": "Entry"
+  },
+  "Sales Representative - Auckland Based": {
+    "skills": "Account Management, Sales Negotiation, Customer Relationship Management, Territory Management",
+    "level": "Mid"
+  },
+  "Sales Support Specialist": {
+    "skills": "Order Management, Customer Service, Sales Administration, CRM Systems",
+    "level": "Entry"
+  },
+  "Seafood Process Workers": {
+    "skills": "Food Safety, Processing Techniques, Quality Control, Hygiene Compliance",
+    "level": "Entry"
+  },
+  "Senior Advisor Planning & Reporting": {
+    "skills": "Demand Planning, Analytics & Reporting, Strategic Planning, Data Visualization",
+    "level": "Senior"
+  },
+  "Senior Financial Accountant": {
+    "skills": "Financial Accounting, General Ledger Management, Financial Reporting, Compliance & Audit",
+    "level": "Senior"
+  },
+  "Senior Practices Improvement Analyst": {
+    "skills": "Process Improvement, Lean Six Sigma, Performance Analytics, Change Management",
+    "level": "Senior"
+  },
+  "Service Delivery Coordinator": {
+    "skills": "Service Scheduling, Customer Coordination, Delivery Management, Communications",
+    "level": "Mid"
+  },
+  "Service Engineer - Christchurch": {
+    "skills": "Technical Troubleshooting, Equipment Maintenance, Customer Support, Service Documentation",
+    "level": "Mid"
+  },
+  "Stocktakers required in Glenfield Sat 14 Feb": {
+    "skills": "Inventory Counting, Physical Stock Verification, Data Entry, Attention to Detail",
+    "level": "Entry"
+  },
+  "Stocktakers required in Linwood, Eastgate, CHCH": {
+    "skills": "Inventory Counting, Physical Stock Verification, Data Entry, Attention to Detail",
+    "level": "Entry"
+  },
+  "Store Manager - Lead, Sell & Succeed in Premium Retail": {
+    "skills": "Store Management, Staff Leadership, Sales Performance Management, Retail Operations",
+    "level": "Management"
+  },
+  "Storeperson - Farmlands Darfield": {
+    "skills": "Warehouse Operations, Stock Management, Inventory Control, Equipment Operation",
+    "level": "Entry"
+  },
+  "Support Centre Analyst": {
+    "skills": "Technical Support, Ticketing Systems, Issue Resolution, Customer Communication",
+    "level": "Entry"
+  },
+  "Support Lead": {
+    "skills": "Customer Service Management, Issue Resolution, Team Coordination",
+    "level": "Management"
+  },
+  "Technology Delivery Lead": {
+    "skills": "Project Management, IT Systems Implementation, Stakeholder Communication",
+    "level": "Management"
+  },
+  "Warehouse Store person": {
+    "skills": "Inventory Management, Stock Receiving, Forklift Operation",
+    "level": "Entry"
+  },
+  "Warehouse supervisor": {
+    "skills": "Warehouse Operations, Staff Supervision, Inventory Control, Health & Safety Compliance",
+    "level": "Management"
+  },
+  "ASICS Apps, Oceania": {
+    "skills": "Application Development, Mobile Technology, Regional Operations",
+    "level": "Mid"
+  },
+  "Account Payable and Administrator": {
+    "skills": "Accounts Payable Processing, Invoice Management, Financial Administration",
+    "level": "Entry"
+  },
+  "Accounts Receivable Contract": {
+    "skills": "Accounts Receivable, Credit Management, Collections",
+    "level": "Mid"
+  },
+  "Administrative Assitant": {
+    "skills": "Administrative Support, Scheduling, Data Entry",
+    "level": "Entry"
+  },
+  "Business Performance Coordinator": {
+    "skills": "Performance Metrics Analysis, Data Compilation, Reporting",
+    "level": "Mid"
+  },
+  "Business Reporting & Modelling Analyst": {
+    "skills": "Financial Modelling, Business Intelligence, Data Analysis",
+    "level": "Mid"
+  },
+  "Category & Ops Assistant": {
+    "skills": "Category Management, Operational Support, Procurement Coordination",
+    "level": "Entry"
+  },
+  "Container Flow Specialist": {
+    "skills": "Container Management, Logistics Planning, Terminal Operations",
+    "level": "Mid"
+  },
+  "Continuous Improvement & Integrated Management System Lead": {
+    "skills": "Process Improvement, ISO Management Systems, Lean Methodology",
+    "level": "Senior"
+  },
+  "Courier Contractor": {
+    "skills": "Route Planning, Delivery Operations, Customer Interaction",
+    "level": "Entry"
+  },
+  "Customer Service": {
+    "skills": "Customer Service, Order Processing, Problem Resolution",
+    "level": "Entry"
+  },
+  "Customer Service Support - Freight Industry": {
+    "skills": "Freight Services, Customer Communication, Order Management",
+    "level": "Entry"
+  },
+  "Customs Broker": {
+    "skills": "Customs Compliance, Import/Export Documentation, Regulatory Knowledge",
+    "level": "Senior"
+  },
+  "Delivery Driver & Warehouse Store Person": {
+    "skills": "Vehicle Operation, Delivery Execution, Inventory Handling",
+    "level": "Entry"
+  },
+  "Deputy Chief Executive – ATNZ": {
+    "skills": "Strategic Leadership, Organisational Management, Executive Decision-Making",
+    "level": "Executive"
+  },
+  "Dispatcher": {
+    "skills": "Dispatch Management, Route Optimization, Driver Coordination",
+    "level": "Mid"
+  },
+  "Driver/Warehouse - Sydenham": {
+    "skills": "Forklift Operation, Warehouse Management Systems, Vehicle Safety Compliance",
+    "level": "Entry"
+  },
+  "Engineering Manager": {
+    "skills": "Engineering Project Management, Technical Team Leadership, Process Improvement",
+    "level": "Management"
+  },
+  "Export OEM Manager": {
+    "skills": "Export Compliance, Supply Chain Coordination, Supplier Relationship Management",
+    "level": "Management"
+  },
+  "Expression of Interest - Operations Manager": {
+    "skills": "Operations Planning, Process Optimization, Team Leadership",
+    "level": "Management"
+  },
+  "Facilities and Asset Systems Coordinator": {
+    "skills": "Asset Management Systems, Facilities Maintenance Coordination, Database Management",
+    "level": "Mid"
+  },
+  "Factory Worker": {
+    "skills": "Production Line Operation, Quality Control, Safety Compliance",
+    "level": "Entry"
+  },
+  "General Manager": {
+    "skills": "Strategic Business Planning, Profit & Loss Management, Organizational Leadership",
+    "level": "Executive"
+  },
+  "IT Lead": {
+    "skills": "IT Systems Management, Technical Team Leadership, Infrastructure Planning",
+    "level": "Management"
+  },
+  "Information Specialist": {
+    "skills": "Data Management, Information Systems, Business Intelligence",
+    "level": "Mid"
+  },
+  "Inventory Controller - Gisborne": {
+    "skills": "Inventory Management, Stock Reconciliation, Warehouse Management Systems",
+    "level": "Mid"
+  },
+  "Logistics Assistant": {
+    "skills": "Order Processing, Warehouse Operations, Basic Inventory Management",
+    "level": "Entry"
+  },
+  "Macpac Accounts Payable Assistant": {
+    "skills": "Accounts Payable Processing, Invoice Management, Financial Record Keeping",
+    "level": "Entry"
+  },
+  "Marketing Coordinator – Content & Distribution": {
+    "skills": "Content Distribution, Marketing Campaign Coordination, Digital Communications",
+    "level": "Mid"
+  },
+  "Material Planner": {
+    "skills": "Demand Forecasting, Supply Planning, Inventory Optimization",
+    "level": "Mid"
+  },
+  "Multi-Cargo Operations Supervisor": {
+    "skills": "Cargo Operations Management, Team Supervision, Safety Compliance",
+    "level": "Management"
+  },
+  "National Account Manager": {
+    "skills": "Account Management, Strategic Sales, Customer Relationship Management",
+    "level": "Senior"
+  },
+  "Office and Shipping Administration": {
+    "skills": "Shipping Documentation, Administrative Support, Order Management",
+    "level": "Entry"
+  },
+  "Procurement Lead": {
+    "skills": "Procurement Strategy, Vendor Management, Cost Negotiation",
+    "level": "Management"
+  },
+  "Procurement Specialist - Direct Procurement": {
+    "skills": "Strategic Sourcing, Supplier Quality Management, Purchase Order Management",
+    "level": "Mid"
+  },
+  "Product Coordinator": {
+    "skills": "Product Data Management, Cross-functional Coordination, Specification Documentation",
+    "level": "Mid"
+  },
+  "Production Assistant": {
+    "skills": "Production Planning, Quality Control, Equipment Operation",
+    "level": "Entry"
+  },
+  "Seasonal Sample Collector - Bay of Plenty": {
+    "skills": "Field Data Collection, Sample Handling, Route Navigation",
+    "level": "Entry"
+  },
+  "Site Production Supervisor": {
+    "skills": "Production Planning, Team Leadership, Quality Assurance",
+    "level": "Management"
+  },
+  "Storeperson Day Shift & Night Shift": {
+    "skills": "Inventory Management, Stock Rotation, Warehouse Operations",
+    "level": "Entry"
+  },
+  "Stores Person / Driver": {
+    "skills": "Inventory Management, Vehicle Operation, Stock Control",
+    "level": "Entry"
+  },
+  "Technical Specialist (L3)": {
+    "skills": "Systems Administration, Technical Support, Process Optimization",
+    "level": "Mid"
+  },
+  "Terminal Operations Manager": {
+    "skills": "Terminal Operations, Team Management, Logistics Planning",
+    "level": "Management"
+  },
+  "Truck Driver and Junior Operations Assistant": {
+    "skills": "Vehicle Operation, Logistics Coordination, Inventory Tracking",
+    "level": "Entry"
+  },
+  "Virtual Fencing Support Specialist": {
+    "skills": "Technical Support, Agtech Systems, Customer Training",
+    "level": "Mid"
+  },
+  "Warehouse Assistant - 2-3mth contract/parttime": {
+    "skills": "Warehouse Operations, Stock Handling, Order Fulfillment",
+    "level": "Entry"
+  },
+  "Warehouse General Assistant": {
+    "skills": "Warehouse Operations, Stock Management, Order Picking",
+    "level": "Entry"
+  },
+  "Warehouse Picker": {
+    "skills": "Order Picking, Inventory Location, Packing",
+    "level": "Entry"
+  },
+  "Warehouse Store Person - Dry Store": {
+    "skills": "Inventory Management, Stock Rotation, Warehouse Operations",
+    "level": "Entry"
+  },
+  "Warehouse Store Person - Freezer Days": {
+    "skills": "Cold Chain Management, Inventory Control, Safety Compliance",
+    "level": "Entry"
+  },
+  "Warehouse and Print Assistant (Fixed term)": {
+    "skills": "Warehouse Operations, Print Production, Order Fulfillment",
+    "level": "Entry"
+  },
+  "Williams Corporation - AI Strategist": {
+    "skills": "AI Strategy Development, Business Intelligence, Digital Transformation",
+    "level": "Executive"
+  },
+  "AI Technical Product Manager": {
+    "skills": "AI Product Development, Technical Requirements, Roadmap Planning",
+    "level": "Senior"
+  },
+  "Administration & Logistics Supervisor (Part-Time)": {
+    "skills": "Administrative Coordination, Logistics Planning, Team Supervision",
+    "level": "Management"
+  },
+  "Business Adoption Specialist - 12 month fixed term": {
+    "skills": "Change Management, User Training, Process Implementation",
+    "level": "Mid"
+  },
+  "Business Analyst & Operations Specialist": {
+    "skills": "Process Analysis, Data Analysis, Operations Optimization",
+    "level": "Mid"
+  },
+  "Business Analyst HRIS": {
+    "skills": "HRIS Configuration, Requirements Analysis, System Testing, Data Validation",
+    "level": "Mid"
+  },
+  "Business Support": {
+    "skills": "Process Documentation, User Support, Issue Resolution, System Knowledge",
+    "level": "Entry"
+  },
+  "Category Consultant": {
+    "skills": "Spend Analysis, Supplier Evaluation, Category Strategy, Procurement Process",
+    "level": "Senior"
+  },
+  "Category Specialist": {
+    "skills": "Spend Analysis, Supplier Management, Category Planning, Procurement",
+    "level": "Mid"
+  },
+  "Customer Service Team Member": {
+    "skills": "Order Management, Customer Communication, Issue Resolution, Service Documentation",
+    "level": "Entry"
+  },
+  "Data Analyst": {
+    "skills": "Data Visualization, SQL, Statistical Analysis, Business Intelligence",
+    "level": "Mid"
+  },
+  "ERP Consultant": {
+    "skills": "ERP Implementation, System Configuration, Process Mapping, User Training",
+    "level": "Senior"
+  },
+  "Finance Functional Transformation - Senior Consultant": {
+    "skills": "Finance Process Optimization, System Implementation, Change Management, Financial Controls",
+    "level": "Senior"
+  },
+  "Finance Operations Analyst (Manufacturing)": {
+    "skills": "Cost Analysis, Manufacturing Accounting, Budget Variance Analysis, Inventory Valuation",
+    "level": "Mid"
+  },
+  "IT Systems Specialist": {
+    "skills": "System Administration, Network Management, IT Infrastructure, Technical Support",
+    "level": "Mid"
+  },
+  "Inventory Coordinator": {
+    "skills": "Inventory Management, Stock Control, Cycle Counting, WMS Operation",
+    "level": "Entry"
+  },
+  "Operations Planner": {
+    "skills": "Demand Planning, Production Scheduling, Capacity Planning, SCOR Process Management",
+    "level": "Mid"
+  },
+  "Procurement & Factory Coordinator": {
+    "skills": "Purchase Order Processing, Supplier Coordination, Inventory Management, Factory Communication",
+    "level": "Entry"
+  },
+  "Product Owner- APAC": {
+    "skills": "Product Strategy, Requirements Definition, Stakeholder Management, Agile Methodology",
+    "level": "Management"
+  },
+  "Production Coordinator": {
+    "skills": "Production Scheduling, Work Order Management, Quality Control, Production Tracking",
+    "level": "Entry"
+  },
+  "Ramp Agent": {
+    "skills": "Aircraft Handling, Cargo Loading, Safety Compliance, Ground Equipment Operation",
+    "level": "Entry"
+  },
+  "Receptionist /Office Administrator": {
+    "skills": "Administrative Support, Scheduling, File Management, Office Coordination",
+    "level": "Entry"
+  },
+  "SAP SuccessFactors Consultant - EC/ONB": {
+    "skills": "SuccessFactors Configuration, Employee Central, Onboarding Setup, Data Management",
+    "level": "Senior"
+  },
+  "Sales Manager": {
+    "skills": "Sales Team Leadership, Pipeline Management, Revenue Target Achievement, Customer Relationship Management",
+    "level": "Management"
+  },
+  "Sales and Service Coordinator": {
+    "skills": "Order Processing, Customer Support, Sales Administration, Service Coordination",
+    "level": "Entry"
+  },
+  "Senior Business Analyst- HRIS": {
+    "skills": "HRIS Configuration, Requirements Analysis, Data Migration, SQL Reporting",
+    "level": "Senior"
+  },
+  "Store and Dispatch Team Member - Print Industry": {
+    "skills": "Inventory Management, Order Picking, Dispatch Operations, Fork Lift Operation",
+    "level": "Entry"
+  },
+  "Storeperson - Hamilton": {
+    "skills": "Stock Control, Inventory Auditing, Warehouse Safety, Material Handling",
+    "level": "Entry"
+  },
+  "Warehouse Assistant - Inbound": {
+    "skills": "Goods Receiving, Inventory Data Entry, Stock Verification, Forklift Operation",
+    "level": "Entry"
+  },
+  "Warehouse and Maintenance Assistant": {
+    "skills": "Warehouse Maintenance, Inventory Management, Equipment Servicing, Safety Compliance",
+    "level": "Entry"
+  },
+  "Warehousing Storeperson": {
+    "skills": "Stock Control, Order Picking, Cycle Counting, Warehouse Management Systems",
+    "level": "Entry"
+  },
+  "Workshop Operations & Procurement Coordinator": {
+    "skills": "Procurement Coordination, Supplier Management, Workshop Scheduling, Purchase Order Processing",
+    "level": "Mid"
+  },
+  "Co-Product Manager": {
+    "skills": "Product Lifecycle Management, Cross-Functional Collaboration, Market Analysis, Launch Planning",
+    "level": "Mid"
+  },
+  "Corporate Services Officer": {
+    "skills": "Administrative Coordination, Facilities Management, Records Management, Document Control",
+    "level": "Mid"
+  },
+  "Decon (FX-PL)": {
+    "skills": "Decontamination Procedures, Safety Protocols, Hazmat Handling, Quality Standards",
+    "level": "Entry"
+  },
+  "Finance Systems Project Manager": {
+    "skills": "ERP Implementation, Project Management, Finance Systems Configuration, Stakeholder Management",
+    "level": "Management"
+  },
+  "Operations Manager - NZ Autotraps": {
+    "skills": "Operations Planning, Team Leadership, Supply Chain Coordination, Performance Metrics",
+    "level": "Management"
+  },
+  "Oracle Projects Functional Consultant": {
+    "skills": "Oracle Projects Configuration, Requirements Gathering, Process Mapping, System Testing",
+    "level": "Senior"
+  },
+  "Pricing Coordinator": {
+    "skills": "Pricing Analytics, Cost Analysis, Price List Management, Data Spreadsheet Management",
+    "level": "Mid"
+  },
+  "Technical Business Analyst - GIS": {
+    "skills": "GIS Systems, Spatial Data Analysis, Requirements Specification, Technical Documentation",
+    "level": "Mid"
+  },
+  "Vendor Managed Inventory Specialist": {
+    "skills": "Inventory Planning, Vendor Collaboration, Demand Forecasting, Inventory Optimization",
+    "level": "Mid"
+  },
+  "ACCOUNTS AND OFFICE ADMINISTRATOR - SOLE POSITION": {
+    "skills": "Accounts Payable, General Ledger, Office Administration, Financial Reporting",
+    "level": "Mid"
+  },
+  "Accounts Assistant": {
+    "skills": "Data Entry, Invoice Processing, Reconciliation, General Ledger Support",
+    "level": "Entry"
+  },
+  "Accounts Payable Administrator - Feisst Group Ltd": {
+    "skills": "Accounts Payable Processing, Invoice Management, Supplier Reconciliation, Payment Processing",
+    "level": "Mid"
+  },
+  "Bulk Stock Labourers": {
+    "skills": "Material Handling, Palletising, Stock Movement, Warehouse Safety",
+    "level": "Entry"
+  },
+  "Commercial Analyst - Merchandise Team": {
+    "skills": "Demand Forecasting, Pricing Analysis, Inventory Optimization",
+    "level": "Mid"
+  },
+  "Customer Service and Import Manager": {
+    "skills": "Import Customs Compliance, Customer Relationship Management, Supplier Coordination",
+    "level": "Management"
+  },
+  "Data Reconciliations Analyst": {
+    "skills": "Data Validation, Reconciliation Procedures, Financial Reporting",
+    "level": "Mid"
+  },
+  "Delivery Driver – FMCG Distribution (Auckland & North Island)": {
+    "skills": "Route Optimization, Vehicle Operation, Cargo Handling",
+    "level": "Entry"
+  },
+  "Distribution Centre Manager": {
+    "skills": "Warehouse Operations Management, Team Leadership, KPI Performance",
+    "level": "Management"
+  },
+  "Distribution Centre Operations Co-Ordinator - Hastings (NOSH)": {
+    "skills": "Warehouse Coordination, Inventory Management, Staff Scheduling",
+    "level": "Mid"
+  },
+  "Distribution Team Member (Storeperson)": {
+    "skills": "Stock Handling, Warehouse Safety, Inventory Counting",
+    "level": "Entry"
+  },
+  "Export Customer Service Coordinator": {
+    "skills": "Export Documentation, Customer Service, Order Processing",
+    "level": "Mid"
+  },
+  "Graduate Role - Logistics & Freight": {
+    "skills": "Supply Chain Fundamentals, Freight Forwarding, Logistics Systems",
+    "level": "Entry"
+  },
+  "Pricing & Estimate Coordinator": {
+    "skills": "Cost Analysis, Quotation Preparation, Rate Management",
+    "level": "Entry"
+  },
+  "Pricing Analyst": {
+    "skills": "Pricing Strategy, Cost Modeling, Competitive Analysis",
+    "level": "Mid"
+  },
+  "Process Operator - Timaru": {
+    "skills": "Equipment Operation, Process Quality Control, Production Procedures",
+    "level": "Entry"
+  },
+  "Project Admin/Coordinator - SAP": {
+    "skills": "SAP Administration, Project Documentation, Change Management",
+    "level": "Mid"
+  },
+  "Quality Assurance Engineer - SAP": {
+    "skills": "SAP Testing, Test Case Development, Defect Management",
+    "level": "Mid"
+  },
+  "Quality Assurance Engineer - Supply Chain": {
+    "skills": "Supply Chain Quality Control, Process Audit, Compliance Testing",
+    "level": "Mid"
+  },
+  "SAP Project Manager": {
+    "skills": "SAP Implementation, Project Planning, Stakeholder Management",
+    "level": "Management"
+  },
+  "SAP Technical Lead - SAP Platforms": {
+    "skills": "SAP Architecture, System Configuration, Technical Team Leadership",
+    "level": "Senior"
+  },
+  "SAP Technical Solution Architect": {
+    "skills": "Enterprise Architecture, SAP Solution Design, Systems Integration",
+    "level": "Senior"
+  },
+  "Sales Merchandiser": {
+    "skills": "Point-Of-Sale Merchandising, Category Management, Retail Analytics",
+    "level": "Entry"
+  },
+  "Transport Coordinator": {
+    "skills": "Route Planning, Fleet Management, Carrier Management, Customer Communication",
+    "level": "Mid"
+  },
+  "Warehouse Labourer": {
+    "skills": "Stock Handling, Forklift Operation, Inventory Management, Safety Compliance",
+    "level": "Entry"
+  },
+  "Warehouse Sorter (Part-Time)- 2 Positions Available": {
+    "skills": "Order Picking, Product Sorting, Barcode Scanning, Accuracy Under Pressure",
+    "level": "Entry"
+  },
+  "Warehouse Storeperson (Nightshift)": {
+    "skills": "Stock Receiving, Inventory Control, Warehouse Management Systems, Freight Handling",
+    "level": "Entry"
+  },
+  "*** EXPERIENCED VOICE PICKERS ***": {
+    "skills": "Voice Picking Systems, Order Picking, Warehouse Operations, Speed & Accuracy",
+    "level": "Mid"
+  },
+  "Air Logistics Pricing Specialist": {
+    "skills": "Airfreight Costing, Rate Management, Tariff Knowledge, Pricing Systems",
+    "level": "Mid"
+  },
+  "Business Development Manager - Freight Forwarding": {
+    "skills": "Client Acquisition, Freight Forwarding Operations, Sales Strategy, Market Analysis",
+    "level": "Management"
+  },
+  "Contract Test Analyst": {
+    "skills": "Contract Review, Quality Assurance, Documentation Management, Compliance Testing",
+    "level": "Mid"
+  },
+  "Customer Experience Consultant": {
+    "skills": "Customer Insights, Service Design, Feedback Analysis, Process Improvement",
+    "level": "Mid"
+  },
+  "Customer Experience and Supply Chain Coordinator": {
+    "skills": "Supply Chain Coordination, Customer Service, Order Management, Process Documentation",
+    "level": "Mid"
+  },
+  "Devonport Chocolates - Handmade Chocolate & Confectionary packer": {
+    "skills": "Product Packing, Quality Control, Food Safety Compliance, Attention to Detail",
+    "level": "Entry"
+  },
+  "Dispatch Supervisor": {
+    "skills": "Dispatch Management, Fleet Coordination, Team Leadership, Performance Monitoring",
+    "level": "Management"
+  },
+  "Entry-Level Warehouse Assistant / Customer Service": {
+    "skills": "Stock Handling, Customer Service, Data Entry, Warehouse Safety",
+    "level": "Entry"
+  },
+  "Export Airfreight Operator": {
+    "skills": "Airfreight Documentation, Export Compliance, Customs Knowledge, Booking Systems",
+    "level": "Mid"
+  },
+  "Export Operations & Logistics Specialist (Fresh Produce)": {
+    "skills": "Export Documentation, Cold Chain Management, Perishables Logistics, Regulatory Compliance",
+    "level": "Mid"
+  },
+  "Export Operator": {
+    "skills": "Export Documentation, Customs Procedures, Shipping Systems, Compliance",
+    "level": "Entry"
+  },
+  "FP&A Analyst": {
+    "skills": "Financial Modelling, Forecasting, Budget Analysis, Excel & Business Intelligence",
+    "level": "Mid"
+  },
+  "Factory / Warehouse Assistant (Afternoon Shift)": {
+    "skills": "Production Support, Stock Management, Equipment Operation, Factory Safety",
+    "level": "Entry"
+  },
+  "Food Packers - dayshift": {
+    "skills": "Product Packing, Food Safety, Quality Standards, Production Line Operations",
+    "level": "Entry"
+  },
+  "Forklift Freight Loader": {
+    "skills": "Forklift Operation, Freight Loading, Pallet Handling, Safety Compliance",
+    "level": "Entry"
+  },
+  "Forklift Freight Loader Sorter": {
+    "skills": "Forklift Operation, Freight Sorting, Load Planning, Workplace Safety",
+    "level": "Entry"
+  },
+  "Freight Handler": {
+    "skills": "Manual Material Handling, Freight Documentation, Load Securing, Safety Compliance",
+    "level": "Entry"
+  },
+  "Freight Office Agent": {
+    "skills": "Freight Documentation, Customer Communication, Booking Systems, Data Entry",
+    "level": "Entry"
+  },
+  "Fresh Food Processor & Packer": {
+    "skills": "Food Safety Standards, Product Packing, Quality Inspection, Equipment Operation",
+    "level": "Entry"
+  },
+  "Junior Administrator": {
+    "skills": "Data Entry, Office Administration, Record Management, Customer Service",
+    "level": "Entry"
+  },
+  "Morning Freight sorter (casual)": {
+    "skills": "Freight Sorting, Manual Material Handling, Package Scanning, Time Management",
+    "level": "Entry"
+  },
+  "Operations & Dispatch Support": {
+    "skills": "Dispatch Scheduling, Order Management, Communication Systems, Data Administration",
+    "level": "Mid"
+  },
+  "Pick Packers - Day Shift": {
+    "skills": "Order Picking, Packing, Barcode Scanning, Inventory Accuracy",
+    "level": "Entry"
+  },
+  "Principal SAP Analytics Consultant": {
+    "skills": "SAP Analytics Cloud, Data Modeling, Business Intelligence, Strategic Analytics",
+    "level": "Senior"
+  },
+  "Replenishment Manager": {
+    "skills": "Demand Forecasting, Inventory Planning, Supply Chain Coordination, Performance Analytics",
+    "level": "Management"
+  },
+  "Retail Sales Assistant - Part time - Manukau": {
+    "skills": "Point-Of-Sale Systems, Customer Service, Stock Management, Sales Process",
+    "level": "Entry"
+  },
+  "Storeperson / Driver": {
+    "skills": "Warehouse Operations, Vehicle Operation, Inventory Control, Route Delivery",
+    "level": "Entry"
+  },
+  "Supply Chain & Operations Lead": {
+    "skills": "Supply Chain Planning, Operations Management, Process Optimization, Team Leadership",
+    "level": "Management"
+  },
+  "WAREHOUSE TEAM MEMBER in HOBSONVILLE AUCKLAND": {
+    "skills": "Warehouse Operations, Order Picking, Material Handling, Safety Compliance",
+    "level": "Entry"
+  },
+  "Warehouse Operator- Christchurch RDC": {
+    "skills": "Warehouse Management Systems, Inventory Operations, Material Handling, Equipment Operation",
+    "level": "Entry"
+  },
+  "Warehouse Person - Hamilton Branch": {
+    "skills": "Warehouse Operations, Stock Management, Packing, Manual Material Handling",
+    "level": "Entry"
+  },
+  "Warehouse Store Person": {
+    "skills": "Stock Control, Warehouse Operations, Order Fulfillment, Safety Procedures",
+    "level": "Entry"
+  },
+  "Accounts Payable": {
+    "skills": "Invoice Processing, Accounts Payable Systems, Reconciliation, Financial Compliance",
+    "level": "Mid"
+  },
+  "Application Support Specialist (12 month Fixed Term Contract)": {
+    "skills": "Application Support, User Training, Incident Management, IT Systems Administration",
+    "level": "Mid"
+  },
+  "Application Support Team Lead": {
+    "skills": "Application Support, Team Management, Incident Escalation, User Training & Coaching",
+    "level": "Management"
+  },
+  "Delivery Driver": {
+    "skills": "Route Navigation, Vehicle Safety Compliance, Customer Service",
+    "level": "Entry"
+  },
+  "Despatch Storeman and Forklift Driver": {
+    "skills": "Forklift Operation, Warehouse Management Systems, Inventory Control",
+    "level": "Entry"
+  },
+  "Despatch and Store Person": {
+    "skills": "Order Picking, Inventory Management, Warehouse Safety",
+    "level": "Entry"
+  },
+  "General Freight Class 2 & 5 drivers": {
+    "skills": "Heavy Vehicle Operation, Load Securing, Road Safety Compliance",
+    "level": "Entry"
+  },
+  "Head of Operations & Field Service": {
+    "skills": "P&L Management, Field Service Operations, Team Leadership, Process Optimization",
+    "level": "Executive"
+  },
+  "Junior Category Manager": {
+    "skills": "Procurement Analysis, Supplier Evaluation, Cost Analysis, Category Planning",
+    "level": "Mid"
+  },
+  "Line Mechanic": {
+    "skills": "Equipment Maintenance, Preventive Maintenance, Mechanical Troubleshooting",
+    "level": "Mid"
+  },
+  "Materials Manager": {
+    "skills": "Inventory Planning, Materials Forecasting, Warehouse Operations, Supplier Management",
+    "level": "Senior"
+  },
+  "Night Shift Admin and Warehousing Role": {
+    "skills": "Data Entry, Inventory Tracking, Warehouse Operations, Documentation",
+    "level": "Entry"
+  },
+  "On-Site Airline Support Specialist": {
+    "skills": "Ground Handling, Airline Procedures, Equipment Operation, Compliance",
+    "level": "Mid"
+  },
+  "Operations & Inventory Coordinator (Fixed Term)": {
+    "skills": "Inventory Management, Order Processing, Operations Coordination, Data Analysis",
+    "level": "Mid"
+  },
+  "Operations Clerk": {
+    "skills": "Documentation Processing, Data Entry, Order Management, Filing Systems",
+    "level": "Entry"
+  },
+  "Operations Manager Wellington": {
+    "skills": "Operations Management, Performance Metrics, Warehouse Optimization, Scheduling",
+    "level": "Management"
+  },
+  "Operations Supervisor": {
+    "skills": "Team Supervision, Shift Management, Health & Safety, Performance Monitoring",
+    "level": "Management"
+  },
+  "Operations Team Leader": {
+    "skills": "Team Leadership, Operational Planning, Staff Development, Quality Control",
+    "level": "Management"
+  },
+  "Packing Operations Manager": {
+    "skills": "Packing Line Management, Production Scheduling, Quality Assurance, Labor Planning",
+    "level": "Management"
+  },
+  "Procurement and Fleet Specialist": {
+    "skills": "Fleet Management, Procurement Strategy, Cost Analysis, Supplier Management",
+    "level": "Mid"
+  },
+  "Production & Dispatch Assistant": {
+    "skills": "Order Fulfillment, Inventory Tracking, Production Support, Quality Checks",
+    "level": "Entry"
+  },
+  "Purchasing and Inventory Control Specialist": {
+    "skills": "Procurement Analytics, Inventory Optimization, Purchase Order Management, Cost Control",
+    "level": "Mid"
+  },
+  "Purchasing and Inventory Coordinator": {
+    "skills": "Purchase Ordering, Inventory Reconciliation, Supplier Coordination, Data Management",
+    "level": "Entry"
+  },
+  "Scheduler": {
+    "skills": "Production Scheduling, Demand Planning, ERP Systems",
+    "level": "Mid"
+  },
+  "Senior Developer - Integration & SAP": {
+    "skills": "SAP Development, System Integration, API Development",
+    "level": "Senior"
+  },
+  "Senior Project Manager - Oracle": {
+    "skills": "Oracle ERP, Project Management, Change Management",
+    "level": "Senior"
+  },
+  "Senior Purchasing Officer": {
+    "skills": "Procurement Strategy, Vendor Management, Contract Negotiation",
+    "level": "Senior"
+  },
+  "Stores Person Freighter": {
+    "skills": "Warehouse Operations, Freight Handling, Inventory Management",
+    "level": "Entry"
+  },
+  "Stores/Inventory Coordinator": {
+    "skills": "Inventory Control, Warehouse Management Systems, Stock Reconciliation",
+    "level": "Mid"
+  },
+  "Transport Manager": {
+    "skills": "Fleet Management, Route Optimization, Transport Compliance",
+    "level": "Management"
+  },
+  "Accounts Payable Officer (Fixed term)": {
+    "skills": "Accounts Payable Processing, Invoice Management, Financial Reconciliation",
+    "level": "Mid"
+  },
+  "Business Analyst - Finance (3M Contract)": {
+    "skills": "Financial Analysis, Requirements Analysis, Business Process Improvement",
+    "level": "Mid"
+  },
+  "Company Accountant": {
+    "skills": "Financial Reporting, General Ledger Management, Statutory Compliance",
+    "level": "Senior"
+  },
+  "Customer Success Manager": {
+    "skills": "Account Management, Customer Relationship Management, Retention Strategy",
+    "level": "Mid"
+  },
+  "ERP Finance Data & Systems Assistant": {
+    "skills": "ERP Systems, Financial Data Management, System Configuration",
+    "level": "Entry"
+  },
+  "Experienced Forklift & Operations": {
+    "skills": "Forklift Operation, Warehouse Operations, Safety Compliance",
+    "level": "Mid"
+  },
+  "Finance Operations Specialist": {
+    "skills": "Process Automation, Financial Controls, ERP Operations",
+    "level": "Mid"
+  },
+  "Implementation Specialist": {
+    "skills": "System Implementation, Change Management, Process Configuration",
+    "level": "Mid"
+  },
+  "Information Technology – Project Management Business Analyst": {
+    "skills": "IT Project Management, Requirements Analysis, Stakeholder Management",
+    "level": "Mid"
+  },
+  "Logistics & Warehousing Team Leader": {
+    "skills": "Warehouse Operations, Team Supervision, Inventory Management",
+    "level": "Management"
+  },
+  "Marketing Campaign Manager": {
+    "skills": "Campaign Management, Digital Marketing, Marketing Analytics",
+    "level": "Mid"
+  },
+  "Northern Region Manager": {
+    "skills": "Regional Operations Management, Sales Management, Performance Management",
+    "level": "Management"
+  },
+  "Order Fulfillment Coordinator": {
+    "skills": "Order Management, Warehouse Operations, Inventory Coordination",
+    "level": "Mid"
+  },
+  "Part Time Revenue Recovery Agent": {
+    "skills": "Collections Management, Customer Account Analysis, Payment Processing",
+    "level": "Entry"
+  },
+  "Pick Packers (Part Time)": {
+    "skills": "Order Picking, Packing, Inventory Accuracy",
+    "level": "Entry"
+  },
+  "Production Planner - Kawerau": {
+    "skills": "Production Scheduling, Demand Forecasting, Resource Planning",
+    "level": "Mid"
+  },
+  "Senior Analyst Application Support": {
+    "skills": "Systems Administration, Technical Troubleshooting, User Support",
+    "level": "Senior"
+  },
+  "Senior SAP Developer (ABAP, Fiori, BTP, RAP)": {
+    "skills": "SAP ABAP Programming, SAP Fiori Development, Business Technology Platform",
+    "level": "Senior"
+  },
+  "Storeperson (Nightshift)": {
+    "skills": "Stock Management, Warehouse Operations, Goods Receipt",
+    "level": "Entry"
+  },
+  "Storeperson / Forklift driver": {
+    "skills": "Forklift Operation, Stock Control, Material Handling",
+    "level": "Entry"
+  },
+  "Team Leader": {
+    "skills": "Team Supervision, Performance Management, Safety Compliance",
+    "level": "Management"
+  },
+  "Warehouse Manager - Winger Motors Penrose": {
+    "skills": "Warehouse Operations Management, Inventory Control, Team Leadership",
+    "level": "Management"
+  },
+  "Warehouse Operator (Coolstore)": {
+    "skills": "Cold Chain Management, Inventory Handling, Temperature Monitoring",
+    "level": "Entry"
+  },
+  "Warehouse Operator - Medical Devices": {
+    "skills": "Inventory Management, GxP Compliance, Quality Assurance",
+    "level": "Entry"
+  },
+  "Warehouse Team Leader": {
+    "skills": "Team Coordination, Warehouse Operations, Performance Monitoring",
+    "level": "Management"
+  },
+  "Warehouse Worker - Days": {
+    "skills": "Stock Handling, Warehouse Operations, Order Picking",
+    "level": "Entry"
+  },
+  "Dispatch Team Leader": {
+    "skills": "Fleet Coordination, Route Optimization, Team Management",
+    "level": "Management"
+  },
+  "Dispatcher FCL": {
+    "skills": "FCL Shipment Planning, Transport Coordination, Documentation Management",
+    "level": "Mid"
+  },
+  "Documentation Officer - Rail Planner": {
+    "skills": "Rail Transport Planning, Documentation Management, Compliance",
+    "level": "Mid"
+  },
+  "EcoSort Operator": {
+    "skills": "Material Sorting, Quality Control, Equipment Operation",
+    "level": "Entry"
+  },
+  "Kiosk Operator": {
+    "skills": "Point of Sale Operations, Customer Service, Cash Handling",
+    "level": "Entry"
+  },
+  "Labouring/ Warehouse Operative": {
+    "skills": "Material Handling, Warehouse Operations, Safety Procedures",
+    "level": "Entry"
+  },
+  "Mitre 10 Waihi - Inwards Goods Team Member": {
+    "skills": "Goods Receiving, Stock Management, Inventory Accuracy",
+    "level": "Entry"
+  },
+  "Night Shift Freight Handler": {
+    "skills": "Freight Handling, Material Handling Equipment, Warehouse Safety",
+    "level": "Entry"
+  },
+  "Nightshift Storeperson - Full Time": {
+    "skills": "Inventory Management, Stock Control, Warehouse Operations",
+    "level": "Entry"
+  },
+  "Operations Support Agent": {
+    "skills": "Data Entry, Process Documentation, Customer Service",
+    "level": "Entry"
+  },
+  "Warehouse / Storeroom Assistant": {
+    "skills": "Stock Receiving, Order Picking, Warehouse Safety",
+    "level": "Entry"
+  },
+  "Warehouse Process Operator": {
+    "skills": "Warehouse Management Systems, Order Fulfillment, Process Compliance",
+    "level": "Mid"
+  },
+  "Warehouse Storeperson (Penrose) - Afternoon shift": {
+    "skills": "Inventory Control, Stock Rotation, Warehouse Operations",
+    "level": "Entry"
+  },
+  "Wellington Branch Manager": {
+    "skills": "Staff Management, Operational Planning, Budget Control, Customer Relations",
+    "level": "Management"
+  },
+  "Assistant Operations Manager": {
+    "skills": "Warehouse Operations, Team Supervision, Process Improvement, Performance Metrics",
+    "level": "Management"
+  },
+  "Dry Goods Assistant - PART TIME": {
+    "skills": "Stock Handling, Inventory Management, Warehouse Safety",
+    "level": "Entry"
+  },
+  "Food Production Worker - Mixer": {
+    "skills": "Food Safety Standards, Equipment Operation, Production Processes",
+    "level": "Entry"
+  },
+  "Frozen Team Packer": {
+    "skills": "Order Picking, Packing Operations, Cold Chain Handling",
+    "level": "Entry"
+  },
+  "Import & Export Specialist": {
+    "skills": "Customs Compliance, Documentation Management, Customs Clearance",
+    "level": "Mid"
+  },
+  "Import Operations Specialist": {
+    "skills": "Import/Export Documentation, Customs Procedures, Trade Compliance",
+    "level": "Mid"
+  },
+  "Logistics Assistant - Wellington": {
+    "skills": "Order Management, Logistics Coordination, Basic Systems Administration",
+    "level": "Entry"
+  },
+  "PM Despatch Coordinator": {
+    "skills": "Despatch Coordination, Order Management, Route Planning",
+    "level": "Mid"
+  },
+  "Packer / Despatcher": {
+    "skills": "Order Picking, Packing Operations, Despatch Processing",
+    "level": "Entry"
+  },
+  "Planning & Materials Manager / Supply Chain Manager": {
+    "skills": "Demand Planning, Inventory Optimization, Procurement Planning",
+    "level": "Senior"
+  },
+  "Senior Logistics Coordinator": {
+    "skills": "Logistics Coordination, Vendor Management, Shipment Tracking",
+    "level": "Senior"
+  },
+  "Senior Procurement & Logistics Specialist": {
+    "skills": "Procurement Strategy, Supplier Management, Logistics Optimization",
+    "level": "Senior"
+  },
+  "Storepersons - Fulltime": {
+    "skills": "Inventory Management, Order Picking, Warehouse Safety",
+    "level": "Entry"
+  },
+  "Supply Chain Assistant": {
+    "skills": "Inventory Management, Procurement Support, Data Entry",
+    "level": "Entry"
+  },
+  "Supply Coordinator": {
+    "skills": "Demand Planning, Supplier Coordination, Inventory Management",
+    "level": "Mid"
+  },
+  "WAREHOUSE STOREPERSON": {
+    "skills": "Inventory Management, Order Picking, Warehouse Safety",
+    "level": "Entry"
+  },
+  "Warehouse / Production Assistant": {
+    "skills": "Inventory Management, Order Picking, Production Support",
+    "level": "Entry"
+  },
+  "Warehouse Operator / Delivery Driver – Christchurch": {
+    "skills": "Inventory Management, Vehicle Operation, Route Planning",
+    "level": "Entry"
+  },
+  "Warehouse Storeperson / Delivery Driver": {
+    "skills": "Inventory Management, Vehicle Operation, Order Picking",
+    "level": "Entry"
+  },
+  "Warehouse Team Member": {
+    "skills": "Inventory Management, Order Picking, Warehouse Safety",
+    "level": "Entry"
+  },
+  "Hardware Picker/Packer": {
+    "skills": "Order Picking, Product Packing, Inventory Management",
+    "level": "Entry"
+  },
+  "Inwards goods and Warehouse Person": {
+    "skills": "Goods Receiving, Quality Inspection, Inventory Management",
+    "level": "Entry"
+  },
+  "Shipping & Purchasing Administrator": {
+    "skills": "Procurement Administration, Shipping Coordination, Data Management",
+    "level": "Mid"
+  },
+  "Warehouse Store Person - Outbound (Night Shift)": {
+    "skills": "Order Picking, Inventory Management, Warehouse Safety",
+    "level": "Entry"
+  },
+  "Driver": {
+    "skills": "Vehicle Operation, Route Planning, Customer Delivery",
+    "level": "Entry"
+  },
+  "Picker- Packer - Nightshift Superstars": {
+    "skills": "Order Picking, Product Packing, Inventory Management",
+    "level": "Entry"
+  },
+  "Purchasing Assistant": {
+    "skills": "Procurement Support, Vendor Management, Purchase Order Processing",
+    "level": "Entry"
+  },
+  "Straddle Team Leader": {
+    "skills": "Equipment Operation, Team Leadership, Warehouse Safety",
+    "level": "Management"
+  },
+  "Supply Chain Director": {
+    "skills": "Supply Chain Strategy, Vendor Management, Logistics Optimization",
+    "level": "Executive"
+  },
+  "Delivery Driver / Warehouse /cleaning Part Time": {
+    "skills": "Vehicle Operation, Warehouse Operations, Customer Delivery",
+    "level": "Entry"
+  },
+  "Forklift drivers - Day/Night Shift - Kiwifruit": {
+    "skills": "Forklift Operation, Material Handling, Warehouse Safety",
+    "level": "Entry"
+  },
+  "Plant Nursery Logistics Manager": {
+    "skills": "Inventory Management, Distribution Planning, Supplier Coordination",
+    "level": "Management"
+  },
+  "Process Workers": {
+    "skills": "Equipment Operation, Quality Control, Safety Compliance",
+    "level": "Entry"
+  },
+  "Shipping Coordinator": {
+    "skills": "Shipment Tracking, Documentation Management, Carrier Coordination",
+    "level": "Mid"
+  },
+  "Site Logistics Supervisor": {
+    "skills": "Team Leadership, Inventory Management, Health & Safety Oversight",
+    "level": "Management"
+  },
+  "Store Person - Christchurch": {
+    "skills": "Stock Receiving, Inventory Accuracy, Warehouse Organization",
+    "level": "Entry"
+  },
+  "Stores assistant-fixed term (maternity cover)": {
+    "skills": "Stock Management, Data Entry, Goods Receipt Processing",
+    "level": "Entry"
+  },
+  "Warehouse Team Member - Night Shift": {
+    "skills": "Order Picking, Inventory Counting, Forklift Operation",
+    "level": "Entry"
+  },
+  "Business Development Manager - Logistics": {
+    "skills": "Client Relationship Management, Market Analysis, Contract Negotiation",
+    "level": "Management"
+  },
+  "CUSTOMER SERVICE ADMINISTRATOR – FMCG (EXPORT FOCUS)": {
+    "skills": "Export Documentation, Order Processing, Customer Communication",
+    "level": "Mid"
+  },
+  "Customer Service / Key Accounts Support (Junior–Intermediate)": {
+    "skills": "Account Management, Order Fulfillment, Client Liaison",
+    "level": "Mid"
+  },
+  "Dispatch Assistant": {
+    "skills": "Route Optimization, Shipment Coordination, Data Management",
+    "level": "Entry"
+  },
+  "Export & Import Co-Ordinator - NZ Based WFH Position": {
+    "skills": "Customs Documentation, Import/Export Procedures, Compliance Management",
+    "level": "Mid"
+  },
+  "Freight forwarding Operation & Customer Service officer": {
+    "skills": "Freight Documentation, Carrier Management, Customs Clearance",
+    "level": "Mid"
+  },
+  "Inventory Specialist - Supply Chain Planning": {
+    "skills": "Demand Forecasting, Inventory Optimization, Supply Planning",
+    "level": "Mid"
+  },
+  "Inwards Goods / Warehouse Storeperson": {
+    "skills": "Goods Receipt Inspection, Stock Recording, Warehouse Systems",
+    "level": "Entry"
+  },
+  "Kiwifruit Seasonal Work - Tauranga Port": {
+    "skills": "Cargo Handling, Port Operations, Perishable Goods Management",
+    "level": "Entry"
+  },
+  "LPG Logistics Planner": {
+    "skills": "Logistics Planning, Hazardous Materials Compliance, Fleet Optimization",
+    "level": "Mid"
+  },
+  "Parts & Logistics Co-ordinator": {
+    "skills": "Parts Inventory Management, Order Coordination, Supplier Management",
+    "level": "Mid"
+  },
+  "Parts and Inventory Controller": {
+    "skills": "Inventory Control, Stock Auditing, Procurement Coordination",
+    "level": "Mid"
+  },
+  "Pick Packer - Medical Supplies": {
+    "skills": "Order Picking, Packaging, Quality Assurance",
+    "level": "Entry"
+  },
+  "Terminal Vessel & Operations Planner": {
+    "skills": "Vessel Planning, Port Operations, Container Management",
+    "level": "Mid"
+  },
+  "Warehouse Inventory Assistant": {
+    "skills": "Inventory Management, Stock Receiving & Putaway, Cycle Counting",
+    "level": "Entry"
+  },
+  "Warehouse Operations & Van Delivery": {
+    "skills": "Order Picking & Packing, Vehicle Operation, Route Navigation",
+    "level": "Entry"
+  },
+  "Warehouse Operations Manager": {
+    "skills": "Warehouse Management Systems, Inventory Control, Safety Compliance, Team Leadership",
+    "level": "Management"
+  },
+  "Assistant Team Leader- Production": {
+    "skills": "Production Scheduling, Quality Control, Team Coordination, Safety Management",
+    "level": "Management"
+  },
+  "Fixed Term Store Person": {
+    "skills": "Stock Control, Goods Receipt & Dispatch, Forklift Operation",
+    "level": "Entry"
+  },
+  "Freight Handler - DG Specialist / Opportunities For Progression": {
+    "skills": "Dangerous Goods Handling, Load Planning, Safety Compliance, Material Handling",
+    "level": "Entry"
+  },
+  "Fuel Storage Terminal Operator, Mount Maunganui": {
+    "skills": "Fuel Handling & Safety, Terminal Operations, Hazmat Compliance, Equipment Maintenance",
+    "level": "Entry"
+  },
+  "Hub/Transport Administrator": {
+    "skills": "Transport Coordination, Documentation Management, Scheduling, Carrier Management",
+    "level": "Mid"
+  },
+  "Logistics Coordinator / Customer Service Specialist": {
+    "skills": "Order Management, Customer Communication, Shipment Tracking, Documentation",
+    "level": "Mid"
+  },
+  "Operations Specialist": {
+    "skills": "Process Optimization, Systems Analysis, Performance Metrics, Supply Chain Planning",
+    "level": "Mid"
+  },
+  "Procurement & Logistics": {
+    "skills": "Supplier Management, Purchase Order Processing, Procurement Systems, Inventory Planning",
+    "level": "Mid"
+  },
+  "Purchasing Officer – International Procurement": {
+    "skills": "International Procurement, Customs Documentation, Supplier Negotiations, Import Compliance",
+    "level": "Mid"
+  },
+  "Supply Chain Logistics Specialist": {
+    "skills": "Supply Chain Planning, Distribution Management, Logistics Network Optimization, Demand Forecasting",
+    "level": "Senior"
+  },
+  "Warehouse Assistant (Fixed Term Contract)": {
+    "skills": "Stock Receiving, Order Picking, Basic Inventory Systems",
+    "level": "Entry"
+  },
+  "Warehouse Storeperson (Sole Charge)": {
+    "skills": "Inventory Management, Goods Receipt & Dispatch, Warehouse Systems, Stock Reconciliation",
+    "level": "Mid"
+  },
+  "Workshop and Fleet Operations lead": {
+    "skills": "Fleet Management, Maintenance Scheduling, Workshop Operations, Cost Control",
+    "level": "Management"
+  },
+  "Tomato Packhouse Storeperson": {
+    "skills": "Produce Handling, Stock Management, Quality Inspection, Cold Chain Management",
+    "level": "Entry"
+  },
+  "Casual Warehouse Storeperson": {
+    "skills": "Stock Receiving, Order Picking, Forklift Operation",
+    "level": "Entry"
+  },
+  "Customer Service - Import/Export Airfreight": {
+    "skills": "Airfreight Documentation, Customs Clearance, Customer Communication, Shipment Coordination",
+    "level": "Mid"
+  },
+  "Export Airfreight Operations - CHC": {
+    "skills": "Export Procedures, Airfreight Systems, Documentation Processing, Customs Compliance",
+    "level": "Mid"
+  },
+  "Logistics Coordinator (Import & Export)": {
+    "skills": "Customs Documentation, Freight Coordination, Shipment Tracking",
+    "level": "Mid"
+  },
+  "Logistics Manager": {
+    "skills": "Logistics Network Management, Budget Management, Team Leadership",
+    "level": "Management"
+  },
+  "Operations Improvement Manager": {
+    "skills": "Process Optimization, Lean Methodology, Performance Analytics",
+    "level": "Management"
+  },
+  "Picker & Packer - Online": {
+    "skills": "Order Accuracy, Warehouse Management Systems, Pick Efficiency",
+    "level": "Entry"
+  },
+  "Production Worker": {
+    "skills": "Production Line Operation, Quality Control, Assembly",
+    "level": "Entry"
+  },
+  "Store person": {
+    "skills": "Stock Management, Warehouse Racking, Inventory Control",
+    "level": "Entry"
+  },
+  "Supply Chain Analyst": {
+    "skills": "Demand Forecasting, Supply Chain Modeling, Data Analytics",
+    "level": "Mid"
+  },
+  "Warehouse & Operations Cadet": {
+    "skills": "Warehouse Operations, Health & Safety, Inventory Management",
+    "level": "Entry"
+  },
+  "Warehouse Despatch": {
+    "skills": "Order Dispatch, Warehouse Management Systems, Load Planning",
+    "level": "Entry"
+  },
+  "Warehouse Storeperson - Airfreight Operations": {
+    "skills": "Airfreight Procedures, Stock Control, Dangerous Goods Handling",
+    "level": "Entry"
+  },
+  "Night Shift Storeperson": {
+    "skills": "Stock Management, Warehouse Systems, Inventory Accuracy",
+    "level": "Entry"
+  },
+  "Transport Planner - Fixed term": {
+    "skills": "Route Optimization, Transport Scheduling, Fleet Management",
+    "level": "Mid"
+  },
+  "Warehouse Assistant (DML)": {
+    "skills": "Warehouse Operations, Material Handling, Safety Compliance",
+    "level": "Entry"
+  },
+  "Warehouse Caretaker": {
+    "skills": "Facility Maintenance, Health & Safety, Premises Management",
+    "level": "Entry"
+  },
+  "Warehouse Pick/Packer - Ecommerce fulfillment": {
+    "skills": "Order Picking, Packing, Warehouse Management Systems",
+    "level": "Entry"
+  },
+  "Warehouse Picker & Packer / Storeperson - Fishing, Boating, Marine (Full Time)": {
+    "skills": "Order Picking, Stock Management, Warehouse Operations",
+    "level": "Entry"
+  },
+  "Export Airfreight Operations": {
+    "skills": "Airfreight Documentation, Export Procedures, Dangerous Goods Handling",
+    "level": "Mid"
+  },
+  "Export Supply Planner": {
+    "skills": "Export Planning, Demand Planning, Procurement Coordination",
+    "level": "Mid"
+  },
+  "Factory Team Member": {
+    "skills": "Production Assembly, Quality Inspection, Safety Procedures",
+    "level": "Entry"
+  },
+  "Import/Export Logistics Co-ordinator": {
+    "skills": "Customs Clearance, International Shipping, Documentation Management",
+    "level": "Mid"
+  },
+  "Inbound Logistics Controller": {
+    "skills": "Inbound Freight Management, Inventory Control, Customs Compliance, Warehouse Management Systems",
+    "level": "Senior"
+  },
+  "Logistics Operations Specialist (Tauranga) - Warehouse & Import/Export": {
+    "skills": "Import/Export Documentation, Customs Clearance, Warehouse Management Systems, Logistics Coordination",
+    "level": "Mid"
+  },
+  "Logistics and Dispatch Team Leader": {
+    "skills": "Dispatch Management, Route Optimization, Team Supervision, Logistics Coordination",
+    "level": "Management"
+  },
+  "Operation Manager": {
+    "skills": "Operations Planning, Process Optimization, Budget Management, Team Leadership",
+    "level": "Management"
+  },
+  "Operations & Logistics Manager": {
+    "skills": "Supply Chain Coordination, Inventory Management, Operations Planning, Team Leadership",
+    "level": "Management"
+  },
+  "Operations Controller – Freight / Logistics Supervisor": {
+    "skills": "Freight Management, Logistics Supervision, Cost Control, Warehouse Operations",
+    "level": "Management"
+  },
+  "Operations Manager - Logistics, Freight and Staging": {
+    "skills": "Freight Operations, Staging Management, Inventory Control, Team Leadership",
+    "level": "Management"
+  },
+  "Packaging / Warehouse Assistant": {
+    "skills": "Warehouse Operations, Packing Procedures, Inventory Management, Material Handling",
+    "level": "Entry"
+  },
+  "Picker Packer - Dayshift & Nightshift": {
+    "skills": "Order Picking, Packing, Warehouse Safety, Material Handling Equipment",
+    "level": "Entry"
+  },
+  "Warehouse & Customer Service Team Member - East Tamaki": {
+    "skills": "Warehouse Operations, Customer Service, Order Fulfillment, Inventory Management",
+    "level": "Entry"
+  },
+  "Warehouse & Trade Counter Sales": {
+    "skills": "Counter Sales, Inventory Management, Customer Service, Stock Management",
+    "level": "Entry"
+  },
+  "Warehouse Assistant Inbound": {
+    "skills": "Receiving Procedures, Inbound Processing, Inventory Recording, Material Handling",
+    "level": "Entry"
+  },
+  "Warehouse Assistant Outbound": {
+    "skills": "Order Fulfillment, Packing, Dispatch Preparation, Warehouse Safety",
+    "level": "Entry"
+  },
+  "Warehouse Staff": {
+    "skills": "Warehouse Operations, Order Processing, Material Handling, Stock Management",
+    "level": "Entry"
+  },
+  "Warehouse Store Person (Full time)": {
+    "skills": "Stock Management, Warehouse Operations, Inventory Control, Material Handling",
+    "level": "Entry"
+  },
+  "Warehouse Team Lead": {
+    "skills": "Warehouse Supervision, Team Coordination, Safety Compliance, Performance Monitoring",
+    "level": "Management"
+  },
+  "Warehouse Team Member PM": {
+    "skills": "Warehouse Operations, Evening Shift Management, Order Processing, Material Handling",
+    "level": "Entry"
+  },
+  "Warehouse and Planning Support Specialist - Part time (20 hours weekly)": {
+    "skills": "Warehouse Coordination, Demand Planning, Inventory Management, Logistics Support",
+    "level": "Mid"
+  },
+  "Warehouse process Workers": {
+    "skills": "Warehouse Operations, Process Execution, Material Handling, Safety Compliance",
+    "level": "Entry"
+  },
+  "Bond Warehouse Team Member": {
+    "skills": "Customs Procedures, Bond Warehouse Operations, Inventory Management, Compliance Documentation",
+    "level": "Entry"
+  },
+  "Dispatcher/Operations Coordinator": {
+    "skills": "Route Optimization, Load Planning, Fleet Coordination, Real-Time Tracking",
+    "level": "Mid"
+  },
+  "Driver/Warehouse Person – Mt Wellington Branch": {
+    "skills": "Vehicle Operation, Warehouse Management, Load Securing, Safety Compliance",
+    "level": "Entry"
+  },
+  "Operational Support": {
+    "skills": "Process Documentation, Scheduling, Data Entry, Inventory Management",
+    "level": "Entry"
+  },
+  "Process Workers - PM Shift (Northshore)": {
+    "skills": "Production Line Operation, Quality Control, Safety Procedures, Equipment Maintenance",
+    "level": "Entry"
+  },
+  "Trainee Train Controller": {
+    "skills": "Rail Operations, Signal Systems, Train Dispatch, Safety Protocols",
+    "level": "Entry"
+  },
+  "Warehouse / Forklift Operator": {
+    "skills": "Forklift Operation, Warehouse Management System, Inventory Accuracy, Safety Compliance",
+    "level": "Entry"
+  },
+  "Warehouse Operator- Aqualine Auckland Warehouse": {
+    "skills": "Warehouse Management System, Inventory Control, Order Fulfillment, Forklift Operation",
+    "level": "Entry"
+  },
+  "Warehouse Picker Packer - Mid Shift": {
+    "skills": "Order Picking, Inventory Accuracy, Packing Techniques, Warehouse Safety",
+    "level": "Entry"
+  },
+  "Warehouse Picker Packer - Night Shift": {
+    "skills": "Order Picking, Inventory Accuracy, Packing Techniques, Warehouse Safety",
+    "level": "Entry"
+  },
+  "After Sales Manager": {
+    "skills": "Customer Service Management, Service Coordination, Performance Analytics, Team Leadership",
+    "level": "Management"
+  },
+  "Customer Service - Dispatch": {
+    "skills": "Customer Communication, Order Tracking, Dispatch Coordination, Issue Resolution",
+    "level": "Entry"
+  },
+  "Mitre 10 MEGA Tauranga - Trade Support": {
+    "skills": "Product Knowledge, Trade Customer Service, Stock Location, Sales Support",
+    "level": "Entry"
+  },
+  "Mitre 10 Mega Tauranga - Stocktake": {
+    "skills": "Inventory Counting, Cycle Counting, Data Accuracy, Warehouse Systems",
+    "level": "Entry"
+  },
+  "Mitre 10 Mega Tauranga - Zone Manager": {
+    "skills": "Retail Operations Management, Staff Supervision, Inventory Management, Sales Performance",
+    "level": "Management"
+  },
+  "Office Manager": {
+    "skills": "Administrative Coordination, Scheduling, Document Management, Financial Records",
+    "level": "Mid"
+  },
+  "Production Operator – Frame, Truss & Floor Cassette Manufacturing": {
+    "skills": "CNC Operation, Blueprint Reading, Quality Control, Production Safety",
+    "level": "Entry"
+  },
+  "Retail Assistant and Child Restraint Technician": {
+    "skills": "Child Restraint Installation, Product Knowledge, Customer Service, Safety Compliance",
+    "level": "Entry"
+  },
+  "Retail Sales Assistant": {
+    "skills": "Product Knowledge, Point-Of-Sale Systems, Customer Service, Stock Management",
+    "level": "Entry"
+  },
+  "STMS, TMO NP, TMO P": {
+    "skills": "Traffic Management, Transport Coordination, Safety Protocols, Route Planning",
+    "level": "Entry"
+  },
+  "Sales & Customer Support": {
+    "skills": "Customer Relationship Management, Order Processing, Product Knowledge",
+    "level": "Entry"
+  },
+  "Store Manager - Tauranga Crossing": {
+    "skills": "Retail Operations, Inventory Management, Staff Supervision, Sales Performance",
+    "level": "Management"
+  },
+  "Temporary Fence Installer": {
+    "skills": "Fence Installation, Health & Safety Compliance, Equipment Operation",
+    "level": "Entry"
+  },
+  "Accounts & Trade Administrator (Trades Office Role)": {
+    "skills": "Accounts Payable/Receivable, Invoicing, Data Entry, Trade Compliance",
+    "level": "Entry"
+  },
+  "Asphalt Plant Department Manager": {
+    "skills": "Production Planning, Equipment Maintenance, Team Leadership, Quality Control",
+    "level": "Management"
+  },
+  "Auckland Regional Manager": {
+    "skills": "Regional Operations, P&L Management, Team Leadership, Performance Reporting",
+    "level": "Executive"
+  },
+  "Consulting - Finance and Operations Transformation - Supply Chain Senior Analyst": {
+    "skills": "Supply Chain Optimization, Business Process Analysis, Financial Modeling, Lean/Six Sigma",
+    "level": "Senior"
+  },
+  "Customer Services Officer": {
+    "skills": "Customer Service, Complaint Resolution, Administrative Support, Documentation",
+    "level": "Entry"
+  },
+  "Empty Container Handler Drivers": {
+    "skills": "Container Handling, Vehicle Operation, Logistics Coordination, Safety Procedures",
+    "level": "Entry"
+  },
+  "Interior Design - Stylists Assistant": {
+    "skills": "Interior Design Support, Client Communication, Space Planning, Product Knowledge",
+    "level": "Entry"
+  },
+  "National Fleet Manager": {
+    "skills": "Fleet Operations, Vehicle Maintenance Scheduling, Cost Management, Driver Safety Compliance",
+    "level": "Executive"
+  },
+  "Office & Dispatch Coordinator": {
+    "skills": "Dispatch Scheduling, Route Optimization, Order Coordination, Communication Systems",
+    "level": "Mid"
+  },
+  "HR Business Partner": {
+    "skills": "Talent Management, Recruitment, Employee Relations, HR Systems Administration",
+    "level": "Mid"
+  },
+  "Quality Assurance Manager": {
+    "skills": "Quality Control, Audit Procedures, Process Improvement, Compliance Management",
+    "level": "Management"
+  },
+  "Senior Customer Service": {
+    "skills": "Customer Service, Complaint Resolution, Team Training, Quality Standards",
+    "level": "Senior"
+  },
+  "Service Coordinator": {
+    "skills": "Service Scheduling, Customer Communication, Work Order Management, Documentation",
+    "level": "Mid"
+  },
+  "Service Manager": {
+    "skills": "Service Operations, Team Leadership, Customer Satisfaction Management, Technical Support",
+    "level": "Management"
+  },
+  "Vehicle Operator Class 4 Tegel": {
+    "skills": "Vehicle Operation Class 4, Food Safety Compliance, Route Delivery, Equipment Handling",
+    "level": "Entry"
+  },
+  "Courier Contractor - Timaru": {
+    "skills": "Parcel Delivery, Route Management, Vehicle Operation, Customer Service",
+    "level": "Entry"
+  },
+  "Forklift Operators": {
+    "skills": "Forklift Operation, Warehouse Safety, Load Handling, Material Stacking",
+    "level": "Entry"
+  },
+  "Freezer & Yard Forklift Operator": {
+    "skills": "Forklift Operation, Warehouse Safety Compliance, Cold Chain Management, Load Planning",
+    "level": "Entry"
+  },
+  "Trade Leader - Mitre 10 MEGA Silverdale": {
+    "skills": "Team Leadership, Stock Management, Customer Service, Point-of-Sale Systems",
+    "level": "Management"
+  },
+  "Administrative & Compliance Co-worker": {
+    "skills": "Regulatory Compliance, Data Entry, Documentation Management, Administrative Support",
+    "level": "Entry"
+  },
+  "Customer Services Administrator": {
+    "skills": "Customer Service, Order Processing, Data Management, Communication Systems",
+    "level": "Entry"
+  },
+  "Dispatch Operator": {
+    "skills": "Dispatch Management, Route Optimization, Transport Coordination, Communication Systems",
+    "level": "Mid"
+  },
+  "Flight Logistics and Ground Operations Coordinator (Customer Experience)": {
+    "skills": "Air Freight Operations, Ground Handling, Customer Service, Logistics Coordination",
+    "level": "Mid"
+  },
+  "Operations Specialist / Coordinator": {
+    "skills": "Process Optimization, Inventory Coordination, Demand Planning, Systems Administration",
+    "level": "Mid"
+  },
+  "Store Person - Night Shift": {
+    "skills": "Warehouse Operations, Stock Receiving, Inventory Control, Forklift Operation",
+    "level": "Entry"
+  },
+  "WAREHOUSE STAFF/ DELIVERY DRIVER": {
+    "skills": "Vehicle Operation, Warehouse Operations, Delivery Route Execution, Safety Compliance",
+    "level": "Entry"
+  },
+  "DC Container Operations Coordinator": {
+    "skills": "Container Management, Import/Export Documentation, Yard Operations, Logistics Coordination",
+    "level": "Mid"
+  },
+  "DC Inventory Manager": {
+    "skills": "Inventory Management, Warehouse Operations, Demand Forecasting, Systems Analysis",
+    "level": "Senior"
+  },
+  "Freezer Merchandiser- Picker": {
+    "skills": "Order Picking, Cold Chain Management, Inventory Accuracy, Warehouse Safety",
+    "level": "Entry"
+  },
+  "Integrated Operations Centre Controller": {
+    "skills": "Operations Management, Systems Monitoring, Logistics Coordination, Incident Response",
+    "level": "Mid"
+  },
+  "Material Supplies Supervisor - Night Shift": {
+    "skills": "Team Supervision, Inventory Control, Warehouse Operations, Schedule Management",
+    "level": "Management"
+  },
+  "Night Shift Plant Operator": {
+    "skills": "Equipment Operation, Preventive Maintenance, Safety Protocols, Production Monitoring",
+    "level": "Entry"
+  },
+  "Operations Manager / Skipper": {
+    "skills": "Team Leadership, Operations Planning, Logistics Management, Performance Reporting",
+    "level": "Management"
+  },
+  "Procurement Assistant": {
+    "skills": "Procurement Processing, Supplier Communication, Purchase Order Management, Data Entry",
+    "level": "Entry"
+  },
+  "Specialist Procurement Manager": {
+    "skills": "Supplier Management, Contract Negotiation, Strategic Sourcing, Cost Optimization",
+    "level": "Senior"
+  },
+  "Trade Depot Manager ( Sole Charge)": {
+    "skills": "Team Leadership, Inventory Management, Financial Control, Customer Service",
+    "level": "Management"
+  },
+  "Transport & Dispatch Supervisor": {
+    "skills": "Team Supervision, Transport Coordination, Route Optimization, Driver Management",
+    "level": "Management"
+  },
+  "Aquatics Operations Coordinator": {
+    "skills": "Facility Operations Management, Scheduling & Rostering, Health & Safety Compliance, Customer Service",
+    "level": "Mid"
+  },
+  "Customer Service Coordinator": {
+    "skills": "Customer Relationship Management, Order Management, Communication & Problem Resolution, Data Entry & Record Keeping",
+    "level": "Entry"
+  },
+  "EDI Assistant Manager - Te Puna": {
+    "skills": "EDI Systems Management, Warehouse Operations, Team Supervision, Inventory Control",
+    "level": "Management"
+  },
+  "Helicopter Flight Coordinator": {
+    "skills": "Flight Scheduling & Logistics, Safety Protocol Management, Regulatory Compliance, Dispatch Operations",
+    "level": "Mid"
+  },
+  "Inwards Goods - Team Leader - Mitre10 MEGA Marlborough": {
+    "skills": "Receiving & Inbound Logistics, Team Leadership & Supervision, Quality Inspection, Inventory Management",
+    "level": "Management"
+  },
+  "Manager Transport Planning": {
+    "skills": "Transport Route Planning & Optimization, Fleet Management, Demand Forecasting, Vendor Management",
+    "level": "Management"
+  },
+  "Office Administrator & Customer Service": {
+    "skills": "Administrative Support, Data Entry & Filing Systems, Customer Service, Scheduling & Coordination",
+    "level": "Entry"
+  },
+  "Operations Manager - Moving & Logistics": {
+    "skills": "Logistics Operations Management, Team Leadership, Budget Management, Customer Relationship Management",
+    "level": "Management"
+  },
+  "Picking and Packing/logistics": {
+    "skills": "Order Picking & Fulfillment, Packing & Labeling, Warehouse Safety, Inventory Accuracy",
+    "level": "Entry"
+  },
+  "Quality Controller- Te Puna": {
+    "skills": "Quality Assurance Testing, Defect Analysis & Reporting, Standard Operating Procedures, Regulatory Compliance",
+    "level": "Mid"
+  },
+  "Senior Procurement Specialist": {
+    "skills": "Supplier Evaluation & Selection, Contract Negotiation, Demand Planning, Cost Analysis & Optimization",
+    "level": "Senior"
+  },
+  "Sourcing Manager": {
+    "skills": "Strategic Supplier Sourcing, Category Management, Vendor Performance Management, Cost Reduction Initiatives",
+    "level": "Management"
+  },
+  "Transport Dispatcher (Night Shift)": {
+    "skills": "Dispatch Operations, Route Management, Vehicle Tracking, Regulatory Compliance",
+    "level": "Entry"
+  },
+  "Warehouse and Logistics Coordinator": {
+    "skills": "Warehouse Operations, Order Fulfillment Coordination, Inventory Management, Transportation Coordination",
+    "level": "Mid"
+  },
+  "Whittaker's Head of Production": {
+    "skills": "Production Planning & Control, Quality Assurance, Team Leadership & Management, Regulatory Compliance",
+    "level": "Executive"
+  },
+  "Business Manager - Retail Focused": {
+    "skills": "Retail Operations Management, Sales Performance Analysis, Team Leadership, Inventory Management",
+    "level": "Management"
+  },
+  "Contract Support": {
+    "skills": "Contract Administration, Compliance Monitoring, Documentation & Record Keeping, Communication",
+    "level": "Entry"
+  },
+  "Dispatcher/Logistics Coordinator": {
+    "skills": "Dispatch Operations, Route Planning, Order Coordination, Communication & Problem Resolution",
+    "level": "Mid"
+  },
+  "Driving Instructor - Class 2-5, Forklift, WTR": {
+    "skills": "Professional Driving Instruction, Heavy Vehicle Operations, Forklift Operations, Safety Training & Assessment",
+    "level": "Mid"
+  },
+  "Forestry Faller": {
+    "skills": "Chainsaw Operation, Tree Felling Techniques, Safety Protocols, Physical Fitness",
+    "level": "Entry"
+  },
+  "Marketing Manager": {
+    "skills": "Campaign Management, Brand Strategy, Digital Marketing, Analytics",
+    "level": "Management"
+  },
+  "Senior Executive Assistant Creative Operations": {
+    "skills": "Project Coordination, Stakeholder Management, Creative Operations, Executive Support",
+    "level": "Senior"
+  },
+  "Store Person - St Lukes": {
+    "skills": "Inventory Management, Stock Rotation, Warehouse Safety, Order Processing",
+    "level": "Entry"
+  },
+  "Storeperson/Trade Sales Assistant": {
+    "skills": "Inventory Management, Stock Control, Customer Service, Order Picking",
+    "level": "Entry"
+  },
+  "Agronomist": {
+    "skills": "Crop Management, Soil Analysis, Pest Management, Fertiliser Application",
+    "level": "Senior"
+  },
+  "Maintenance Technician": {
+    "skills": "Mechanical Repair, Equipment Diagnostics, Preventive Maintenance, Safety Compliance",
+    "level": "Entry"
+  },
+  "Facilities Manager": {
+    "skills": "Facilities Planning, Budget Management, Vendor Management, Building Operations",
+    "level": "Management"
+  },
+  "Facilities Coordinator": {
+    "skills": "Maintenance Coordination, Space Management, Vendor Liaison, Work Order Management",
+    "level": "Mid"
+  },
+  "Refrigeration Technician": {
+    "skills": "Refrigeration Systems, EPA Compliance, Fault Diagnosis, Installation & Repair",
+    "level": "Mid"
+  },
+  "Forklift Mechanic": {
+    "skills": "Hydraulic Systems, Engine Repair, Safety Standards, Troubleshooting",
+    "level": "Mid"
+  },
+  "Electrical Maintenance Engineer": {
+    "skills": "Electrical Systems, PLC Programming, Fault Finding, Regulatory Compliance",
+    "level": "Senior"
+  },
+  "Maintenance Manager": {
+    "skills": "Maintenance Planning, Team Leadership, Asset Management, Budget Control",
+    "level": "Management"
+  },
+  "Plant Maintenance Engineer": {
+    "skills": "Predictive Maintenance, Equipment Optimisation, Root Cause Analysis, CMMS Systems",
+    "level": "Senior"
+  },
+  "Building Services Manager": {
+    "skills": "Building Systems Management, Health & Safety, Contractor Supervision, Compliance Audits",
+    "level": "Management"
+  },
+  "Maintenance Planner": {
+    "skills": "Maintenance Scheduling, CMMS Software, Resource Planning, Work Order Prioritisation",
+    "level": "Mid"
+  },
+  "HSE Manager": {
+    "skills": "Health & Safety Strategy, Risk Assessment, Compliance Management, Incident Investigation",
+    "level": "Management"
+  },
+  "Health & Safety Advisor": {
+    "skills": "Risk Assessment, Hazard Identification, Safety Training, Regulatory Compliance",
+    "level": "Mid"
+  },
+  "Safety Officer": {
+    "skills": "Hazard Identification, Safety Inspections, Incident Reporting, Safety Induction",
+    "level": "Entry"
+  },
+  "WHS Coordinator": {
+    "skills": "Safety Administration, Compliance Documentation, Training Coordination, Incident Reporting",
+    "level": "Mid"
+  },
+  "Environmental Officer": {
+    "skills": "Environmental Compliance, Waste Management, Environmental Impact Assessment",
+    "level": "Mid"
+  },
+  "Health & Safety Manager": {
+    "skills": "Hazard Identification & Risk Assessment, Safety Compliance, Incident Investigation & Reporting",
+    "level": "Management"
+  },
+  "HSE Coordinator": {
+    "skills": "Safety Compliance, Hazard Identification, Incident Investigation",
+    "level": "Mid"
+  },
+  "WHS Manager": {
+    "skills": "Hazard Identification & Risk Assessment, Safety Compliance, Incident Investigation & Reporting",
+    "level": "Management"
+  },
+  "Environmental Health & Safety Specialist": {
+    "skills": "Environmental Compliance, Hazard Identification & Risk Assessment, Safety Management Systems",
+    "level": "Senior"
+  },
+  "Risk & Compliance Manager": {
+    "skills": "Compliance Audit, Risk Assessment & Mitigation, Regulatory Reporting",
+    "level": "Management"
+  },
+  "Injury Management Coordinator": {
+    "skills": "Claims Management, Incident Investigation, Return-to-Work Programs",
+    "level": "Mid"
+  },
+  "WMS Consultant": {
+    "skills": "Warehouse Management Systems Configuration, Supply Chain Optimization, System Implementation",
+    "level": "Senior"
+  },
+  "ERP Implementation Specialist": {
+    "skills": "Enterprise Resource Planning Systems, System Configuration, Change Management",
+    "level": "Senior"
+  },
+  "NetSuite Consultant": {
+    "skills": "NetSuite Configuration & Customization, Supply Chain Module Implementation, Process Design",
+    "level": "Senior"
+  },
+  "Oracle Consultant": {
+    "skills": "Oracle ERP Systems, Database Management, Supply Chain Module Configuration",
+    "level": "Senior"
+  },
+  "Microsoft Dynamics Consultant": {
+    "skills": "Microsoft Dynamics Configuration, Supply Chain Management, System Integration",
+    "level": "Senior"
+  },
+  "TMS Consultant": {
+    "skills": "Transportation Management Systems, Route Optimization, System Implementation",
+    "level": "Senior"
+  },
+  "Business Systems Analyst": {
+    "skills": "Requirements Analysis, Business Process Mapping, Systems Testing",
+    "level": "Mid"
+  },
+  "IT Project Manager": {
+    "skills": "Project Management, IT Infrastructure, Stakeholder Management",
+    "level": "Management"
+  },
+  "Data Engineer": {
+    "skills": "Data Pipeline Development, SQL & Database Design, Data Quality Management",
+    "level": "Mid"
+  },
+  "Business Intelligence Developer": {
+    "skills": "Data Visualization, Analytics Query Development, Business Intelligence Tools",
+    "level": "Mid"
+  },
+  "Solutions Architect": {
+    "skills": "Enterprise Architecture, Systems Design, Technology Strategy",
+    "level": "Senior"
+  },
+  "IT Manager": {
+    "skills": "IT Operations Management, Infrastructure Planning, Team Leadership",
+    "level": "Management"
+  },
+  "Application Support Analyst": {
+    "skills": "Application Troubleshooting, User Support, Incident Management",
+    "level": "Entry"
+  },
+  "Cybersecurity Analyst": {
+    "skills": "Security Threat Analysis, Vulnerability Assessment, Incident Response, Access Control Management",
+    "level": "Mid"
+  },
+  "Cloud Solutions Architect": {
+    "skills": "Cloud Infrastructure Design, Azure/AWS Architecture, System Integration, Cost Optimisation",
+    "level": "Senior"
+  },
+  "SAP Basis Consultant": {
+    "skills": "SAP System Administration, Database Management, System Performance Tuning, SAP Security Configuration",
+    "level": "Senior"
+  },
+  "SAP WM/EWM Consultant": {
+    "skills": "Warehouse Management Configuration, SAP EWM Implementation, Inventory Control, Process Optimisation",
+    "level": "Senior"
+  },
+  "Power BI Developer": {
+    "skills": "Data Visualisation, DAX Coding, ETL Pipeline Development, Data Modelling",
+    "level": "Mid"
+  },
+  "Customer Service Advisor": {
+    "skills": "Customer Complaint Resolution, Order Management, Multi-Channel Support, Service Documentation",
+    "level": "Entry"
+  },
+  "Customer Experience Manager": {
+    "skills": "Customer Journey Mapping, Service Quality Improvement, Stakeholder Management, Performance Analytics",
+    "level": "Management"
+  },
+  "Client Services Manager": {
+    "skills": "Account Management, Client Relationship Development, Service Delivery Coordination, Contract Negotiation",
+    "level": "Management"
+  },
+  "Inside Sales Manager": {
+    "skills": "Sales Team Leadership, Pipeline Management, Sales Forecasting, Customer Acquisition Strategy",
+    "level": "Management"
+  },
+  "Sales Operations Manager": {
+    "skills": "Sales Process Optimisation, CRM System Administration, Quota Management, Analytics & Reporting",
+    "level": "Management"
+  },
+  "Telesales Representative": {
+    "skills": "Outbound Call Management, Sales Closing, Customer Qualification, Call Logging & CRM Data Entry",
+    "level": "Entry"
+  },
+  "Account Executive": {
+    "skills": "B2B Sales Strategy, Client Retention, Contract Negotiation, Opportunity Development",
+    "level": "Mid"
+  },
+  "Regional Sales Manager": {
+    "skills": "Territory Sales Leadership, Revenue Growth Strategy, Sales Team Management, Market Analysis",
+    "level": "Management"
+  },
+  "State Sales Manager": {
+    "skills": "State-Level Sales Strategy, Territory Management, Sales Team Leadership, Customer Account Development",
+    "level": "Management"
+  },
+  "Customer Relations Officer": {
+    "skills": "Customer Enquiry Resolution, Account Maintenance, Service Coordination, Documentation Management",
+    "level": "Entry"
+  },
+  "Commercial Analyst": {
+    "skills": "Cost Analysis, Pricing Strategy, Commercial Negotiation, Profit Impact Modelling",
+    "level": "Mid"
+  },
+  "Freight Invoice Auditor": {
+    "skills": "Invoice Verification, Freight Cost Audit, Discrepancy Resolution, Vendor Reconciliation",
+    "level": "Entry"
+  },
+  "Logistics Cost Analyst": {
+    "skills": "Transportation Cost Analysis, Carrier Performance Benchmarking, Cost Optimisation, Budget Forecasting",
+    "level": "Mid"
+  },
+  "Supply Chain Finance Manager": {
+    "skills": "Supply Chain Cost Management, Procurement Analytics, Working Capital Optimisation, Vendor Financial Analysis",
+    "level": "Management"
+  },
+  "Credit Controller": {
+    "skills": "Accounts Receivable Management, Credit Risk Assessment, Debt Collection, Payment Processing",
+    "level": "Mid"
+  },
+  "Financial Controller": {
+    "skills": "Financial Reporting, Management Accounting, Internal Controls, Cash Flow Management",
+    "level": "Management"
+  },
+  "Finance Manager": {
+    "skills": "Budget Management, Financial Analysis, Accounts Payable/Receivable, Variance Analysis",
+    "level": "Management"
+  },
+  "Revenue Analyst": {
+    "skills": "Revenue Recognition, Billing System Management, Financial Forecasting, Data Analysis",
+    "level": "Mid"
+  },
+  "Cost Accountant": {
+    "skills": "Cost Allocation, Standard Costing, Variance Analysis, Activity-Based Costing",
+    "level": "Mid"
+  },
+  "Treasury Analyst": {
+    "skills": "Cash Management, Liquidity Forecasting, Banking Relations, Financial Risk Management",
+    "level": "Mid"
+  },
+  "Learning & Development Manager": {
+    "skills": "Training Program Design, Learning Management Systems, Talent Development, Instructional Design",
+    "level": "Management"
+  },
+  "Talent Acquisition Specialist": {
+    "skills": "Recruitment Strategy, Applicant Tracking Systems, Candidate Screening, Job Market Analysis",
+    "level": "Mid"
+  },
+  "HR Manager": {
+    "skills": "Employee Relations, Performance Management, HR Compliance, Compensation & Benefits",
+    "level": "Management"
+  },
+  "Payroll Manager": {
+    "skills": "Payroll Processing, Tax Compliance, Superannuation Administration, Payroll System Management",
+    "level": "Management"
+  },
+  "Training Coordinator": {
+    "skills": "Training Delivery, Learning Management Systems, Course Development, Scheduling & Logistics",
+    "level": "Entry"
+  },
+  "Organisational Development Manager": {
+    "skills": "Change Management, Organisational Design, Culture Development, Stakeholder Engagement",
+    "level": "Management"
+  },
+  "Workforce Planning Analyst": {
+    "skills": "Workforce Forecasting, Headcount Analysis, Labour Market Analysis, Capacity Planning",
+    "level": "Mid"
+  },
+  "Marketing Coordinator": {
+    "skills": "Campaign Support, Content Calendar Management, Social Media Management, Marketing Analytics",
+    "level": "Entry"
+  },
+  "Communications Manager": {
+    "skills": "Internal Communications, Stakeholder Management, Message Development, Media Relations",
+    "level": "Management"
+  },
+  "Digital Marketing Specialist": {
+    "skills": "SEO/SEM, Digital Campaign Management, Analytics Platforms, Email Marketing",
+    "level": "Mid"
+  },
+  "Brand Manager": {
+    "skills": "Brand Strategy, Market Positioning, Brand Guidelines Development, Consumer Insights",
+    "level": "Senior"
+  },
+  "Content Marketing Specialist": {
+    "skills": "Content Strategy, Copywriting, Content Management Systems, SEO Writing",
+    "level": "Mid"
+  },
+  "Senior Project Manager": {
+    "skills": "Project Planning, Risk Management, Stakeholder Communication, Agile/Waterfall Methodologies",
+    "level": "Senior"
+  },
+  "Program Manager": {
+    "skills": "Program Governance, Multi-Project Coordination, Strategic Alignment, Budget Oversight",
+    "level": "Management"
+  },
+  "Change Manager": {
+    "skills": "Change Control, Stakeholder Engagement, Resistance Management, Impact Assessment",
+    "level": "Senior"
+  },
+  "Strategy Manager": {
+    "skills": "Supply Chain Strategy, Strategic Planning, Business Case Development",
+    "level": "Executive"
+  },
+  "Business Transformation Manager": {
+    "skills": "Change Management, Process Redesign, Stakeholder Engagement",
+    "level": "Management"
+  },
+  "Continuous Improvement Manager": {
+    "skills": "Lean Methodology, Process Optimization, Performance Metrics",
+    "level": "Management"
+  },
+  "Lean Six Sigma Specialist": {
+    "skills": "Lean Six Sigma, Root Cause Analysis, Statistical Analysis",
+    "level": "Senior"
+  },
+  "Process Improvement Analyst": {
+    "skills": "Process Mapping, Data Analysis, Lean Tools",
+    "level": "Mid"
+  },
+  "Legal Counsel": {
+    "skills": "Contract Law, Regulatory Compliance, Risk Assessment",
+    "level": "Executive"
+  },
+  "Compliance Manager": {
+    "skills": "Compliance Management, Regulatory Framework, Audit Procedures",
+    "level": "Management"
+  },
+  "Contracts Manager": {
+    "skills": "Contract Negotiation, Vendor Management, Legal Documentation",
+    "level": "Mid"
+  },
+  "Risk Manager": {
+    "skills": "Risk Assessment, Supply Chain Risk, Mitigation Planning",
+    "level": "Senior"
+  },
+  "Regional Operations Manager": {
+    "skills": "Operations Management, Budget Control, Multi-Site Coordination",
+    "level": "Management"
+  },
+  "Chief Supply Chain Officer": {
+    "skills": "Supply Chain Strategy, End-To-End Planning, Organizational Leadership",
+    "level": "Executive"
+  },
+  "Head of Logistics": {
+    "skills": "Logistics Network Optimization, Transportation Management, Cost Control",
+    "level": "Executive"
+  },
+  "Head of Supply Chain": {
+    "skills": "Supply Chain Planning, Procurement Strategy, Supplier Relationship Management",
+    "level": "Executive"
+  },
+  "Head of Operations": {
+    "skills": "Operations Strategy, Capacity Planning, Performance Management",
+    "level": "Executive"
+  },
+  "Chief Operating Officer": {
+    "skills": "Operational Strategy, Financial Management, Executive Leadership",
+    "level": "Executive"
+  },
+  "Reach Truck Operator": {
+    "skills": "Reach Truck Operation, Pallet Handling, Warehouse Safety",
+    "level": "Entry"
+  },
+  "Order Selector": {
+    "skills": "Order Picking, Inventory Management, Warehouse Systems",
+    "level": "Entry"
+  },
+  "Goods Inwards Officer": {
+    "skills": "Goods Receipt, Quality Inspection, Inventory Recording",
+    "level": "Entry"
+  },
+  "DC Team Leader": {
+    "skills": "Team Supervision, Warehouse Operations, Safety Management",
+    "level": "Management"
+  },
+  "Night Shift Supervisor": {
+    "skills": "Shift Supervision, Resource Management, Safety Compliance",
+    "level": "Management"
+  },
+  "Inbound Team Leader": {
+    "skills": "Receiving & Put-Away, Quality Assurance, Team Supervision, Warehouse Management Systems",
+    "level": "Management"
+  },
+  "Outbound Team Leader": {
+    "skills": "Order Fulfillment, Pick & Pack Operations, Team Supervision, Warehouse Management Systems",
+    "level": "Management"
+  },
+  "Returns Processor": {
+    "skills": "Returns Management, Product Inspection, Inventory Reconciliation, Warehouse Management Systems",
+    "level": "Entry"
+  },
+  "Pick and Pack Operator": {
+    "skills": "Order Picking, Product Packing, Inventory Accuracy, Material Handling Equipment",
+    "level": "Entry"
+  },
+  "Inventory Counter": {
+    "skills": "Stock Taking, Cycle Counting, Inventory Reconciliation, Data Entry",
+    "level": "Entry"
+  },
+  "Replenishment Officer": {
+    "skills": "Inventory Replenishment, Stock Level Monitoring, Warehouse Layout Optimization, Warehouse Management Systems",
+    "level": "Mid"
+  },
+  "Fleet Controller": {
+    "skills": "Fleet Management Systems, Vehicle Maintenance Scheduling, Fuel & Cost Management, Regulatory Compliance",
+    "level": "Management"
+  },
+  "Linehaul Driver": {
+    "skills": "Heavy Vehicle Operation, Route Navigation, Load Securing, Vehicle Safety Inspection",
+    "level": "Entry"
+  },
+  "Owner-Operator Driver": {
+    "skills": "Heavy Vehicle Operation, Business Management, Maintenance & Repairs, Customer Relationship Management",
+    "level": "Mid"
+  },
+  "Last Mile Delivery Driver": {
+    "skills": "Route Navigation, Customer Service, Vehicle Operation, Proof of Delivery Systems",
+    "level": "Entry"
+  },
+  "Traffic Controller": {
+    "skills": "Road Safety, Vehicle Direction & Coordination, Hazard Recognition, Communication Protocols",
+    "level": "Entry"
+  },
+  "Load Planner": {
+    "skills": "Load Optimization, Transport Planning, Weight & Dimension Management, TMS Software",
+    "level": "Mid"
+  },
+  "Route Planner": {
+    "skills": "Route Optimization, Geographic Information Systems, Vehicle Allocation, TMS Software",
+    "level": "Mid"
+  },
+  "Driver Trainer": {
+    "skills": "Vehicle Operation Instruction, Safety Training, Coaching & Mentoring, Defensive Driving Techniques",
+    "level": "Management"
+  },
+  "Fleet Coordinator": {
+    "skills": "Fleet Scheduling, Driver Management, Maintenance Coordination, Fleet Management Systems",
+    "level": "Mid"
+  },
+  "Import Operations Coordinator": {
+    "skills": "Customs Clearance, Import Documentation, Supplier Coordination, Freight Forwarding Systems",
+    "level": "Mid"
+  },
+  "Export Operations Coordinator": {
+    "skills": "Export Documentation, Compliance Management, Shipper Coordination, Freight Forwarding Systems",
+    "level": "Mid"
+  },
+  "Sea Freight Coordinator": {
+    "skills": "Ocean Freight Management, Bill of Lading Processing, Port Coordination, Freight Forwarding Systems",
+    "level": "Mid"
+  },
+  "Air Freight Coordinator": {
+    "skills": "Air Freight Management, Airway Bill Processing, Airport Coordination, Time-Sensitive Logistics",
+    "level": "Mid"
+  },
+  "Customs Compliance Officer": {
+    "skills": "Tariff Classification, Customs Regulations, Compliance Documentation, Risk Management",
+    "level": "Senior"
+  },
+  "Trade Compliance Specialist": {
+    "skills": "Trade Tariff Classification, Customs Regulations, Import/Export Documentation",
+    "level": "Mid"
+  },
+  "Dangerous Goods Coordinator": {
+    "skills": "Dangerous Goods Regulations, Hazmat Compliance, Transport Safety Management",
+    "level": "Mid"
+  },
+  "Freight Pricing Analyst": {
+    "skills": "Freight Rate Analysis, Cost Modelling, Logistics Costing",
+    "level": "Mid"
+  },
+  "S&OP Manager": {
+    "skills": "Demand Forecasting, Supply Planning, Sales And Operations Planning",
+    "level": "Management"
+  },
+  "Demand Planning Manager": {
+    "skills": "Demand Forecasting, Statistical Modelling, Inventory Planning",
+    "level": "Management"
+  },
+  "Procurement Analyst": {
+    "skills": "Procurement Systems, Supplier Performance Analysis, Purchase Order Management",
+    "level": "Mid"
+  },
+  "Strategic Sourcing Manager": {
+    "skills": "Supplier Selection, Contract Negotiation, Strategic Procurement",
+    "level": "Management"
+  },
+  "Category Buyer": {
+    "skills": "Category Management, Supplier Negotiation, Procurement Strategy",
+    "level": "Mid"
+  },
+  "Inventory Optimisation Analyst": {
+    "skills": "Inventory Modelling, ABC Analysis, Safety Stock Optimisation",
+    "level": "Mid"
+  },
+  "Master Scheduler": {
+    "skills": "Production Scheduling, Capacity Planning, MRP Systems",
+    "level": "Mid"
+  },
+  "Production Planner": {
+    "skills": "Production Scheduling, MRP Systems, Capacity Planning",
+    "level": "Mid"
+  },
+  "Trade Counter Sales": {
+    "skills": "Customer Service, Product Knowledge, POS Systems",
+    "level": "Entry"
+  },
+  "Retail Buyer": {
+    "skills": "Category Management, Supplier Negotiation, Retail Buying Strategy",
+    "level": "Mid"
+  },
+  "Merchandise Coordinator": {
+    "skills": "Merchandise Planning, Inventory Management, POS Systems",
+    "level": "Entry"
+  },
+  "Category Analyst": {
+    "skills": "Category Performance Analysis, Market Research, Sales Analytics",
+    "level": "Mid"
+  },
+  "Space Planner": {
+    "skills": "Retail Space Allocation, Planogram Design, Sales Analytics",
+    "level": "Mid"
+  },
+  "Retail Operations Manager": {
+    "skills": "Store Operations, Inventory Management, Team Leadership",
+    "level": "Management"
+  },
+  "Store Replenishment Manager": {
+    "skills": "Inventory Replenishment, Distribution Management, Store Operations",
+    "level": "Management"
+  },
+  "SAP Functional Consultant": {
+    "skills": "SAP Module Configuration, Business Process Analysis, User Acceptance Testing, System Integration",
+    "level": "Senior"
+  }
+}
