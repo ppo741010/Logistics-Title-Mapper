@@ -1922,7 +1922,7 @@ function PrivacyPolicy() {
 
         <Card style={{ padding: "14px 20px" }}>
           <div style={{ fontSize: 13, color: C.textSub, lineHeight: 1.7 }}>
-            <strong>Contact:</strong> ppo741010@gmail.com<br />
+            <strong>Contact:</strong> logititles@gmail.com<br />
             <strong>Governing law:</strong> New Zealand — Privacy Act 2020<br />
             <strong>Questions?</strong> Email us and we will respond within 5 business days.
           </div>
@@ -2012,7 +2012,7 @@ function TermsOfService() {
         <Card style={{ padding: "14px 20px" }}>
           <div style={{ fontSize: 13, color: C.textSub, lineHeight: 1.7 }}>
             <strong>Governing law:</strong> New Zealand<br />
-            <strong>Contact:</strong> ppo741010@gmail.com<br />
+            <strong>Contact:</strong> logititles@gmail.com<br />
             These terms may be updated at any time. Continued use of the tool constitutes acceptance of the updated terms.
           </div>
         </Card>
