@@ -82,11 +82,11 @@ _SKILLS_KNOWLEDGE_MAP: dict[str, dict] = {
 
 # Map skills_knowledge_map level values → UI display strings
 _LEVEL_DISPLAY = {
-    "Entry":      "1. Junior / Entry",
-    "Mid":        "2. Intermediate / Staff",
-    "Senior":     "3. Senior / Professional",
-    "Management": "4. Expert / Specialist",
-    "Executive":  "5. Executive / Strategic",
+    "Entry":      "Entry Level",
+    "Mid":        "Mid Level",
+    "Senior":     "Senior",
+    "Management": "Manager",
+    "Executive":  "Executive",
 }
 
 # ── Hardcoded rules (logistics-title-mapper specific, not in JSON) ────────────
@@ -357,7 +357,7 @@ def get_seniority(title: str) -> str:
     for key, label in LEVEL_MAPPING.items():
         if key in tl:
             return label
-    return "2. Intermediate / Staff"
+    return "Mid Level"
 
 
 def get_work_nature(title: str) -> str:

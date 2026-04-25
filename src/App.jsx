@@ -35,20 +35,20 @@ const FUZZY_ROLE_REPAIR = {
 };
 
 const LEVEL_MAPPING = {
-  "ceo":"5. Executive / Strategic","gm":"5. Executive / Strategic","director":"5. Executive / Strategic",
-  "head of":"5. Executive / Strategic","executive":"5. Executive / Strategic",
-  "manager":"4. Expert / Specialist",
-  "consultant":"4. Expert / Specialist","analyst":"4. Expert / Specialist","strategist":"4. Expert / Specialist",
-  "specialist":"3. Senior / Professional",
-  "senior":"3. Senior / Professional","team lead":"3. Senior / Professional",
-  "principal":"3. Senior / Professional","advanced":"3. Senior / Professional",
-  "coordinator":"2. Intermediate / Staff","supervisor":"2. Intermediate / Staff",
-  "officer":"2. Intermediate / Staff","administrator":"2. Intermediate / Staff",
-  "representative":"2. Intermediate / Staff","operator":"2. Intermediate / Staff",
-  "driver":"2. Intermediate / Staff","planner":"2. Intermediate / Staff",
-  "junior":"1. Junior / Entry","graduate":"1. Junior / Entry","trainee":"1. Junior / Entry",
-  "entry":"1. Junior / Entry","assistant":"1. Junior / Entry","picker":"1. Junior / Entry",
-  "packer":"1. Junior / Entry","handler":"1. Junior / Entry",
+  "ceo":"Executive","gm":"Executive","director":"Executive",
+  "head of":"Executive","executive":"Executive",
+  "manager":"Manager",
+  "consultant":"Manager","analyst":"Manager","strategist":"Manager",
+  "specialist":"Senior",
+  "senior":"Senior","team lead":"Senior",
+  "principal":"Senior","advanced":"Senior",
+  "coordinator":"Mid Level","supervisor":"Mid Level",
+  "officer":"Mid Level","administrator":"Mid Level",
+  "representative":"Mid Level","operator":"Mid Level",
+  "driver":"Mid Level","planner":"Mid Level",
+  "junior":"Entry Level","graduate":"Entry Level","trainee":"Entry Level",
+  "entry":"Entry Level","assistant":"Entry Level","picker":"Entry Level",
+  "packer":"Entry Level","handler":"Entry Level",
 };
 
 const WORK_NATURE_MAPPING = {
@@ -377,7 +377,7 @@ const CROSS_FUNCTIONAL_PAIRS = [
 function getSeniority(title) {
   const t = title.toLowerCase();
   for (const [key, label] of Object.entries(LEVEL_MAPPING)) if (t.includes(key)) return label;
-  return "2. Intermediate / Staff";
+  return "Mid Level";
 }
 
 function getWorkNature(title) {
@@ -627,11 +627,10 @@ function domainTone(d) {
 }
 
 function seniorityTone(label) {
-  if (label === "Review Required") return "gray";
-  if (label.includes("5.")) return "red";
-  if (label.includes("4.")) return "amber";
-  if (label.includes("3.")) return "green";
-  if (label.includes("2.")) return "blue";
+  if (label === "Executive") return "red";
+  if (label === "Manager")   return "amber";
+  if (label === "Senior")    return "green";
+  if (label === "Mid Level") return "blue";
   return "gray";
 }
 
@@ -1762,7 +1761,7 @@ function About() {
               { f: "clean_title",      d: "Standardized title with abbreviations expanded and noise removed" },
               { f: "functional_area",  d: "Suggested logistics category (e.g. Freight Forwarding, Warehouse)" },
               { f: "work_nature",      d: "Suggested nature: Management, Specialist / Support, or Operational" },
-              { f: "seniority",        d: "Suggested level from Junior / Entry to Executive / Strategic" },
+              { f: "seniority",        d: "Suggested level: Entry Level · Mid Level · Senior · Manager · Executive" },
               { f: "skills",           d: "Normalized skill tags mapped from title and description text" },
               { f: "confidence_score", d: "0–100 score indicating how certain the rule engine is" },
               { f: "review_flags",     d: "Flags for ambiguous, short, noisy, or out-of-scope inputs" },
