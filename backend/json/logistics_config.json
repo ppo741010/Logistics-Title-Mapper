@@ -545,17 +545,17 @@
     "General Hand": "Other/Noise"
   },
   "DOMAIN_SKILL_FIXED": {
-    "Business Administration": "Leadership, Stakeholder Management, Strategic Planning, KPI Management",
-    "Operations": "Process Optimization, Operational Excellence, Resource Allocation, SOP Development",
-    "Finance": "Cost Analysis, Accounts Payable/Receivable, ERP Proficiency, Financial Reporting",
-    "Planning": "Demand Forecasting, Inventory Optimization, Supply Chain Planning, S&OP",
-    "Freight Forwarding": "Incoterms, Customs Clearance, Export/Import Documentation, Consolidation",
-    "Warehouse": "Inventory Accuracy, WMS, RF Scanning, Manual Handling, Safety Compliance",
-    "Transport": "TMS, Route Optimization, Fleet Management, Last Mile Delivery, Compliance",
-    "Sales": "Customer Relationship Management (CRM), Quotation, Market Analysis, Revenue Growth, Customer Service",
-    "IT Support": "Systems Integration, ERP Maintenance, Data Governance, IT Infrastructure",
-    "Pending Review": "Logistics Fundamentals, Communication, Process Adherence",
-    "Other/Noise": "N/A - Non-logistics role"
+    "Business Administration": ["Leadership", "Stakeholder Management", "Strategic Planning", "KPI Management"],
+    "Operations": ["Process Optimization", "Operational Excellence", "Resource Allocation", "SOP Development"],
+    "Finance": ["Cost Analysis", "Accounts Payable/Receivable", "ERP Proficiency", "Financial Reporting"],
+    "Planning": ["Demand Forecasting", "Inventory Optimization", "Supply Chain Planning", "S&OP"],
+    "Freight Forwarding": ["Incoterms", "Customs Clearance", "Export/Import Documentation", "Consolidation"],
+    "Warehouse": ["Inventory Accuracy", "WMS", "RF Scanning", "Manual Handling", "Safety Compliance"],
+    "Transport": ["TMS", "Route Optimization", "Fleet Management", "Last Mile Delivery", "Compliance"],
+    "Sales": ["CRM", "Quotation", "Market Analysis", "Revenue Growth", "Customer Service"],
+    "IT Support": ["Systems Integration", "ERP Maintenance", "Data Governance", "IT Infrastructure"],
+    "Pending Review": ["Logistics Fundamentals", "Communication", "Process Adherence"],
+    "Other/Noise": []
   },
   "SALARY_BENCHMARK_NZ": {
     "Warehouse": 62000,
