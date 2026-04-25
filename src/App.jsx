@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import * as XLSX from "xlsx";
 import { analyzeViaAPI, bulkAnalyzeViaAPI, cleanPreviewViaAPI, submitFeedback } from "./api.js";
+import skillConfig from "./skill_normalize.json";
 
 // ── Classification data ─────────────────────────────────────────────────────
 
@@ -175,79 +176,7 @@ function FeedbackModal({ page = "", title = "", result = "", onClose }) {
   );
 }
 
-const SKILL_SYNONYMS = {
-  "erp":"ERP Systems","sap/erp":"ERP Systems","erp software":"ERP Systems",
-  "wms":"WMS","warehouse management system":"WMS","wms software":"WMS",
-  "tms":"TMS","transport management system":"TMS","tms software":"TMS",
-  "crm":"CRM","customer relationship management":"CRM","crm software":"CRM",
-  "ms excel":"Microsoft Excel","microsoft excel":"Microsoft Excel","advanced excel":"Microsoft Excel (Advanced)",
-  "forklift operation":"Forklift Operation","sql":"SQL","data governance":"Data Governance",
-  "supply chain management":"Supply Chain Management","inventory control":"Inventory Control",
-  "inventory management":"Inventory Management","rf scanning":"RF Scanning",
-  "sap":"SAP","s&op":"S&OP","kpi":"KPI","kpi management":"KPI Management",
-  "mrp":"MRP","sop":"SOP","edi":"EDI","vmi":"VMI","ohs":"OHS","ehs":"EHS","sla":"SLA",
-  // Analytics tools
-  "power bi":"Power BI","powerbi":"Power BI","power-bi":"Power BI",
-  "tableau":"Tableau",
-  "python":"Python","python scripting":"Python",
-  // Logistics operations
-  "cold chain":"Cold Chain","cold storage":"Cold Chain","temperature controlled":"Cold Chain",
-  "last mile":"Last Mile Delivery","last mile delivery":"Last Mile Delivery","last-mile":"Last Mile Delivery",
-  "cross docking":"Cross-Docking","cross-docking":"Cross-Docking","cross dock":"Cross-Docking",
-  "pick and pack":"Pick & Pack","pick & pack":"Pick & Pack","pick pack":"Pick & Pack",
-  "3pl management":"3PL Management","third party logistics":"3PL Management","3pl":"3PL Management",
-  // Compliance & certifications
-  "dangerous goods":"Dangerous Goods","dg":"Dangerous Goods","hazmat":"Dangerous Goods","hazchem":"Dangerous Goods",
-  "haccp":"HACCP","food safety":"HACCP",
-  "iso 9001":"ISO 9001","iso9001":"ISO 9001",
-  "customs compliance":"Customs Compliance","customs regulations":"Customs Compliance",
-  // Procurement
-  "tender management":"Tender Management","rfq":"Tender Management","request for quotation":"Tender Management",
-  "vendor management":"Vendor Management","supplier management":"Vendor Management","supplier relations":"Vendor Management",
-  "contract negotiation":"Contract Negotiation","contract management":"Contract Negotiation",
-  // Soft skills
-  "stakeholder management":"Stakeholder Management","stakeholder engagement":"Stakeholder Management",
-  "team leadership":"Team Leadership","people management":"Team Leadership","leading teams":"Team Leadership",
-  "communication":"Communication Skills","written communication":"Communication Skills","verbal communication":"Communication Skills",
-  "continuous improvement":"Continuous Improvement","ci":"Continuous Improvement","lean":"Lean Methodology",
-  "lean six sigma":"Lean Six Sigma","six sigma":"Lean Six Sigma",
-  // Microsoft Office Suite
-  "microsoft office":"Microsoft Office Suite","ms office":"Microsoft Office Suite","office 365":"Microsoft Office Suite","microsoft 365":"Microsoft Office Suite","ms office suite":"Microsoft Office Suite",
-  "microsoft word":"Microsoft Word","ms word":"Microsoft Word",
-  "microsoft powerpoint":"Microsoft PowerPoint","ms powerpoint":"Microsoft PowerPoint","powerpoint":"Microsoft PowerPoint",
-  "microsoft outlook":"Microsoft Outlook","ms outlook":"Microsoft Outlook","outlook":"Microsoft Outlook",
-  "microsoft teams":"Microsoft Teams","ms teams":"Microsoft Teams",
-  // Google Workspace
-  "google workspace":"Google Workspace","google suite":"Google Workspace","g suite":"Google Workspace",
-  "google sheets":"Google Sheets","g sheets":"Google Sheets",
-  "google docs":"Google Docs",
-  // Accounting software
-  "xero":"Xero","xero accounting":"Xero",
-  "myob":"MYOB","myob accounting":"MYOB",
-  "quickbooks":"QuickBooks","quick books":"QuickBooks",
-  // Project management tools
-  "project management":"Project Management","pm skills":"Project Management",
-  "agile":"Agile","agile methodology":"Agile","scrum":"Agile",
-  "jira":"Jira",
-  "asana":"Asana",
-  "trello":"Trello",
-  "ms project":"Microsoft Project","microsoft project":"Microsoft Project",
-  // HR systems
-  "hris":"HRIS","hr information system":"HRIS","hr system":"HRIS",
-  "workday":"Workday",
-  "employment hero":"Employment Hero",
-  // General office skills
-  "data entry":"Data Entry","data input":"Data Entry",
-  "report writing":"Report Writing","reporting":"Report Writing",
-  "scheduling":"Scheduling","calendar management":"Scheduling","diary management":"Scheduling",
-  "presentation skills":"Presentation Skills","presentations":"Presentation Skills",
-  "problem solving":"Problem Solving","problem-solving":"Problem Solving",
-  "time management":"Time Management",
-  "attention to detail":"Attention to Detail",
-  "minute taking":"Minute Taking","meeting minutes":"Minute Taking","minutes":"Minute Taking",
-  "adaptability":"Adaptability","adaptable":"Adaptability",
-  "collaboration":"Collaboration","teamwork":"Collaboration",
-};
+const SKILL_SYNONYMS = skillConfig.skill_synonyms;
 
 const SKILL_DESCRIPTIONS = {
   "WMS":                      "Warehouse Management System — software used to manage day-to-day warehouse operations including inventory tracking, picking, and dispatch.",
