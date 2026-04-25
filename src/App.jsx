@@ -718,6 +718,15 @@ function LandingPage({ onEnter }) {
           <span key={i} style={{ color: "#e0e7ff", fontSize: 13, padding: "4px 14px", background: "rgba(255,255,255,0.08)", borderRadius: 20, border: "1px solid rgba(255,255,255,0.15)" }}>{a}</span>
         ))}
       </div>
+
+      {/* Footer */}
+      <div style={{ borderTop: "1px solid rgba(255,255,255,0.08)", padding: "16px 48px", display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 8 }}>
+        <span style={{ color: "rgba(255,255,255,0.3)", fontSize: 11 }}>© 2025 Logititles · logititles@gmail.com</span>
+        <div style={{ display: "flex", gap: 16 }}>
+          <button onClick={() => { onEnter("privacy"); }} style={{ background: "none", border: "none", cursor: "pointer", fontSize: 11, color: "rgba(255,255,255,0.35)", fontFamily: "inherit", textDecoration: "underline", padding: 0 }}>Privacy Policy</button>
+          <button onClick={() => { onEnter("terms"); }} style={{ background: "none", border: "none", cursor: "pointer", fontSize: 11, color: "rgba(255,255,255,0.35)", fontFamily: "inherit", textDecoration: "underline", padding: 0 }}>Terms of Service</button>
+        </div>
+      </div>
     </div>
   );
 }
@@ -1805,6 +1814,13 @@ function About() {
             ))}
           </Card>
         </div>
+
+        <Card style={{ background: C.bg }}>
+          <div style={{ fontSize: 11, fontWeight: 700, color: C.textMuted, textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 14 }}>Data Sources</div>
+          <div style={{ fontSize: 13, color: C.textSub, lineHeight: 1.85 }}>
+            Classification rules are derived from NZ and AU logistics job market data. Salary benchmarks are market estimates based on job market analysis — they are <strong>reference ranges only</strong> and do not represent any official salary survey, government data, or authoritative benchmarking source. Actual salaries vary by employer, location, experience, and market conditions. The classification taxonomy references publicly available frameworks including ASCM SCOR, ILO ISCO-08, and O*NET Job Zones.
+          </div>
+        </Card>
 
         <Card style={{ background: C.bg }}>
           <div style={{ fontSize: 11, fontWeight: 700, color: C.textMuted, textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 14 }}>How Classification Works</div>
