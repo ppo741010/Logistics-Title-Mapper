@@ -1976,6 +1976,11 @@ function AIAssistant({ initialContext = "", onClearContext }) {
             </div>
           </div>
         )}
+        {messages.length >= 16 && (
+          <div style={{ textAlign: "center", padding: "12px 16px", background: C.amberLight, border: `1px solid ${C.amberBorder}`, borderRadius: 8, fontSize: 12, color: "#78350f" }}>
+            Session limit reached. <button onClick={() => { setMessages([{ role: "assistant", content: "Hi! I'm your logistics HR specialist. Ask me anything about your classification results, salary benchmarks, or logistics job titles in general." }]); didAutoSend.current = false; }} style={{ background: "none", border: "none", cursor: "pointer", color: C.accent, fontWeight: 600, fontFamily: "inherit", fontSize: 12, textDecoration: "underline", padding: 0 }}>Start a new conversation</button>
+          </div>
+        )}
         <div ref={bottomRef} />
       </Card>
 
@@ -1987,10 +1992,10 @@ function AIAssistant({ initialContext = "", onClearContext }) {
           onKeyDown={e => e.key === "Enter" && !e.shiftKey && send()}
           placeholder="Ask about your results or logistics job titles…"
           style={{ ...inputStyle, flex: 1, margin: 0 }}
-          disabled={loading}
+          disabled={loading || messages.length >= 16}
         />
         <button onClick={() => send()}
-          disabled={!input.trim() || loading}
+          disabled={!input.trim() || loading || messages.length >= 16}
           style={{ padding: "10px 20px", borderRadius: 8, border: "none", background: input.trim() && !loading ? C.accent : "#d1d5db", color: "#fff", fontWeight: 700, fontSize: 13, cursor: input.trim() && !loading ? "pointer" : "default", fontFamily: "inherit", whiteSpace: "nowrap" }}>
           Send →
         </button>

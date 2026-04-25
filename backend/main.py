@@ -184,11 +184,12 @@ def chat_endpoint(request: Request, req: ChatRequest):
         if req.context:
             first_content = f"Context from my current analysis:\n{req.context}\n\nMy question: {req.message}"
         messages = req.history + [{"role": "user", "content": first_content}]
+        trimmed = messages[-8:] if len(messages) > 8 else messages
         resp = client.messages.create(
             model="claude-haiku-4-5-20251001",
-            max_tokens=600,
+            max_tokens=200,
             system=_CHAT_SYSTEM,
-            messages=messages,
+            messages=trimmed,
         )
         return {"reply": resp.content[0].text.strip()}
     except Exception as e:
