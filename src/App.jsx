@@ -2023,7 +2023,9 @@ function AIAssistant({ initialContext = "", onClearContext }) {
     setMessages(updated);
     setLoading(true);
     const history = updated.slice(1).slice(0, -1).map(m => ({ role: m.role, content: m.content }));
-    const reply = await chatViaAPI(msg, history, ctx);
+    const { data: { session } } = await supabase.auth.getSession();
+    const token = session?.access_token ?? "";
+    const reply = await chatViaAPI(msg, history, ctx, token);
     setMessages(prev => [...prev, {
       role: "assistant",
       content: reply || "Sorry, I couldn't get a response. Please try again."

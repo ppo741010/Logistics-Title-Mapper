@@ -97,11 +97,13 @@ export async function checkAPIHealth() {
   }
 }
 
-export async function chatViaAPI(message, history = [], context = "") {
+export async function chatViaAPI(message, history = [], context = "", token = "") {
   try {
+    const headers = { "Content-Type": "application/json" };
+    if (token) headers["Authorization"] = `Bearer ${token}`;
     const res = await fetch(`${API_BASE}/chat`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers,
       body: JSON.stringify({ message, history, context }),
     });
     if (!res.ok) return null;

@@ -178,6 +178,18 @@ Help with: classification results, confidence scores, salary benchmarks (NZ/AU e
 @app.post("/chat")
 @limiter.limit("30/minute")
 def chat_endpoint(request: Request, req: ChatRequest):
+    # Verify Supabase JWT
+    auth_header = request.headers.get("Authorization", "")
+    if not auth_header.startswith("Bearer "):
+        raise HTTPException(status_code=401, detail="Authentication required.")
+    token = auth_header.split(" ", 1)[1]
+    if not supabase:
+        raise HTTPException(status_code=503, detail="Auth service unavailable.")
+    try:
+        supabase.auth.get_user(token)
+    except Exception:
+        raise HTTPException(status_code=401, detail="Invalid or expired session. Please sign in again.")
+
     api_key = os.getenv("ANTHROPIC_API_KEY")
     if not api_key:
         raise HTTPException(status_code=503, detail="AI Assistant is not available.")
