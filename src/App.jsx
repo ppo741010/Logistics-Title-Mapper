@@ -1625,15 +1625,32 @@ function ExportPage({ bulkResults }) {
   const label = hasRealData ? `${data.length} rows from Bulk Upload` : `${data.length} demo rows (upload a file in Bulk Upload to use your own data)`;
 
   function doDownload() {
-    const filtered = data.map(r => {
-      const row = buildExportRow(r);
+    const filename = `logistics_export_${Date.now()}`;
+    const rows = data.map(r => {
+      const full = buildExportRow(r);
       const out = {};
-      fields.forEach(f => { out[f] = row[f]; });
-      return { raw: r.raw, cleanTitle: r.cleanTitle, domain: r.domain, nature: r.nature, seniority: r.seniority, skills: r.skills, confidence: r.confidence, flags: r.flags, needsReview: r.needsReview, country: r.country, ...out };
+      fields.forEach(f => { out[f] = full[f] ?? ""; });
+      return out;
     });
-    if (format === "csv")  doDownloadCSV(data, `logistics_export_${Date.now()}.csv`);
-    if (format === "json") doDownloadJSON(data, `logistics_export_${Date.now()}.json`);
-    if (format === "xlsx") doDownloadXLSX(data, `logistics_export_${Date.now()}.xlsx`);
+    if (format === "csv") {
+      const header = fields.join(",");
+      const lines = rows.map(r =>
+        fields.map(f => {
+          const v = String(r[f] ?? "");
+          return v.includes(",") || v.includes('"') || v.includes("\n") ? `"${v.replace(/"/g, '""')}"` : v;
+        }).join(",")
+      );
+      triggerDownload(new Blob([header + "\n" + lines.join("\n")], { type: "text/csv" }), `${filename}.csv`);
+    }
+    if (format === "json") {
+      triggerDownload(new Blob([JSON.stringify(rows, null, 2)], { type: "application/json" }), `${filename}.json`);
+    }
+    if (format === "xlsx") {
+      const ws = XLSX.utils.json_to_sheet(rows, { header: fields });
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, "Structured Output");
+      XLSX.writeFile(wb, `${filename}.xlsx`);
+    }
   }
 
   return (
