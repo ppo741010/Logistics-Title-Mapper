@@ -1,4 +1,4 @@
-from fastapi import FastAPI, UploadFile, File, HTTPException
+from fastapi import FastAPI, UploadFile, File, HTTPException, BackgroundTasks
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import pandas as pd
@@ -57,21 +57,46 @@ class WaitlistRequest(BaseModel):
 
 # ── Endpoints ─────────────────────────────────────────────────────────────────
 
+def _log_titles(rows: list[dict]):
+    """Background task: batch-insert title + result to Supabase for training data."""
+    if not supabase:
+        return
+    try:
+        records = [
+            {
+                "title":       r.get("raw_title", ""),
+                "clean_title": r.get("clean_title", ""),
+                "domain":      r.get("domain", ""),
+                "confidence":  r.get("confidence", 0),
+                "ai_used":     r.get("ai_used", False),
+            }
+            for r in rows
+        ]
+        if records:
+            supabase.table("title_log").insert(records).execute()
+    except Exception as e:
+        logger.error("Supabase title_log insert failed: %s", e)
+
+
 @app.get("/health")
 def health():
     return {"status": "ok", "version": "2.0.0"}
 
 
 @app.post("/analyze")
-def analyze_single(req: AnalyzeRequest):
-    return analyze(req.title, req.description, req.country)
+def analyze_single(req: AnalyzeRequest, background_tasks: BackgroundTasks):
+    result = analyze(req.title, req.description, req.country)
+    background_tasks.add_task(_log_titles, [result])
+    return result
 
 
 @app.post("/bulk-analyze")
-def bulk_analyze(req: BulkAnalyzeRequest):
+def bulk_analyze(req: BulkAnalyzeRequest, background_tasks: BackgroundTasks):
     if len(req.rows) > 10_000:
         raise HTTPException(status_code=400, detail="Maximum 10,000 rows per request.")
-    return [analyze(r.title, r.description, r.country) for r in req.rows]
+    results = [analyze(r.title, r.description, r.country) for r in req.rows]
+    background_tasks.add_task(_log_titles, results)
+    return results
 
 
 @app.post("/upload")

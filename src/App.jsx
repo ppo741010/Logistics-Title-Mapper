@@ -957,6 +957,7 @@ function BulkUpload({ onResultsReady }) {
   const [fileName, setFileName]         = useState("");
   const [parsedRows, setParsedRows]     = useState([]);
   const [headers, setHeaders]           = useState([]);
+  const [progress, setProgress]         = useState(0);
   const [colMap, setColMap]             = useState({ rawTitle: "", description: "", country: "" });
   const [cleanPreviews, setCleanPreviews] = useState([]);
   const [results, setResults]           = useState([]);
@@ -1022,32 +1023,42 @@ function BulkUpload({ onResultsReady }) {
   async function processRows() {
     if (!colMap.rawTitle) return;
     setPhase("processing");
+    setProgress(0);
 
     const rows = parsedRows
       .map((row, i) => ({
         id: i + 1,
         raw:         (row[colMap.rawTitle] || "").trim(),
-        // Use edited clean title from preview if available, otherwise raw
         title:       cleanPreviews[i]?.clean || (row[colMap.rawTitle] || "").trim(),
         description: colMap.description ? (row[colMap.description] || "") : "",
         country:     colMap.country     ? (row[colMap.country]     || "") : "",
       }))
       .filter(r => r.title);
 
-    // Try API first
-    const apiResults = await bulkAnalyzeViaAPI(
-      rows.map(r => ({ title: r.title, description: r.description, country: r.country }))
-    );
+    const BATCH = 200;
+    const allResults = [];
+    let useLocal = false;
 
-    let processed;
-    if (apiResults) {
-      processed = rows.map((r, i) => ({ id: r.id, raw: r.raw, country: r.country, ...apiResults[i] }));
-    } else {
-      processed = rows.map(r => ({ id: r.id, raw: r.raw, country: r.country, source: "local", ...analyze(r.title, r.description, r.country) }));
+    for (let i = 0; i < rows.length; i += BATCH) {
+      const batch = rows.slice(i, i + BATCH);
+      if (!useLocal) {
+        const apiResults = await bulkAnalyzeViaAPI(
+          batch.map(r => ({ title: r.title, description: r.description, country: r.country }))
+        );
+        if (apiResults) {
+          allResults.push(...batch.map((r, j) => ({ id: r.id, raw: r.raw, country: r.country, ...apiResults[j] })));
+        } else {
+          useLocal = true;
+        }
+      }
+      if (useLocal) {
+        allResults.push(...batch.map(r => ({ id: r.id, raw: r.raw, country: r.country, source: "local", ...analyze(r.title, r.description, r.country) })));
+      }
+      setProgress(i + batch.length);
     }
 
-    setResults(processed);
-    onResultsReady && onResultsReady(processed);
+    setResults(allResults);
+    onResultsReady && onResultsReady(allResults);
     setPhase("done");
   }
 
@@ -1074,7 +1085,7 @@ function BulkUpload({ onResultsReady }) {
   function reset() {
     setPhase("idle"); setError(null); setFileName(""); setParsedRows([]); setHeaders([]);
     setColMap({ rawTitle: "", description: "", country: "" }); setCleanPreviews([]); setResults([]);
-    setSheetNames([]); setXlsxBuffer(null);
+    setSheetNames([]); setXlsxBuffer(null); setProgress(0);
   }
 
   const onDrop = e => { e.preventDefault(); setDragOver(false); handleFile(e.dataTransfer.files[0]); };
@@ -1108,6 +1119,9 @@ function BulkUpload({ onResultsReady }) {
           <div style={{ marginTop: 8, fontSize: 12, color: C.textMuted }}>
             If your columns have different names, you'll be prompted to map them after uploading.
           </div>
+        </div>
+        <div style={{ marginTop: 12, fontSize: 11, color: C.textMuted, textAlign: "center" }}>
+          Job titles submitted are used to improve classification accuracy. No personal data is collected.
         </div>
       </Card>
     </div>
@@ -1249,12 +1263,26 @@ function BulkUpload({ onResultsReady }) {
               {phase === "processing" && (
                 <div style={{ padding: "8px 22px", borderRadius: 8, background: C.accentLight, color: C.accent, fontWeight: 600, fontSize: 13 }}>Processing…</div>
               )}
+
               {phase === "done" && (
                 <div style={{ padding: "6px 14px", borderRadius: 8, background: C.greenLight, color: C.green, fontWeight: 700, fontSize: 12, border: `1px solid ${C.greenBorder}` }}>✓ Complete</div>
               )}
             </div>
           </div>
         </Card>
+
+        {/* Progress bar */}
+        {phase === "processing" && (
+          <Card style={{ padding: "16px 20px" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
+              <div style={{ fontSize: 13, fontWeight: 600, color: C.text }}>Classifying titles…</div>
+              <div style={{ fontSize: 12, color: C.textMuted }}>{Math.min(progress, parsedRows.length)} / {parsedRows.length}</div>
+            </div>
+            <div style={{ background: C.border, borderRadius: 99, height: 6, overflow: "hidden" }}>
+              <div style={{ background: C.accent, height: "100%", borderRadius: 99, width: `${parsedRows.length ? Math.round((Math.min(progress, parsedRows.length) / parsedRows.length) * 100) : 0}%`, transition: "width 0.3s ease" }} />
+            </div>
+          </Card>
+        )}
 
         {/* Fallback warning */}
         {phase === "done" && results[0]?.source === "local" && (
