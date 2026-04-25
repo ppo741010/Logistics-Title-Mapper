@@ -1716,7 +1716,7 @@ function About() {
             <div style={{ fontSize: 34 }}>📦</div>
             <div>
               <div style={{ fontSize: 18, fontWeight: 700, color: C.text }}>Logistics Title Mapper</div>
-              <div style={{ fontSize: 13, color: C.textMuted, marginTop: 3 }}>Rule-based normalization tool for messy logistics job text</div>
+              <div style={{ fontSize: 13, color: C.textMuted, marginTop: 3 }}>Rule-based + AI normalization tool for messy logistics job text</div>
             </div>
           </div>
           <div style={{ fontSize: 14, color: C.textSub, lineHeight: 1.8, marginBottom: 16 }}>
@@ -1738,6 +1738,8 @@ function About() {
               "Detects suggested work nature (Management / Specialist / Operational)",
               "Flags ambiguous, low-confidence, or out-of-scope cases",
               "Uses description context when title alone is ambiguous",
+              "Uses AI fallback (Claude Haiku) for unmatched or ambiguous titles",
+              "Shows salary benchmark reference for NZ and AU roles",
               "Produces export-ready structured output (CSV, Excel, JSON)",
             ].map(item => (
               <div key={item} style={{ display: "flex", gap: 9, marginBottom: 9, fontSize: 13, color: C.textSub, alignItems: "flex-start" }}>
@@ -1752,7 +1754,7 @@ function About() {
               "Not a market intelligence or hiring trends platform",
               "Not a job board or candidate sourcing tool",
               "Not a reporting or analytics dashboard",
-              "Not a salary benchmarking tool",
+              "Salary figures are market references only — not authoritative benchmarks",
               "Not a universal authoritative logistics taxonomy",
               "Not a replacement for human review on ambiguous cases",
             ].map(item => (
@@ -1767,7 +1769,7 @@ function About() {
         <Card style={{ background: C.bg }}>
           <div style={{ fontSize: 11, fontWeight: 700, color: C.textMuted, textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 14 }}>How Classification Works</div>
           <div style={{ fontSize: 13, color: C.textSub, lineHeight: 1.85 }}>
-            Classification follows a three-stage rule engine. <strong>Stage 1</strong> matches title keywords against a logistics domain taxonomy — producing 88% confidence when matched. <strong>Stage 2</strong> applies fuzzy repair rules for ambiguous or abbreviated titles — producing 74% (or 30% if outside logistics scope). <strong>Stage 3</strong> uses description text when the title alone is insufficient — producing 60–72% confidence depending on how many domain keywords appear in the description. All outputs are <strong>suggested draft classifications</strong> intended for normalization and review support, not final authoritative labels.
+            Classification follows a four-stage pipeline. <strong>Stage 1</strong> matches title keywords against a logistics domain taxonomy — producing up to 92% confidence when matched. <strong>Stage 2</strong> applies fuzzy repair rules for ambiguous or abbreviated titles — producing 74% (or 30% if outside logistics scope). <strong>Stage 3</strong> uses description text when the title alone is insufficient — producing 58–72% confidence. <strong>Stage 4</strong> calls Claude Haiku AI for titles that pass all three rule stages without a match — capped at 70% confidence. All outputs are <strong>suggested draft classifications</strong> intended for normalization and review support, not final authoritative labels.
           </div>
         </Card>
 
@@ -1782,6 +1784,7 @@ function About() {
               { f: "skills",           d: "Normalized skill tags mapped from title and description text" },
               { f: "confidence_score", d: "0–100 score indicating how certain the rule engine is" },
               { f: "review_flags",     d: "Flags for ambiguous, short, noisy, or out-of-scope inputs" },
+              { f: "salary_benchmark", d: "Market salary reference range for NZ or AU roles (±12% around median)" },
             ].map(({ f, d }) => (
               <div key={f} style={{ padding: "12px 14px", borderRadius: 8, background: C.bg, border: `1px solid ${C.border}` }}>
                 <div style={{ fontFamily: "monospace", fontSize: 11, color: C.accent, fontWeight: 700, marginBottom: 5 }}>{f}</div>
