@@ -554,7 +554,7 @@ function detectColumns(headers) {
 
 // ── Export utilities ─────────────────────────────────────────────────────────
 
-const EXPORT_FIELDS = ["raw_title","clean_title","functional_area","work_nature","seniority","confidence","skills","review_flags","needs_review","country"];
+const EXPORT_FIELDS = ["raw_title","clean_title","functional_area","work_nature","seniority","confidence","skills","review_flags","needs_review","country","salary_range","salary_median"];
 
 function buildExportRow(r) {
   return {
@@ -568,6 +568,8 @@ function buildExportRow(r) {
     review_flags:    (r.flags || []).join(" | "),
     needs_review:    r.needsReview ? "Yes" : "No",
     country:         r.country || "",
+    salary_range:    r.salaryBenchmark?.range || "",
+    salary_median:   r.salaryBenchmark ? `${r.salaryBenchmark.currency} ${r.salaryBenchmark.median}` : "",
   };
 }
 
@@ -602,6 +604,9 @@ function doDownloadJSON(results, filename = "logistics_structured.json") {
     review_flags: r.flags || [],
     needs_review: r.needsReview || false,
     country: r.country || "",
+    salary_range: r.salaryBenchmark?.range || null,
+    salary_median: r.salaryBenchmark?.median || null,
+    salary_currency: r.salaryBenchmark?.currency || null,
   }));
   triggerDownload(new Blob([JSON.stringify(rows, null, 2)], { type: "application/json" }), filename);
 }
