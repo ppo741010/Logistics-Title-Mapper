@@ -923,6 +923,23 @@ function SingleAnalyzer() {
                   <Badge tone={seniorityTone(result.seniority)}>{result.seniority}</Badge>
                 </Card>
               </div>
+              {result.salaryBenchmark ? (
+                <Card style={{ padding: 18 }}>
+                  <FieldLabel>Salary Benchmark <span style={{ fontWeight: 400, color: C.textMuted }}>— market reference only</span></FieldLabel>
+                  <div style={{ display: "flex", alignItems: "baseline", gap: 10, marginTop: 4 }}>
+                    <span style={{ fontSize: 20, fontWeight: 700, color: C.text }}>{result.salaryBenchmark.range}</span>
+                    <span style={{ fontSize: 12, color: C.textMuted }}>/ year</span>
+                  </div>
+                  <div style={{ marginTop: 6, fontSize: 11, color: C.textMuted }}>
+                    Median: {result.salaryBenchmark.currency} ${result.salaryBenchmark.median.toLocaleString()} · Range ±12%
+                  </div>
+                </Card>
+              ) : country === "" && result.domain !== "Other/Noise" ? (
+                <Card style={{ padding: 18, opacity: 0.7 }}>
+                  <FieldLabel>Salary Benchmark</FieldLabel>
+                  <div style={{ fontSize: 13, color: C.textMuted, marginTop: 4 }}>Select NZ or AU above to see salary reference</div>
+                </Card>
+              ) : null}
               <Card style={{ padding: 18 }}>
                 <FieldLabel>Normalized Skills</FieldLabel>
                 {result.skills.length > 0 ? (
