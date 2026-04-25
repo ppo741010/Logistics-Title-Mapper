@@ -549,6 +549,18 @@ function doDownloadXLSX(results, filename = "logistics_structured.xlsx") {
   XLSX.writeFile(wb, filename);
 }
 
+// ── Hooks ───────────────────────────────────────────────────────────────────
+
+function useIsMobile() {
+  const [isMobile, setIsMobile] = useState(() => window.innerWidth < 768);
+  useEffect(() => {
+    const handler = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener("resize", handler);
+    return () => window.removeEventListener("resize", handler);
+  }, []);
+  return isMobile;
+}
+
 // ── Design system ───────────────────────────────────────────────────────────
 
 const C = {
@@ -652,6 +664,7 @@ const inputStyle = {
 // ── Landing Page ─────────────────────────────────────────────────────────────
 
 function LandingPage({ onEnter }) {
+  const isMobile = useIsMobile();
   const features = [
     { icon: "✏️", title: "Clean Titles",       desc: "Removes noise, expands abbreviations, strips location and shift suffixes automatically." },
     { icon: "🏷️", title: "Classify Roles",     desc: "Suggests functional area, seniority level, and work nature using a rule-based taxonomy." },
@@ -699,8 +712,8 @@ function LandingPage({ onEnter }) {
       </div>
 
       {/* Feature grid */}
-      <div style={{ padding: "0 48px 56px", maxWidth: 1100, margin: "0 auto", width: "100%", boxSizing: "border-box" }}>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 14 }}>
+      <div style={{ padding: isMobile ? "0 20px 40px" : "0 48px 56px", maxWidth: 1100, margin: "0 auto", width: "100%", boxSizing: "border-box" }}>
+        <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "repeat(3, 1fr)", gap: 14 }}>
           {features.map(({ icon, title, desc }) => (
             <div key={title} style={{ background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.12)", borderRadius: 12, padding: "20px 22px" }}>
               <div style={{ fontSize: 22, marginBottom: 10 }}>{icon}</div>
@@ -743,6 +756,7 @@ const SA_EXAMPLES = [
 ];
 
 function SingleAnalyzer() {
+  const isMobile = useIsMobile();
   const [title, setTitle]   = useState("");
   const [desc, setDesc]     = useState("");
   const [country, setCountry] = useState("");
@@ -760,7 +774,7 @@ function SingleAnalyzer() {
   return (
     <div>
       <SectionTitle children="Single Analyzer" sub="Paste a messy logistics job title — get a clean, structured, reviewable draft output." />
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20, alignItems: "start" }}>
+      <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: 20, alignItems: "start" }}>
 
         {/* Input */}
         <Card>
@@ -1433,6 +1447,7 @@ function BulkUpload({ onResultsReady }) {
 // ── Page 3: Skill Mapper ─────────────────────────────────────────────────────
 
 function SkillMapper() {
+  const isMobile = useIsMobile();
   const [input, setInput]     = useState("");
   const [results, setResults] = useState([]);
 
@@ -1459,7 +1474,7 @@ function SkillMapper() {
   return (
     <div>
       <SectionTitle children="Skill Mapper" sub="Enter inconsistent skill phrases — see how they normalize into standard canonical labels." />
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 }}>
+      <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: 20 }}>
         <Card>
           <FieldLabel>Raw Skill Phrases <span style={{ fontWeight: 400, color: C.textMuted }}>comma or line separated</span></FieldLabel>
           <textarea value={input} onChange={e => setInput(e.target.value)} rows={9}
@@ -1754,6 +1769,7 @@ function ExportPage({ bulkResults }) {
 // ── Page 6: About ────────────────────────────────────────────────────────────
 
 function About() {
+  const isMobile = useIsMobile();
   const [showAboutFeedback, setShowAboutFeedback] = useState(false);
   return (
     <div>
@@ -1776,7 +1792,7 @@ function About() {
           </div>
         </Card>
 
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
+        <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: 14 }}>
           <Card>
             <div style={{ fontSize: 13, fontWeight: 700, color: C.green, marginBottom: 14 }}>✓ What this tool does</div>
             {[
@@ -1831,7 +1847,7 @@ function About() {
 
         <Card>
           <div style={{ fontSize: 11, fontWeight: 700, color: C.textMuted, textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 16 }}>Output Fields</div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 10 }}>
+          <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "repeat(3, 1fr)", gap: 10 }}>
             {[
               { f: "clean_title",      d: "Standardized title with abbreviations expanded and noise removed" },
               { f: "functional_area",  d: "Suggested logistics category (e.g. Freight Forwarding, Warehouse)" },
@@ -2051,6 +2067,7 @@ const NAV = [
 ];
 
 export default function App() {
+  const isMobile = useIsMobile();
   const [showLanding, setShowLanding]     = useState(true);
   const [page, setPage]                   = useState("analyzer");
   const [bulkResults, setBulkResults]     = useState([]);
@@ -2065,6 +2082,53 @@ export default function App() {
 
   const navItem = NAV.find(n => n.id === page);
 
+  const MOBILE_NAV = [
+    { id: "analyzer", icon: "🔍", label: "Analyze" },
+    { id: "skills",   icon: "🧩", label: "Skills" },
+    { id: "titles",   icon: "✏️", label: "Cleaner" },
+    { id: "bulk",     icon: "📂", label: "Bulk" },
+    { id: "about",    icon: "ℹ️", label: "About" },
+  ];
+
+  // ── Mobile layout ──────────────────────────────────────────────────────────
+  if (isMobile) return (
+    <div style={{ display: "flex", flexDirection: "column", height: "100vh", fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, sans-serif", background: C.bg }}>
+      {/* Top bar */}
+      <div style={{ background: C.sidebar, padding: "12px 16px", display: "flex", alignItems: "center", justifyContent: "space-between", flexShrink: 0, borderBottom: "1px solid #e5e7eb" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+          <div style={{ width: 28, height: 28, borderRadius: 6, background: "#eef2ff", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14 }}>📦</div>
+          <span style={{ fontSize: 13, fontWeight: 700, color: "#1e1b4b" }}>Logititles</span>
+        </div>
+        <button onClick={() => setShowFeedback(true)}
+          style={{ background: "none", border: "none", cursor: "pointer", fontSize: 18, padding: 4 }}>
+          💬
+        </button>
+      </div>
+
+      {/* Content */}
+      <div style={{ flex: 1, overflowY: "auto", padding: "20px 16px" }}>
+        {page === "bulk"    && <BulkUpload onResultsReady={setBulkResults} />}
+        {page === "export"  && <ExportPage bulkResults={bulkResults} />}
+        {page === "privacy" && <PrivacyPolicy />}
+        {page === "terms"   && <TermsOfService />}
+        {!["bulk","export","privacy","terms"].includes(page) && navItem && <navItem.component />}
+      </div>
+
+      {/* Bottom nav */}
+      <div style={{ background: C.sidebar, borderTop: "1px solid #e5e7eb", display: "flex", flexShrink: 0 }}>
+        {MOBILE_NAV.map(n => (
+          <button key={n.id} onClick={() => setPage(n.id)}
+            style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "8px 4px", border: "none", background: "transparent", cursor: "pointer", fontFamily: "inherit", borderTop: page === n.id ? `2px solid ${C.accent}` : "2px solid transparent" }}>
+            <span style={{ fontSize: 18, lineHeight: 1 }}>{n.icon}</span>
+            <span style={{ fontSize: 9, marginTop: 3, color: page === n.id ? C.accent : C.sidebarText, fontWeight: page === n.id ? 700 : 400 }}>{n.label}</span>
+          </button>
+        ))}
+      </div>
+      {showFeedback && <FeedbackModal page={page} onClose={() => setShowFeedback(false)} />}
+    </div>
+  );
+
+  // ── Desktop layout ─────────────────────────────────────────────────────────
   return (
     <div style={{ display: "flex", height: "100vh", fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, sans-serif", background: C.bg }}>
 
