@@ -97,6 +97,21 @@ export async function checkAPIHealth() {
   }
 }
 
+export async function chatViaAPI(message, history = [], context = "") {
+  try {
+    const res = await fetch(`${API_BASE}/chat`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ message, history, context }),
+    });
+    if (!res.ok) return null;
+    const data = await res.json();
+    return data.reply;
+  } catch {
+    return null;
+  }
+}
+
 export async function submitFeedback(rating, comment = "", page = "", title = "", result = "") {
   try {
     await fetch(`${API_BASE}/feedback`, {

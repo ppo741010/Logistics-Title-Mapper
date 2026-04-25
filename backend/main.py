@@ -6,6 +6,7 @@ from slowapi.errors import RateLimitExceeded
 from slowapi.middleware import SlowAPIMiddleware
 from starlette.responses import JSONResponse
 from pydantic import BaseModel
+import anthropic
 import pandas as pd
 import io
 import logging
@@ -65,6 +66,11 @@ class WaitlistRequest(BaseModel):
     email: str
     plan: str = "general"
     source: str = "landing_page"
+
+class ChatRequest(BaseModel):
+    message: str
+    history: list[dict] = []   # [{role: "user"|"assistant", content: "..."}]
+    context: str = ""          # optional: JSON string of current analysis results
 
 
 # ── Endpoints ─────────────────────────────────────────────────────────────────
@@ -152,6 +158,42 @@ def clean_preview(request: Request, req: CleanPreviewRequest):
         {"raw": t, "clean": clean_title(t)}
         for t in req.titles
     ]
+
+
+_CHAT_SYSTEM = """You are a logistics and supply chain HR specialist assistant for Logititles — a job title normalization tool built for the NZ and AU market.
+
+Help users:
+- Understand their classification results (domain, seniority, confidence scores, flags)
+- Interpret salary benchmarks (NZ/AU market estimates — reference only, not official surveys)
+- Improve their job title data quality and handle edge cases
+- Understand logistics terminology, role structures, and industry conventions
+- Decide what to do with low-confidence or Other/Noise results
+
+Be concise and practical. Keep responses under 200 words unless more detail is clearly needed. Use plain English — users are HR professionals and recruiters, not data scientists. If the user shares analysis results, reference them specifically."""
+
+
+@app.post("/chat")
+@limiter.limit("30/minute")
+def chat_endpoint(request: Request, req: ChatRequest):
+    api_key = os.getenv("ANTHROPIC_API_KEY")
+    if not api_key:
+        raise HTTPException(status_code=503, detail="AI Assistant is not available.")
+    try:
+        client = anthropic.Anthropic(api_key=api_key)
+        first_content = req.message
+        if req.context:
+            first_content = f"Context from my current analysis:\n{req.context}\n\nMy question: {req.message}"
+        messages = req.history + [{"role": "user", "content": first_content}]
+        resp = client.messages.create(
+            model="claude-haiku-4-5-20251001",
+            max_tokens=600,
+            system=_CHAT_SYSTEM,
+            messages=messages,
+        )
+        return {"reply": resp.content[0].text.strip()}
+    except Exception as e:
+        logger.error("Chat error: %s", e)
+        raise HTTPException(status_code=500, detail="AI Assistant error. Please try again.")
 
 
 @app.post("/waitlist")

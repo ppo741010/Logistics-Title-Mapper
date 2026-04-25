@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import * as XLSX from "xlsx";
-import { analyzeViaAPI, bulkAnalyzeViaAPI, cleanPreviewViaAPI, submitFeedback } from "./api.js";
+import { analyzeViaAPI, bulkAnalyzeViaAPI, cleanPreviewViaAPI, submitFeedback, chatViaAPI } from "./api.js";
 import skillConfig from "./skill_normalize.json";
 
 // ── Classification data ─────────────────────────────────────────────────────
@@ -1885,7 +1885,108 @@ function About() {
   );
 }
 
-// ── Page 7: Privacy Policy ───────────────────────────────────────────────────
+// ── Page 7: AI Assistant ─────────────────────────────────────────────────────
+
+const QUICK_PROMPTS = [
+  "Why would a title be classified as Other/Noise?",
+  "What's the difference between Operations and Warehouse?",
+  "How do I improve low-confidence results?",
+  "What does the confidence score mean?",
+];
+
+function AIAssistant() {
+  const [messages, setMessages] = useState([
+    { role: "assistant", content: "Hi! I'm your logistics HR specialist. Ask me anything about your classification results, salary benchmarks, or logistics job titles in general." }
+  ]);
+  const [input, setInput]       = useState("");
+  const [loading, setLoading]   = useState(false);
+  const bottomRef               = useRef(null);
+
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages, loading]);
+
+  async function send(text) {
+    const msg = (text || input).trim();
+    if (!msg || loading) return;
+    setInput("");
+    const updated = [...messages, { role: "user", content: msg }];
+    setMessages(updated);
+    setLoading(true);
+    const history = updated.slice(1).slice(0, -1).map(m => ({ role: m.role, content: m.content }));
+    const reply = await chatViaAPI(msg, history);
+    setMessages(prev => [...prev, {
+      role: "assistant",
+      content: reply || "Sorry, I couldn't get a response. Please try again."
+    }]);
+    setLoading(false);
+  }
+
+  return (
+    <div style={{ display: "flex", flexDirection: "column", height: "calc(100vh - 64px)", maxWidth: 720 }}>
+      <SectionTitle children="AI Assistant" sub="Ask questions about your results, salary benchmarks, or logistics job titles." />
+
+      {/* Quick prompts */}
+      <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 16 }}>
+        {QUICK_PROMPTS.map(q => (
+          <button key={q} onClick={() => send(q)}
+            style={{ padding: "6px 14px", borderRadius: 20, border: `1px solid ${C.border}`, background: C.card, fontSize: 12, color: C.textSub, cursor: "pointer", fontFamily: "inherit" }}>
+            {q}
+          </button>
+        ))}
+      </div>
+
+      {/* Messages */}
+      <Card style={{ flex: 1, overflowY: "auto", padding: 16, display: "flex", flexDirection: "column", gap: 12, minHeight: 0 }}>
+        {messages.map((m, i) => (
+          <div key={i} style={{ display: "flex", justifyContent: m.role === "user" ? "flex-end" : "flex-start" }}>
+            <div style={{
+              maxWidth: "80%", padding: "10px 14px", borderRadius: m.role === "user" ? "14px 14px 4px 14px" : "14px 14px 14px 4px",
+              background: m.role === "user" ? C.accent : C.bg,
+              color: m.role === "user" ? "#fff" : C.text,
+              fontSize: 13, lineHeight: 1.7,
+              border: m.role === "assistant" ? `1px solid ${C.border}` : "none",
+            }}>
+              {m.content}
+            </div>
+          </div>
+        ))}
+        {loading && (
+          <div style={{ display: "flex", justifyContent: "flex-start" }}>
+            <div style={{ padding: "10px 14px", borderRadius: "14px 14px 14px 4px", background: C.bg, border: `1px solid ${C.border}`, fontSize: 13, color: C.textMuted }}>
+              Thinking…
+            </div>
+          </div>
+        )}
+        <div ref={bottomRef} />
+      </Card>
+
+      {/* Input */}
+      <div style={{ display: "flex", gap: 10, marginTop: 12 }}>
+        <input
+          value={input}
+          onChange={e => setInput(e.target.value)}
+          onKeyDown={e => e.key === "Enter" && !e.shiftKey && send()}
+          placeholder="Ask about your results or logistics job titles…"
+          style={{ ...inputStyle, flex: 1, margin: 0 }}
+          disabled={loading}
+        />
+        <button onClick={() => send()}
+          disabled={!input.trim() || loading}
+          style={{ padding: "10px 20px", borderRadius: 8, border: "none", background: input.trim() && !loading ? C.accent : "#d1d5db", color: "#fff", fontWeight: 700, fontSize: 13, cursor: input.trim() && !loading ? "pointer" : "default", fontFamily: "inherit", whiteSpace: "nowrap" }}>
+          Send →
+        </button>
+      </div>
+      <div style={{ marginTop: 6, fontSize: 11, color: C.textMuted, textAlign: "center" }}>
+        Powered by Claude · Responses are AI-generated and may not always be accurate
+      </div>
+    </div>
+  );
+}
+
+
+// ── Page 8: Privacy Policy ───────────────────────────────────────────────────
+
 
 function PrivacyPolicy() {
   return (
@@ -2063,6 +2164,7 @@ const NAV = [
   { id: "skills",   label: "Skill Mapper",    icon: "🧩", component: SkillMapper },
   { id: "titles",   label: "Title Cleaner",   icon: "✏️", component: TitleCleaner },
   { id: "export",   label: "Export",          icon: "⬇️", component: ExportPage },
+  { id: "ai",       label: "AI Assistant",    icon: "✨", component: AIAssistant },
   { id: "about",    label: "About",           icon: "ℹ️", component: About },
 ];
 
@@ -2085,7 +2187,7 @@ export default function App() {
   const MOBILE_NAV = [
     { id: "analyzer", icon: "🔍", label: "Analyze" },
     { id: "skills",   icon: "🧩", label: "Skills" },
-    { id: "titles",   icon: "✏️", label: "Cleaner" },
+    { id: "ai",       icon: "✨", label: "AI" },
     { id: "bulk",     icon: "📂", label: "Bulk" },
     { id: "about",    icon: "ℹ️", label: "About" },
   ];
