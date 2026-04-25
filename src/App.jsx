@@ -446,9 +446,10 @@ function parseCSVText(text) {
   return { headers, rows };
 }
 
-function parseXLSX(buffer) {
+function parseXLSX(buffer, sheetName = null) {
   const wb = XLSX.read(buffer, { type: "array" });
-  const ws = wb.Sheets[wb.SheetNames[0]];
+  const name = sheetName || wb.SheetNames[0];
+  const ws = wb.Sheets[name];
   const data = XLSX.utils.sheet_to_json(ws, { header: 1, defval: "" });
   if (!data.length) throw new Error("File appears to be empty.");
   const headers = data[0].map(h => String(h).trim()).filter(h => h);
@@ -943,7 +944,7 @@ function InlineFeedback({ title, result }) {
 // ── Page 2: Bulk Upload ─────────────────────────────────────────────────────
 
 function BulkUpload({ onResultsReady }) {
-  const [phase, setPhase]               = useState("idle"); // idle | error | mapping | ready | previewing | processing | done
+  const [phase, setPhase]               = useState("idle"); // idle | error | sheet-select | mapping | ready | previewing | processing | done
   const [error, setError]               = useState(null);
   const [fileName, setFileName]         = useState("");
   const [parsedRows, setParsedRows]     = useState([]);
@@ -952,6 +953,8 @@ function BulkUpload({ onResultsReady }) {
   const [cleanPreviews, setCleanPreviews] = useState([]);
   const [results, setResults]           = useState([]);
   const [dragOver, setDragOver]         = useState(false);
+  const [sheetNames, setSheetNames]     = useState([]);
+  const [xlsxBuffer, setXlsxBuffer]     = useState(null);
   const fileInputRef                    = useRef(null);
 
   // Summary stats
@@ -969,22 +972,41 @@ function BulkUpload({ onResultsReady }) {
     }
     setFileName(file.name); setPhase("parsing");
     try {
-      let parsed;
       if (ext === "csv") {
         const text = await file.text();
-        parsed = parseCSVText(text);
+        const parsed = parseCSVText(text);
+        applyParsed(parsed);
       } else {
         const buffer = await file.arrayBuffer();
-        parsed = parseXLSX(buffer);
+        const wb = XLSX.read(buffer, { type: "array" });
+        if (wb.SheetNames.length > 1) {
+          setXlsxBuffer(buffer);
+          setSheetNames(wb.SheetNames);
+          setPhase("sheet-select");
+        } else {
+          applyParsed(parseXLSX(buffer));
+        }
       }
-      const { headers: hdrs, rows } = parsed;
-      if (!rows.length) throw new Error("The file has no data rows.");
-      setParsedRows(rows); setHeaders(hdrs);
-      const detected = detectColumns(hdrs);
-      setColMap({ rawTitle: detected.rawTitle || "", description: detected.description || "", country: detected.country || "" });
-      setPhase(detected.rawTitle ? "ready" : "mapping");
     } catch (err) {
       setError(err.message || "Could not parse the file. Please check the format and try again.");
+      setPhase("error");
+    }
+  }
+
+  function applyParsed(parsed) {
+    const { headers: hdrs, rows } = parsed;
+    if (!rows.length) throw new Error("The file has no data rows.");
+    setParsedRows(rows); setHeaders(hdrs);
+    const detected = detectColumns(hdrs);
+    setColMap({ rawTitle: detected.rawTitle || "", description: detected.description || "", country: detected.country || "" });
+    setPhase(detected.rawTitle ? "ready" : "mapping");
+  }
+
+  function selectSheet(name) {
+    try {
+      applyParsed(parseXLSX(xlsxBuffer, name));
+    } catch (err) {
+      setError(err.message || "Could not parse this sheet.");
       setPhase("error");
     }
   }
@@ -1044,6 +1066,7 @@ function BulkUpload({ onResultsReady }) {
   function reset() {
     setPhase("idle"); setError(null); setFileName(""); setParsedRows([]); setHeaders([]);
     setColMap({ rawTitle: "", description: "", country: "" }); setCleanPreviews([]); setResults([]);
+    setSheetNames([]); setXlsxBuffer(null);
   }
 
   const onDrop = e => { e.preventDefault(); setDragOver(false); handleFile(e.dataTransfer.files[0]); };
@@ -1090,6 +1113,30 @@ function BulkUpload({ onResultsReady }) {
         <div style={{ fontSize: 28, marginBottom: 12 }}>⏳</div>
         <div style={{ fontWeight: 600, color: C.text, marginBottom: 6 }}>Reading file…</div>
         <div style={{ fontSize: 13 }}>{fileName}</div>
+      </Card>
+    </div>
+  );
+
+  // ── Render: Sheet Select ──
+  if (phase === "sheet-select") return (
+    <div>
+      <SectionTitle children="Bulk Upload" sub="Select which sheet to import." />
+      <Card style={{ maxWidth: 520 }}>
+        <FieldLabel>This workbook has {sheetNames.length} sheets — select one to continue</FieldLabel>
+        <div style={{ display: "flex", flexDirection: "column", gap: 8, marginTop: 12 }}>
+          {sheetNames.map(name => (
+            <button key={name} onClick={() => selectSheet(name)}
+              style={{ padding: "12px 18px", borderRadius: 8, border: `1.5px solid ${C.border}`, background: C.bg, fontSize: 14, fontWeight: 600, color: C.text, cursor: "pointer", textAlign: "left", fontFamily: "inherit", transition: "border-color 0.15s" }}
+              onMouseEnter={e => e.currentTarget.style.borderColor = C.accent}
+              onMouseLeave={e => e.currentTarget.style.borderColor = C.border}>
+              📄 {name}
+            </button>
+          ))}
+        </div>
+        <div style={{ marginTop: 14, fontSize: 12, color: C.textMuted }}>{fileName}</div>
+        <button onClick={reset} style={{ marginTop: 12, fontSize: 12, color: C.textMuted, background: "none", border: "none", cursor: "pointer", padding: 0, fontFamily: "inherit" }}>
+          ← Upload a different file
+        </button>
       </Card>
     </div>
   );
