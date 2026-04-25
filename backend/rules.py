@@ -167,6 +167,10 @@ _EMOJI_RE       = re.compile(r'[\U0001F300-\U0001FAFF]|[☀-➿]|[︀-️]')
 _MULTI_SEP_RE   = re.compile(r'(\s*[-–]\s*){2,}')
 _TRAILING_RE    = re.compile(r'[-–,|&]+$')
 _TITLE_CASE_RE  = re.compile(r'\b\w')
+_PRESERVE_UPPER = {"hse", "whs", "it", "hr", "erp", "sap", "qa", "qc", "kpi",
+                   "apac", "anz", "au", "nz", "fcl", "lcl", "3pl", "4pl",
+                   "b2b", "b2c", "po", "edi", "api", "dc", "id", "io",
+                   "fmcg", "ngo", "ceo", "coo", "cfo", "vp", "gm"}
 
 # ── AI fallback (Claude Haiku) ───────────────────────────────────────────────
 
@@ -241,7 +245,14 @@ def _map_lookup(title: str) -> dict | None:
 # ── Core functions ───────────────────────────────────────────────────────────
 
 def _title_case(s: str) -> str:
-    return _TITLE_CASE_RE.sub(lambda m: m.group().upper(), s)
+    words = s.split()
+    out = []
+    for w in words:
+        if w.lower() in _PRESERVE_UPPER:
+            out.append(w.upper())
+        else:
+            out.append(_TITLE_CASE_RE.sub(lambda m: m.group().upper(), w))
+    return " ".join(out)
 
 
 def clean_title(raw: str) -> str:
