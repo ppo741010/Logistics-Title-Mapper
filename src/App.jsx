@@ -563,7 +563,7 @@ const C = {
   pill: "#f3f4f6", pillText: "#374151",
 };
 
-function Badge({ tone = "blue", children, size = "sm" }) {
+function Badge({ tone = "blue", children, size = "sm", variant = "pill" }) {
   const tones = {
     blue:  { background: C.accentLight, color: C.accent,   border: C.accentBorder },
     green: { background: C.greenLight,  color: C.green,    border: C.greenBorder },
@@ -573,8 +573,17 @@ function Badge({ tone = "blue", children, size = "sm" }) {
     slate: { background: "#f1f5f9",     color: "#475569",  border: "#cbd5e1" },
   };
   const t = tones[tone] || tones.gray;
+  const fontSize = size === "sm" ? 12 : 13;
+  if (variant === "tag") {
+    return (
+      <span style={{ display: "inline-flex", alignItems: "center", gap: 6, background: C.bg, border: `1px solid ${C.border}`, borderRadius: 4, padding: size === "sm" ? "2px 8px 2px 0" : "3px 10px 3px 0", fontSize, fontWeight: 600, color: t.color }}>
+        <span style={{ display: "inline-block", width: 3, alignSelf: "stretch", background: t.color, borderRadius: "2px 0 0 2px", minHeight: 14 }} />
+        {children}
+      </span>
+    );
+  }
   return (
-    <span style={{ ...t, border: `1px solid ${t.border}`, padding: size === "sm" ? "3px 10px" : "4px 14px", borderRadius: 20, fontSize: size === "sm" ? 12 : 13, fontWeight: 600, display: "inline-block", letterSpacing: "0.01em" }}>
+    <span style={{ ...t, border: `1px solid ${t.border}`, padding: size === "sm" ? "3px 10px" : "4px 14px", borderRadius: 20, fontSize, fontWeight: 600, display: "inline-block", letterSpacing: "0.01em" }}>
       {children}
     </span>
   );
@@ -854,7 +863,7 @@ function SingleAnalyzer() {
                 </Card>
                 <Card style={{ padding: 16 }}>
                   <FieldLabel>Suggested Seniority</FieldLabel>
-                  <Badge tone={seniorityTone(result.seniority)}>{result.seniority}</Badge>
+                  <Badge tone={seniorityTone(result.seniority)} variant="tag">{result.seniority}</Badge>
                 </Card>
               </div>
               {result.salaryBenchmark ? (
@@ -1335,7 +1344,7 @@ function BulkUpload({ onResultsReady }) {
                       {phase === "done" && <>
                         <td style={{ padding: "10px 16px", fontWeight: 600, color: C.text }}>{row.cleanTitle}</td>
                         <td style={{ padding: "10px 16px" }}><Badge tone={domainTone(row.domain)} size="sm">{row.domain}</Badge></td>
-                        <td style={{ padding: "10px 16px" }}><Badge tone={seniorityTone(row.seniority)} size="sm">{row.seniority}</Badge></td>
+                        <td style={{ padding: "10px 16px" }}><Badge tone={seniorityTone(row.seniority)} size="sm" variant="tag">{row.seniority}</Badge></td>
                         <td style={{ padding: "10px 16px", fontWeight: 700, fontSize: 13, color: row.confidence >= 80 ? C.green : row.confidence >= 60 ? C.amber : C.red }}>
                           {row.confidence}%
                         </td>
@@ -1549,7 +1558,7 @@ function TitleCleaner() {
             </div>
             <div>
               <FieldLabel>Seniority</FieldLabel>
-              <Badge tone={seniorityTone(manualResult.seniority)}>{manualResult.seniority}</Badge>
+              <Badge tone={seniorityTone(manualResult.seniority)} variant="tag">{manualResult.seniority}</Badge>
             </div>
             <div>
               <FieldLabel>Confidence</FieldLabel>
@@ -1587,7 +1596,7 @@ function TitleCleaner() {
                       {changed && <span style={{ display: "block", fontSize: 10, color: C.textMuted, fontWeight: 400, marginTop: 2 }}>cleaned</span>}
                     </td>
                     <td style={{ padding: "13px 18px" }}><Badge tone={domainTone(res.domain)}>{res.domain}</Badge></td>
-                    <td style={{ padding: "13px 18px" }}><Badge tone={seniorityTone(res.seniority)}>{res.seniority}</Badge></td>
+                    <td style={{ padding: "13px 18px" }}><Badge tone={seniorityTone(res.seniority)} variant="tag">{res.seniority}</Badge></td>
                   </tr>
                 );
               })}
