@@ -1335,7 +1335,7 @@ function BulkUpload({ onResultsReady }) {
                       {phase === "done" && <>
                         <td style={{ padding: "10px 16px", fontWeight: 600, color: C.text }}>{row.cleanTitle}</td>
                         <td style={{ padding: "10px 16px" }}><Badge tone={domainTone(row.domain)} size="sm">{row.domain}</Badge></td>
-                        <td style={{ padding: "10px 16px", fontSize: 12, color: C.textMuted }}>{row.seniority}</td>
+                        <td style={{ padding: "10px 16px" }}><Badge tone={seniorityTone(row.seniority)} size="sm">{row.seniority}</Badge></td>
                         <td style={{ padding: "10px 16px", fontWeight: 700, fontSize: 13, color: row.confidence >= 80 ? C.green : row.confidence >= 60 ? C.amber : C.red }}>
                           {row.confidence}%
                         </td>
@@ -1549,7 +1549,7 @@ function TitleCleaner() {
             </div>
             <div>
               <FieldLabel>Seniority</FieldLabel>
-              <span style={{ fontSize: 13, color: C.textMuted }}>{manualResult.seniority}</span>
+              <Badge tone={seniorityTone(manualResult.seniority)}>{manualResult.seniority}</Badge>
             </div>
             <div>
               <FieldLabel>Confidence</FieldLabel>
@@ -1587,7 +1587,7 @@ function TitleCleaner() {
                       {changed && <span style={{ display: "block", fontSize: 10, color: C.textMuted, fontWeight: 400, marginTop: 2 }}>cleaned</span>}
                     </td>
                     <td style={{ padding: "13px 18px" }}><Badge tone={domainTone(res.domain)}>{res.domain}</Badge></td>
-                    <td style={{ padding: "13px 18px", fontSize: 12, color: C.textMuted }}>{res.seniority}</td>
+                    <td style={{ padding: "13px 18px" }}><Badge tone={seniorityTone(res.seniority)}>{res.seniority}</Badge></td>
                   </tr>
                 );
               })}
