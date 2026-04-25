@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import * as XLSX from "xlsx";
 import { analyzeViaAPI, bulkAnalyzeViaAPI, cleanPreviewViaAPI, submitFeedback, chatViaAPI } from "./api.js";
 import skillConfig from "./skill_normalize.json";
+import { supabase } from "./supabase.js";
 
 // ── Classification data ─────────────────────────────────────────────────────
 
@@ -93,6 +94,96 @@ const TYPO_MAP = {
 const HOURS_POSITIONS_PATTERN = /\b(\d+\.?\d*\s*h(rs?|ours?)(\s*p\.?w\.?|\s*per\s*week)?|\d+\s*x\s*\w+|x\s*\d+\s*(position|role|vacancy|vacancies)?s?|\d+\s*(position|role|vacancy|vacancies)s?|multiple\s*(position|role)s?)\b/gi;
 
 // ── Feedback modal ────────────────────────────────────────────────────────────
+
+function AuthModal({ onClose, onSuccess }) {
+  const [tab, setTab]         = useState("login");   // "login" | "signup"
+  const [email, setEmail]     = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError]     = useState("");
+  const [loading, setLoading] = useState(false);
+  const [done, setDone]       = useState(false);
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+    setError("");
+    setLoading(true);
+    try {
+      if (tab === "login") {
+        const { error: err } = await supabase.auth.signInWithPassword({ email, password });
+        if (err) throw err;
+        onSuccess();
+        onClose();
+      } else {
+        const { error: err } = await supabase.auth.signUp({ email, password });
+        if (err) throw err;
+        setDone(true);
+      }
+    } catch (err) {
+      setError(err.message || "Something went wrong.");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  const inputStyle = { width: "100%", padding: "9px 12px", borderRadius: 8, border: `1px solid ${C.border}`, fontSize: 13.5, fontFamily: "inherit", background: C.bg, color: C.text, boxSizing: "border-box", outline: "none" };
+
+  return (
+    <div onClick={onClose} style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.45)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 9999 }}>
+      <div onClick={e => e.stopPropagation()} style={{ background: C.sidebar, border: `1px solid ${C.border}`, borderRadius: 14, padding: "28px 30px", width: 360, boxShadow: "0 8px 32px rgba(0,0,0,0.4)", fontFamily: "inherit" }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 20 }}>
+          <span style={{ fontWeight: 700, fontSize: 16, color: C.text }}>Welcome to Logititles</span>
+          <button onClick={onClose} style={{ background: "none", border: "none", cursor: "pointer", fontSize: 18, color: C.textMuted, lineHeight: 1 }}>×</button>
+        </div>
+
+        {done ? (
+          <div style={{ textAlign: "center", padding: "16px 0" }}>
+            <div style={{ fontSize: 32, marginBottom: 12 }}>📧</div>
+            <div style={{ fontWeight: 600, color: C.text, marginBottom: 6 }}>Check your email</div>
+            <div style={{ fontSize: 13, color: C.textMuted }}>We sent a confirmation link to <strong>{email}</strong>. Click it to activate your account.</div>
+            <button onClick={onClose} style={{ marginTop: 20, padding: "9px 24px", borderRadius: 8, border: "none", background: C.accent, color: "#fff", fontWeight: 700, fontSize: 13, cursor: "pointer", fontFamily: "inherit" }}>Done</button>
+          </div>
+        ) : (
+          <>
+            <div style={{ display: "flex", gap: 0, marginBottom: 20, borderRadius: 8, overflow: "hidden", border: `1px solid ${C.border}` }}>
+              {["login", "signup"].map(t => (
+                <button key={t} onClick={() => { setTab(t); setError(""); }}
+                  style={{ flex: 1, padding: "8px 0", border: "none", cursor: "pointer", fontFamily: "inherit", fontSize: 13, fontWeight: tab === t ? 700 : 400, background: tab === t ? C.accent : "transparent", color: tab === t ? "#fff" : C.textMuted, transition: "all 0.15s" }}>
+                  {t === "login" ? "Sign In" : "Sign Up"}
+                </button>
+              ))}
+            </div>
+
+            <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+              <input type="email" placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} required style={inputStyle} />
+              <input type="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} required style={inputStyle} />
+              {error && <div style={{ fontSize: 12, color: "#ef4444", background: "#fef2f2", padding: "8px 10px", borderRadius: 6 }}>{error}</div>}
+              <button type="submit" disabled={loading}
+                style={{ padding: "10px 0", borderRadius: 8, border: "none", background: loading ? "#d1d5db" : C.accent, color: "#fff", fontWeight: 700, fontSize: 14, cursor: loading ? "default" : "pointer", fontFamily: "inherit", marginTop: 4 }}>
+                {loading ? "Please wait…" : tab === "login" ? "Sign In" : "Create Account"}
+              </button>
+            </form>
+          </>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function AILoginWall({ onLogin }) {
+  return (
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", height: "60vh", gap: 16, textAlign: "center", padding: "0 24px" }}>
+      <div style={{ fontSize: 48 }}>✨</div>
+      <div style={{ fontWeight: 700, fontSize: 20, color: C.text }}>AI Assistant</div>
+      <div style={{ fontSize: 14, color: C.textMuted, maxWidth: 320, lineHeight: 1.6 }}>
+        Sign in to access the AI Assistant. Ask questions about classification results, salary benchmarks, and logistics job titles.
+      </div>
+      <button onClick={onLogin}
+        style={{ padding: "11px 32px", borderRadius: 9, border: "none", background: C.accent, color: "#fff", fontWeight: 700, fontSize: 14, cursor: "pointer", fontFamily: "inherit", marginTop: 8 }}>
+        Sign In / Sign Up
+      </button>
+    </div>
+  );
+}
 
 function FeedbackModal({ page = "", title = "", result = "", onClose }) {
   const [step, setStep] = useState("rate");   // "rate" | "comment" | "done"
@@ -2198,6 +2289,16 @@ export default function App() {
   const [bulkResults, setBulkResults]     = useState([]);
   const [showFeedback, setShowFeedback]   = useState(false);
   const [aiContext, setAiContext]          = useState("");
+  const [user, setUser]                   = useState(null);
+  const [showAuth, setShowAuth]           = useState(false);
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data }) => setUser(data.session?.user ?? null));
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null);
+    });
+    return () => subscription.unsubscribe();
+  }, []);
 
   function handleEnter(targetPage) {
     setShowLanding(false);
@@ -2239,10 +2340,23 @@ export default function App() {
           <div style={{ width: 28, height: 28, borderRadius: 6, background: "#eef2ff", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14 }}>📦</div>
           <span style={{ fontSize: 13, fontWeight: 700, color: "#1e1b4b" }}>Logititles</span>
         </div>
-        <button onClick={() => setShowFeedback(true)}
-          style={{ background: "none", border: "none", cursor: "pointer", fontSize: 18, padding: 4 }}>
-          💬
-        </button>
+        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+          {user ? (
+            <button onClick={() => supabase.auth.signOut()}
+              style={{ background: "none", border: `1px solid ${C.border}`, cursor: "pointer", fontSize: 11, color: "#ef4444", fontFamily: "inherit", padding: "4px 8px", borderRadius: 6 }}>
+              Sign Out
+            </button>
+          ) : (
+            <button onClick={() => setShowAuth(true)}
+              style={{ background: C.accent, border: "none", cursor: "pointer", fontSize: 11, color: "#fff", fontFamily: "inherit", padding: "5px 10px", borderRadius: 6, fontWeight: 700 }}>
+              Sign In
+            </button>
+          )}
+          <button onClick={() => setShowFeedback(true)}
+            style={{ background: "none", border: "none", cursor: "pointer", fontSize: 18, padding: 4 }}>
+            💬
+          </button>
+        </div>
       </div>
 
       {/* Content */}
@@ -2250,7 +2364,7 @@ export default function App() {
         {page === "analyzer" && <SingleAnalyzer onAskAI={handleAskAI} />}
         {page === "bulk"     && <BulkUpload onResultsReady={setBulkResults} />}
         {page === "export"   && <ExportPage bulkResults={bulkResults} />}
-        {page === "ai"       && <AIAssistant initialContext={aiContext} onClearContext={() => setAiContext("")} />}
+        {page === "ai"       && (user ? <AIAssistant initialContext={aiContext} onClearContext={() => setAiContext("")} /> : <AILoginWall onLogin={() => setShowAuth(true)} />)}
         {page === "privacy"  && <PrivacyPolicy />}
         {page === "terms"    && <TermsOfService />}
         {!["analyzer","bulk","export","ai","privacy","terms"].includes(page) && navItem && <navItem.component />}
@@ -2267,6 +2381,7 @@ export default function App() {
         ))}
       </div>
       {showFeedback && <FeedbackModal page={page} onClose={() => setShowFeedback(false)} />}
+      {showAuth && <AuthModal onClose={() => setShowAuth(false)} onSuccess={() => setShowAuth(false)} />}
     </div>
   );
 
@@ -2297,6 +2412,20 @@ export default function App() {
         </nav>
 
         <div style={{ padding: "14px 18px", borderTop: "1px solid #e5e7eb" }}>
+          {user ? (
+            <div style={{ marginBottom: 8 }}>
+              <div style={{ fontSize: 11, color: C.textMuted, marginBottom: 4, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{user.email}</div>
+              <button onClick={() => supabase.auth.signOut()}
+                style={{ background: "none", border: "none", cursor: "pointer", fontSize: 11, color: "#ef4444", fontFamily: "inherit", padding: 0 }}>
+                Sign Out
+              </button>
+            </div>
+          ) : (
+            <button onClick={() => setShowAuth(true)}
+              style={{ width: "100%", padding: "7px 0", borderRadius: 7, border: "none", background: C.accent, color: "#fff", fontWeight: 700, fontSize: 12, cursor: "pointer", fontFamily: "inherit", marginBottom: 8 }}>
+              Sign In / Sign Up
+            </button>
+          )}
           <button onClick={() => setShowLanding(true)}
             style={{ background: "none", border: "none", cursor: "pointer", fontSize: 11, color: "#9ca3af", fontFamily: "inherit", padding: 0, lineHeight: 1.8, display: "block" }}>
             ← Back to Landing Page
@@ -2325,13 +2454,14 @@ export default function App() {
         {page === "analyzer" && <SingleAnalyzer onAskAI={handleAskAI} />}
         {page === "bulk"     && <BulkUpload onResultsReady={setBulkResults} />}
         {page === "export"   && <ExportPage bulkResults={bulkResults} />}
-        {page === "ai"       && <AIAssistant initialContext={aiContext} onClearContext={() => setAiContext("")} />}
+        {page === "ai"       && (user ? <AIAssistant initialContext={aiContext} onClearContext={() => setAiContext("")} /> : <AILoginWall onLogin={() => setShowAuth(true)} />)}
         {page === "privacy"  && <PrivacyPolicy />}
         {page === "terms"    && <TermsOfService />}
         {!["analyzer","bulk","export","ai","privacy","terms"].includes(page) && navItem && <navItem.component />}
       </div>
 
       {showFeedback && <FeedbackModal page={page} onClose={() => setShowFeedback(false)} />}
+      {showAuth && <AuthModal onClose={() => setShowAuth(false)} onSuccess={() => setShowAuth(false)} />}
     </div>
   );
 }
