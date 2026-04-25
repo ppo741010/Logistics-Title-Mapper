@@ -755,7 +755,7 @@ const SA_EXAMPLES = [
   "BD Executive Last Mile AU",
 ];
 
-function SingleAnalyzer() {
+function SingleAnalyzer({ onAskAI }) {
   const isMobile = useIsMobile();
   const [title, setTitle]   = useState("");
   const [desc, setDesc]     = useState("");
@@ -800,7 +800,6 @@ function SingleAnalyzer() {
             <select value={country} onChange={e => setCountry(e.target.value)} style={{ ...inputStyle }}>
               <option value="">— Select country —</option>
               <option>New Zealand</option><option>Australia</option>
-              <option>Singapore</option><option>United States</option><option>United Kingdom</option>
             </select>
           </div>
 
@@ -936,6 +935,14 @@ function SingleAnalyzer() {
                     Ambiguous titles may be classified using description context when available.
                   </div>
                 </Card>
+              )}
+              {onAskAI && (
+                <div style={{ textAlign: "center", paddingTop: 4 }}>
+                  <button onClick={() => onAskAI({ ...result, raw_title: title })}
+                    style={{ padding: "9px 22px", borderRadius: 8, border: `1.5px solid ${C.accent}`, background: C.accentLight, color: C.accent, fontWeight: 600, fontSize: 13, cursor: "pointer", fontFamily: "inherit" }}>
+                    ✨ Ask AI about this result
+                  </button>
+                </div>
               )}
               <InlineFeedback title={title} result={result.domain} />
             </div>
@@ -1804,6 +1811,7 @@ function About() {
               "Flags ambiguous, low-confidence, or out-of-scope cases",
               "Uses description context when title alone is ambiguous",
               "Uses AI fallback (Claude Haiku) for unmatched or ambiguous titles",
+              "AI Assistant — ask questions about your results in plain English",
               "Shows salary benchmark reference for NZ and AU roles",
               "Produces export-ready structured output (CSV, Excel, JSON)",
             ].map(item => (
@@ -1894,19 +1902,29 @@ const QUICK_PROMPTS = [
   "What does the confidence score mean?",
 ];
 
-function AIAssistant() {
+function AIAssistant({ initialContext = "", onClearContext }) {
   const [messages, setMessages] = useState([
     { role: "assistant", content: "Hi! I'm your logistics HR specialist. Ask me anything about your classification results, salary benchmarks, or logistics job titles in general." }
   ]);
   const [input, setInput]       = useState("");
   const [loading, setLoading]   = useState(false);
   const bottomRef               = useRef(null);
+  const didAutoSend             = useRef(false);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, loading]);
 
-  async function send(text) {
+  useEffect(() => {
+    if (initialContext && !didAutoSend.current) {
+      didAutoSend.current = true;
+      send("Can you explain this classification result?", initialContext);
+      onClearContext?.();
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  async function send(text, ctx = "") {
     const msg = (text || input).trim();
     if (!msg || loading) return;
     setInput("");
@@ -1914,7 +1932,7 @@ function AIAssistant() {
     setMessages(updated);
     setLoading(true);
     const history = updated.slice(1).slice(0, -1).map(m => ({ role: m.role, content: m.content }));
-    const reply = await chatViaAPI(msg, history);
+    const reply = await chatViaAPI(msg, history, ctx);
     setMessages(prev => [...prev, {
       role: "assistant",
       content: reply || "Sorry, I couldn't get a response. Please try again."
@@ -2174,10 +2192,25 @@ export default function App() {
   const [page, setPage]                   = useState("analyzer");
   const [bulkResults, setBulkResults]     = useState([]);
   const [showFeedback, setShowFeedback]   = useState(false);
+  const [aiContext, setAiContext]          = useState("");
 
   function handleEnter(targetPage) {
     setShowLanding(false);
     if (targetPage) setPage(targetPage);
+  }
+
+  function handleAskAI(result) {
+    const ctx = [
+      `Title: ${result.raw_title || ""}`,
+      `Clean Title: ${result.cleanTitle || ""}`,
+      `Domain: ${result.domain || ""}`,
+      `Seniority: ${result.seniority || ""}`,
+      `Confidence: ${result.confidence ?? ""}%`,
+      result.skills?.length ? `Skills: ${result.skills.join(", ")}` : null,
+      result.flags?.length  ? `Flags: ${result.flags.join("; ")}` : null,
+    ].filter(Boolean).join("\n");
+    setAiContext(ctx);
+    setPage("ai");
   }
 
   if (showLanding) return <LandingPage onEnter={handleEnter} />;
@@ -2209,11 +2242,13 @@ export default function App() {
 
       {/* Content */}
       <div style={{ flex: 1, overflowY: "auto", padding: "20px 16px" }}>
-        {page === "bulk"    && <BulkUpload onResultsReady={setBulkResults} />}
-        {page === "export"  && <ExportPage bulkResults={bulkResults} />}
-        {page === "privacy" && <PrivacyPolicy />}
-        {page === "terms"   && <TermsOfService />}
-        {!["bulk","export","privacy","terms"].includes(page) && navItem && <navItem.component />}
+        {page === "analyzer" && <SingleAnalyzer onAskAI={handleAskAI} />}
+        {page === "bulk"     && <BulkUpload onResultsReady={setBulkResults} />}
+        {page === "export"   && <ExportPage bulkResults={bulkResults} />}
+        {page === "ai"       && <AIAssistant initialContext={aiContext} onClearContext={() => setAiContext("")} />}
+        {page === "privacy"  && <PrivacyPolicy />}
+        {page === "terms"    && <TermsOfService />}
+        {!["analyzer","bulk","export","ai","privacy","terms"].includes(page) && navItem && <navItem.component />}
       </div>
 
       {/* Bottom nav */}
@@ -2282,11 +2317,13 @@ export default function App() {
 
       {/* Main */}
       <div style={{ flex: 1, overflowY: "auto", padding: "32px 38px" }}>
-        {page === "bulk"    && <BulkUpload onResultsReady={setBulkResults} />}
-        {page === "export"  && <ExportPage bulkResults={bulkResults} />}
-        {page === "privacy" && <PrivacyPolicy />}
-        {page === "terms"   && <TermsOfService />}
-        {!["bulk","export","privacy","terms"].includes(page) && navItem && <navItem.component />}
+        {page === "analyzer" && <SingleAnalyzer onAskAI={handleAskAI} />}
+        {page === "bulk"     && <BulkUpload onResultsReady={setBulkResults} />}
+        {page === "export"   && <ExportPage bulkResults={bulkResults} />}
+        {page === "ai"       && <AIAssistant initialContext={aiContext} onClearContext={() => setAiContext("")} />}
+        {page === "privacy"  && <PrivacyPolicy />}
+        {page === "terms"    && <TermsOfService />}
+        {!["analyzer","bulk","export","ai","privacy","terms"].includes(page) && navItem && <navItem.component />}
       </div>
 
       {showFeedback && <FeedbackModal page={page} onClose={() => setShowFeedback(false)} />}
