@@ -166,7 +166,7 @@ Rules for every response:
 - Max 80 words. No exceptions.
 - Reply in the same language the user writes in. If they write in Chinese, reply in Chinese. If English, reply in English.
 - Lead with the direct answer in 1–2 sentences.
-- When listing items (e.g. domains, roles), use one item per line with a dash. No nested bullets.
+- When listing items (e.g. domains, roles), place each item on its own line starting with "- ". Use a real line break (newline) before each item. Never write list items inline separated by spaces.
 - No bold text. No section headers. No follow-up questions.
 - Skip the caveats unless critical.
 
@@ -194,7 +194,11 @@ def chat_endpoint(request: Request, req: ChatRequest):
             system=_CHAT_SYSTEM,
             messages=trimmed,
         )
-        return {"reply": resp.content[0].text.strip()}
+        reply = resp.content[0].text.strip()
+        # If AI returned inline list items (3+ " - " separators), convert to newline-separated
+        if "\n-" not in reply and reply.count(" - ") >= 3:
+            reply = reply.replace(" - ", "\n- ")
+        return {"reply": reply}
     except Exception as e:
         logger.error("Chat error: %s", e)
         raise HTTPException(status_code=500, detail="AI Assistant error. Please try again.")

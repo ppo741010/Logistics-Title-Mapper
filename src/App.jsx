@@ -1962,7 +1962,7 @@ function AIAssistant({ initialContext = "", onClearContext }) {
               maxWidth: "80%", padding: "10px 14px", borderRadius: m.role === "user" ? "14px 14px 4px 14px" : "14px 14px 14px 4px",
               background: m.role === "user" ? C.accent : C.bg,
               color: m.role === "user" ? "#fff" : C.text,
-              fontSize: 13, lineHeight: 1.7,
+              fontSize: 13, lineHeight: 1.7, whiteSpace: "pre-wrap",
               border: m.role === "assistant" ? `1px solid ${C.border}` : "none",
             }}>
               {m.content}
