@@ -258,7 +258,16 @@
       "commercial manager",
       "merchandiser",
       "trade sales",
-      "national sales"
+      "national sales",
+      "digital marketing",
+      "digital marketer",
+      "marketing manager",
+      "marketing coordinator",
+      "marketing specialist",
+      "social media",
+      "brand manager",
+      "e-commerce manager",
+      "ecommerce manager"
     ],
     "Warehouse": [
       "warehouse",
@@ -542,7 +551,20 @@
     "Shipping Coordinator": "Freight Forwarding",
     "Shipping Manager": "Freight Forwarding",
     "Restaurant Manager": "Other/Noise",
-    "General Hand": "Other/Noise"
+    "General Hand": "Other/Noise",
+    "We're Hiring": "Other/Noise",
+    "We Are Hiring": "Other/Noise",
+    "Now Hiring": "Other/Noise",
+    "Hiring Now": "Other/Noise",
+    "Project Manager": "Operations",
+    "AI Project": "IT Support",
+    "Head of Brokerage": "Freight Forwarding",
+    "Brokerage Manager": "Freight Forwarding",
+    "Digital Marketing Manager": "Sales",
+    "Digital Marketing Coordinator": "Sales",
+    "Digital Marketer": "Sales",
+    "Marketing Manager": "Sales",
+    "Marketing Coordinator": "Sales"
   },
   "DOMAIN_SKILL_FIXED": {
     "Business Administration": ["Leadership", "Stakeholder Management", "Strategic Planning", "KPI Management"],
