@@ -1,5 +1,10 @@
-from fastapi import FastAPI, UploadFile, File, HTTPException, BackgroundTasks
+from fastapi import FastAPI, UploadFile, File, HTTPException, BackgroundTasks, Request
 from fastapi.middleware.cors import CORSMiddleware
+from slowapi import Limiter
+from slowapi.util import get_remote_address
+from slowapi.errors import RateLimitExceeded
+from slowapi.middleware import SlowAPIMiddleware
+from starlette.responses import JSONResponse
 from pydantic import BaseModel
 import pandas as pd
 import io
@@ -19,8 +24,15 @@ _supabase_url = os.getenv("SUPABASE_URL")
 _supabase_key = os.getenv("SUPABASE_KEY")
 supabase = create_client(_supabase_url, _supabase_key) if _supabase_url and _supabase_key else None
 
-app = FastAPI(title="Logistics Title Mapper API", version="2.0.0")
+limiter = Limiter(key_func=get_remote_address)
 
+app = FastAPI(title="Logistics Title Mapper API", version="2.0.0")
+app.state.limiter = limiter
+app.add_exception_handler(RateLimitExceeded, lambda req, exc: JSONResponse(
+    status_code=429,
+    content={"detail": "Too many requests. Please slow down and try again shortly."}
+))
+app.add_middleware(SlowAPIMiddleware)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -84,14 +96,16 @@ def health():
 
 
 @app.post("/analyze")
-def analyze_single(req: AnalyzeRequest, background_tasks: BackgroundTasks):
+@limiter.limit("60/minute")
+def analyze_single(request: Request, req: AnalyzeRequest, background_tasks: BackgroundTasks):
     result = analyze(req.title, req.description, req.country)
     background_tasks.add_task(_log_titles, [result])
     return result
 
 
 @app.post("/bulk-analyze")
-def bulk_analyze(req: BulkAnalyzeRequest, background_tasks: BackgroundTasks):
+@limiter.limit("10/minute")
+def bulk_analyze(request: Request, req: BulkAnalyzeRequest, background_tasks: BackgroundTasks):
     if len(req.rows) > 10_000:
         raise HTTPException(status_code=400, detail="Maximum 10,000 rows per request.")
     results = [analyze(r.title, r.description, r.country) for r in req.rows]
@@ -100,7 +114,8 @@ def bulk_analyze(req: BulkAnalyzeRequest, background_tasks: BackgroundTasks):
 
 
 @app.post("/upload")
-async def upload_file(file: UploadFile = File(...)):
+@limiter.limit("20/minute")
+async def upload_file(request: Request, file: UploadFile = File(...)):
     """
     Accept CSV or XLSX, return parsed rows for the frontend
     to map columns before sending to /bulk-analyze.
@@ -126,7 +141,8 @@ async def upload_file(file: UploadFile = File(...)):
 
 
 @app.post("/clean-preview")
-def clean_preview(req: CleanPreviewRequest):
+@limiter.limit("20/minute")
+def clean_preview(request: Request, req: CleanPreviewRequest):
     """
     Step 1 of the paid bulk flow:
     Return before/after pairs so the user can review cleaning
@@ -139,7 +155,8 @@ def clean_preview(req: CleanPreviewRequest):
 
 
 @app.post("/waitlist")
-def join_waitlist(req: WaitlistRequest):
+@limiter.limit("5/minute")
+def join_waitlist(request: Request, req: WaitlistRequest):
     if supabase:
         try:
             supabase.table("waitlist").insert({
@@ -153,7 +170,8 @@ def join_waitlist(req: WaitlistRequest):
 
 
 @app.post("/feedback")
-def submit_feedback(req: FeedbackRequest):
+@limiter.limit("20/minute")
+def submit_feedback(request: Request, req: FeedbackRequest):
     ts = datetime.now(timezone.utc).isoformat()
     logger.info("FEEDBACK | %s | rating=%s | title=%s | result=%s | page=%s | comment=%s",
                 ts, req.rating, req.title, req.result, req.page, req.comment)
