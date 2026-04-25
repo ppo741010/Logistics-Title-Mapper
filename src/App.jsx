@@ -876,6 +876,9 @@ function SingleAnalyzer() {
                   <div style={{ marginTop: 6, fontSize: 11, color: C.textMuted }}>
                     Median: {result.salaryBenchmark.currency} ${result.salaryBenchmark.median.toLocaleString()} · Range ±12%
                   </div>
+                  <div style={{ marginTop: 8, fontSize: 10, color: C.textMuted, borderTop: `1px solid ${C.border}`, paddingTop: 8 }}>
+                    Market estimate only. Not financial or HR advice. Actual salaries vary by employer, experience, and location.
+                  </div>
                 </Card>
               ) : country === "" && result.domain !== "Other/Noise" ? (
                 <Card style={{ padding: 18, opacity: 0.7 }}>
@@ -1850,6 +1853,176 @@ function About() {
   );
 }
 
+// ── Page 7: Privacy Policy ───────────────────────────────────────────────────
+
+function PrivacyPolicy() {
+  return (
+    <div>
+      <SectionTitle children="Privacy Policy" sub="Last updated: April 2025" />
+      <div style={{ display: "flex", flexDirection: "column", gap: 16, maxWidth: 720 }}>
+
+        <Card>
+          <div style={{ fontSize: 14, color: C.textSub, lineHeight: 1.9 }}>
+            This Privacy Policy describes how Logistics Title Mapper ("we", "the tool") handles information submitted through this website. By using this tool, you agree to the practices described below.
+          </div>
+        </Card>
+
+        {[
+          {
+            title: "What we collect",
+            items: [
+              "Job titles and descriptions you submit for classification — used to improve classification accuracy. No names, emails, or personally identifying information are extracted from submitted content.",
+              "Feedback you voluntarily submit (thumbs up/down, comments) — stored to help identify misclassifications.",
+              "Email address, if you join the waitlist — used only to notify you when paid plans become available.",
+            ],
+          },
+          {
+            title: "What we do NOT collect",
+            items: [
+              "We do not collect names, contact details, or any personally identifying information from submitted job titles.",
+              "We do not use cookies for tracking or advertising.",
+              "We do not sell or share your data with third parties for commercial purposes.",
+            ],
+          },
+          {
+            title: "How we use submitted data",
+            items: [
+              "Submitted job titles and classification results are logged to improve the accuracy of the classification engine over time.",
+              "We may review patterns in submitted titles to add new rules or correct misclassifications. Individual submissions are not manually reviewed in isolation.",
+              "Feedback and waitlist data are stored securely in Supabase (supabase.com), hosted in the US. See Supabase's privacy policy for infrastructure details.",
+            ],
+          },
+          {
+            title: "Data retention",
+            items: [
+              "Title log and feedback data are retained indefinitely for classification improvement purposes.",
+              "Waitlist data is retained until you request removal or until the waitlist is closed.",
+              "You may request deletion of any data associated with your email address by contacting us.",
+            ],
+          },
+          {
+            title: "Your rights (NZ Privacy Act 2020)",
+            items: [
+              "You have the right to request access to personal information we hold about you.",
+              "You have the right to request correction or deletion of your personal information.",
+              "To exercise these rights, contact us at the email address below.",
+            ],
+          },
+        ].map(({ title, items }) => (
+          <Card key={title}>
+            <div style={{ fontSize: 13, fontWeight: 700, color: C.text, marginBottom: 12 }}>{title}</div>
+            {items.map(item => (
+              <div key={item} style={{ display: "flex", gap: 9, marginBottom: 9, fontSize: 13, color: C.textSub, alignItems: "flex-start", lineHeight: 1.6 }}>
+                <span style={{ color: C.accent, flexShrink: 0, marginTop: 2 }}>•</span>
+                <span>{item}</span>
+              </div>
+            ))}
+          </Card>
+        ))}
+
+        <Card style={{ padding: "14px 20px" }}>
+          <div style={{ fontSize: 13, color: C.textSub, lineHeight: 1.7 }}>
+            <strong>Contact:</strong> ppo741010@gmail.com<br />
+            <strong>Governing law:</strong> New Zealand — Privacy Act 2020<br />
+            <strong>Questions?</strong> Email us and we will respond within 5 business days.
+          </div>
+        </Card>
+
+      </div>
+    </div>
+  );
+}
+
+
+// ── Page 8: Terms of Service ─────────────────────────────────────────────────
+
+function TermsOfService() {
+  return (
+    <div>
+      <SectionTitle children="Terms of Service" sub="Last updated: April 2025" />
+      <div style={{ display: "flex", flexDirection: "column", gap: 16, maxWidth: 720 }}>
+
+        <Card>
+          <div style={{ fontSize: 14, color: C.textSub, lineHeight: 1.9 }}>
+            By using Logistics Title Mapper ("the tool", "the service"), you agree to these Terms of Service. Please read them carefully before using the tool.
+          </div>
+        </Card>
+
+        {[
+          {
+            title: "1. About the service",
+            items: [
+              "Logistics Title Mapper is a job title normalization tool designed for logistics and supply chain professionals.",
+              "The tool provides suggested draft classifications — including functional area, seniority level, and skill tags — based on rule-based and AI-assisted analysis.",
+              "All outputs are suggestions intended to support human review and decision-making, not to replace professional judgment.",
+            ],
+          },
+          {
+            title: "2. Salary benchmarks",
+            items: [
+              "Salary benchmarks shown by this tool are market estimates based on NZ/AU job market data analysis. They are provided for general reference purposes only.",
+              "Salary estimates do not constitute financial advice, HR advice, or any form of official salary survey.",
+              "Actual salaries vary based on employer, experience, location, industry segment, and market conditions. We make no warranty regarding accuracy.",
+              "Do not rely solely on this tool's salary estimates for employment decisions, salary negotiations, or compensation benchmarking.",
+            ],
+          },
+          {
+            title: "3. Classification accuracy",
+            items: [
+              "Classification outputs are generated by a rule-based engine with AI fallback. Results may be inaccurate, incomplete, or unsuitable for specific contexts.",
+              "The tool is designed to assist with data cleaning and normalization, not to produce authoritative job classifications.",
+              "Always verify classification results before using them in formal HR systems, reports, or compliance contexts.",
+            ],
+          },
+          {
+            title: "4. Acceptable use",
+            items: [
+              "You may use this tool for personal, internal business, or commercial purposes within the limits of your subscription plan.",
+              "You may not use this tool to process data that violates applicable privacy laws or third-party terms of service.",
+              "You may not attempt to reverse-engineer, scrape, or systematically extract the classification rules or underlying data from this tool.",
+            ],
+          },
+          {
+            title: "5. Disclaimer of warranties",
+            items: [
+              "The tool is provided 'as is' without warranties of any kind, express or implied.",
+              "We do not guarantee uninterrupted availability, accuracy of outputs, or fitness for any particular purpose.",
+              "To the extent permitted by New Zealand law, we are not liable for any loss or damage arising from use of this tool.",
+            ],
+          },
+          {
+            title: "6. Subscriptions (coming soon)",
+            items: [
+              "Paid subscription plans are not yet active. Terms specific to subscriptions will be added here when billing is enabled.",
+              "By joining the waitlist, you are expressing interest only — no payment or commitment is required.",
+            ],
+          },
+        ].map(({ title, items }) => (
+          <Card key={title}>
+            <div style={{ fontSize: 13, fontWeight: 700, color: C.text, marginBottom: 12 }}>{title}</div>
+            {items.map(item => (
+              <div key={item} style={{ display: "flex", gap: 9, marginBottom: 9, fontSize: 13, color: C.textSub, alignItems: "flex-start", lineHeight: 1.6 }}>
+                <span style={{ color: C.accent, flexShrink: 0, marginTop: 2 }}>•</span>
+                <span>{item}</span>
+              </div>
+            ))}
+          </Card>
+        ))}
+
+        <Card style={{ padding: "14px 20px" }}>
+          <div style={{ fontSize: 13, color: C.textSub, lineHeight: 1.7 }}>
+            <strong>Governing law:</strong> New Zealand<br />
+            <strong>Contact:</strong> ppo741010@gmail.com<br />
+            These terms may be updated at any time. Continued use of the tool constitutes acceptance of the updated terms.
+          </div>
+        </Card>
+
+      </div>
+    </div>
+  );
+}
+
+
 // ── App shell ─────────────────────────────────────────────────────────────────
 
 const NAV = [
@@ -1911,14 +2084,27 @@ export default function App() {
             style={{ background: "none", border: "none", cursor: "pointer", fontSize: 11, color: "#4a527a", fontFamily: "inherit", padding: 0, lineHeight: 1.8, display: "block", marginTop: 4 }}>
             💬 Give Feedback
           </button>
+          <div style={{ marginTop: 10, display: "flex", gap: 10 }}>
+            <button onClick={() => setPage("privacy")}
+              style={{ background: "none", border: "none", cursor: "pointer", fontSize: 10, color: "#9ca3af", fontFamily: "inherit", padding: 0, textDecoration: "underline" }}>
+              Privacy
+            </button>
+            <span style={{ fontSize: 10, color: "#d1d5db" }}>·</span>
+            <button onClick={() => setPage("terms")}
+              style={{ background: "none", border: "none", cursor: "pointer", fontSize: 10, color: "#9ca3af", fontFamily: "inherit", padding: 0, textDecoration: "underline" }}>
+              Terms
+            </button>
+          </div>
         </div>
       </div>
 
       {/* Main */}
       <div style={{ flex: 1, overflowY: "auto", padding: "32px 38px" }}>
-        {page === "bulk"   && <BulkUpload onResultsReady={setBulkResults} />}
-        {page === "export" && <ExportPage bulkResults={bulkResults} />}
-        {page !== "bulk" && page !== "export" && navItem && <navItem.component />}
+        {page === "bulk"    && <BulkUpload onResultsReady={setBulkResults} />}
+        {page === "export"  && <ExportPage bulkResults={bulkResults} />}
+        {page === "privacy" && <PrivacyPolicy />}
+        {page === "terms"   && <TermsOfService />}
+        {!["bulk","export","privacy","terms"].includes(page) && navItem && <navItem.component />}
       </div>
 
       {showFeedback && <FeedbackModal page={page} onClose={() => setShowFeedback(false)} />}
