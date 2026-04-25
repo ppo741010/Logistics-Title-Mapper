@@ -166,7 +166,7 @@ Rules for every response:
 - Max 80 words. No exceptions.
 - Reply in the same language the user writes in. If they write in Chinese, reply in Chinese. If English, reply in English.
 - Lead with the direct answer in 1–2 sentences.
-- Use at most 3 bullet points if a list genuinely helps. No nested bullets.
+- When listing items (e.g. domains, roles), use one item per line with a dash. No nested bullets.
 - No bold text. No section headers. No follow-up questions.
 - Skip the caveats unless critical.
 
