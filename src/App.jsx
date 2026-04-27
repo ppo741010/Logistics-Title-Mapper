@@ -825,8 +825,9 @@ function LandingPage({ onEnter }) {
 
       {/* Footer */}
       <div style={{ borderTop: "1px solid rgba(255,255,255,0.08)", padding: "16px 48px", display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 8 }}>
-        <span style={{ color: "rgba(255,255,255,0.3)", fontSize: 11 }}>© 2025 Logititles · logititles@gmail.com</span>
-        <div style={{ display: "flex", gap: 16 }}>
+        <span style={{ color: "rgba(255,255,255,0.3)", fontSize: 11 }}>© 2026 Logititles · logititles@gmail.com</span>
+        <div style={{ display: "flex", gap: 16, alignItems: "center" }}>
+          <a href="https://www.logititles.com" target="_blank" rel="noopener noreferrer" style={{ fontSize: 11, color: "rgba(255,255,255,0.35)", textDecoration: "underline" }}>logititles.com</a>
           <button onClick={() => { onEnter("privacy"); }} style={{ background: "none", border: "none", cursor: "pointer", fontSize: 11, color: "rgba(255,255,255,0.35)", fontFamily: "inherit", textDecoration: "underline", padding: 0 }}>Privacy Policy</button>
           <button onClick={() => { onEnter("terms"); }} style={{ background: "none", border: "none", cursor: "pointer", fontSize: 11, color: "rgba(255,255,255,0.35)", fontFamily: "inherit", textDecoration: "underline", padding: 0 }}>Terms of Service</button>
         </div>
