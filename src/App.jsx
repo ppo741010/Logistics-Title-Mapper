@@ -578,18 +578,18 @@ function detectColumns(headers) {
 
 // ── Export utilities ─────────────────────────────────────────────────────────
 
-const EXPORT_FIELDS = ["raw_title","clean_title","functional_area","work_nature","seniority","confidence","skills","review_flags","needs_review","country","salary_range","salary_median"];
+const EXPORT_FIELDS = ["raw_title","clean_title","domain","work_nature","seniority","confidence","skills","flags","needs_review","country","salary_range","salary_median"];
 
 function buildExportRow(r) {
   return {
     raw_title:       r.raw || "",
     clean_title:     r.cleanTitle || "",
-    functional_area: r.domain || "",
+    domain:          r.domain || "",
     work_nature:     r.nature || "",
     seniority:       r.seniority || "",
     confidence:      `${r.confidence}%`,
     skills:          (r.skills || []).join("; "),
-    review_flags:    (r.flags || []).join(" | "),
+    flags:           (r.flags || []).join(" | "),
     needs_review:    r.needsReview ? "Yes" : "No",
     country:         r.country || "",
     salary_range:    r.salaryBenchmark?.range || "",
@@ -620,12 +620,12 @@ function doDownloadJSON(results, filename = "logistics_structured.json") {
   const rows = results.map(r => ({
     raw_title: r.raw || "",
     clean_title: r.cleanTitle || "",
-    functional_area: r.domain || "",
+    domain:          r.domain || "",
     work_nature: r.nature || "",
     seniority: r.seniority || "",
     confidence: r.confidence,
     skills: r.skills || [],
-    review_flags: r.flags || [],
+    flags: r.flags || [],
     needs_review: r.needsReview || false,
     country: r.country || "",
     salary_range: r.salaryBenchmark?.range || null,
@@ -2050,14 +2050,13 @@ function TitleCleaner() {
   const [manualInput, setManualInput]   = useState("");
   const [manualResult, setManualResult] = useState(null);
   const [manualLoading, setManualLoading] = useState(false);
-  const [sampleResults, setSampleResults] = useState(() =>
-    TC_SAMPLES.map(raw => ({ raw, ...analyze(raw, "", "") }))
-  );
+  const [sampleResults, setSampleResults] = useState(null);
 
   useEffect(() => {
     bulkAnalyzeViaAPI(TC_SAMPLES.map(title => ({ title, description: "", country: "" })))
       .then(res => {
         if (res) setSampleResults(TC_SAMPLES.map((raw, i) => ({ raw, ...res[i] })));
+        else setSampleResults(TC_SAMPLES.map(raw => ({ raw, ...analyze(raw, "", "") })));
       });
   }, []);
 
@@ -2126,6 +2125,9 @@ function TitleCleaner() {
           <div style={{ fontWeight: 600, color: C.text, fontSize: 14 }}>Before / After — Sample Titles</div>
           <div style={{ fontSize: 12, color: C.textMuted, marginTop: 2 }}>Shows what gets cleaned from real logistics job ad titles</div>
         </div>
+        {!sampleResults ? (
+          <div style={{ padding: "32px 20px", textAlign: "center", color: C.textMuted, fontSize: 13 }}>Loading samples…</div>
+        ) : (
         <div style={{ overflowX: "auto" }}>
           <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
             <thead>
@@ -2153,6 +2155,7 @@ function TitleCleaner() {
             </tbody>
           </table>
         </div>
+        )}
       </Card>
     </div>
   );
@@ -2175,7 +2178,7 @@ const DEMO_RESULTS = DEMO_TITLES.map((raw, i) => ({ id: i + 1, raw, country: "",
 
 function ExportPage({ bulkResults }) {
   const [format, setFormat]   = useState("csv");
-  const [fields, setFields]   = useState(["raw_title","clean_title","functional_area","work_nature","seniority","confidence","needs_review"]);
+  const [fields, setFields]   = useState(["raw_title","clean_title","domain","work_nature","seniority","confidence","needs_review"]);
   const allFields = EXPORT_FIELDS;
   const toggle = f => setFields(p => p.includes(f) ? p.filter(x => x !== f) : [...p, f]);
 
@@ -2300,6 +2303,9 @@ function About() {
               "Uses description context when title alone is ambiguous",
               "Uses AI fallback (Claude Haiku) for unmatched or ambiguous titles",
               "AI Assistant — ask questions about your results in plain English",
+              "Data Analysis Charts — domain, seniority, skills, and salary breakdowns",
+              "PDF Report — 2-page export with summary stats and charts",
+              "PNG Export — download charts as an image",
               "Shows salary benchmark reference for NZ and AU roles",
               "Produces export-ready structured output (CSV, Excel, JSON)",
             ].map(item => (
@@ -2314,7 +2320,7 @@ function About() {
             {[
               "Not a market intelligence or hiring trends platform",
               "Not a job board or candidate sourcing tool",
-              "Not a reporting or analytics dashboard",
+              "Charts are based on your uploaded data only — not market-wide data",
               "Salary figures are market references only — not authoritative benchmarks",
               "Not a universal authoritative logistics taxonomy",
               "Not a replacement for human review on ambiguous cases",
@@ -2346,12 +2352,12 @@ function About() {
           <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "repeat(3, 1fr)", gap: 10 }}>
             {[
               { f: "clean_title",      d: "Standardized title with abbreviations expanded and noise removed" },
-              { f: "functional_area",  d: "Suggested logistics category (e.g. Freight Forwarding, Warehouse)" },
+              { f: "domain",           d: "Suggested logistics category (e.g. Freight Forwarding, Warehouse)" },
               { f: "work_nature",      d: "Suggested nature: Management, Specialist / Support, or Operational" },
               { f: "seniority",        d: "Suggested level: Entry Level · Mid Level · Senior · Manager · Executive" },
               { f: "skills",           d: "Normalized skill tags mapped from title and description text" },
-              { f: "confidence_score", d: "0–100 score indicating how certain the rule engine is" },
-              { f: "review_flags",     d: "Flags for ambiguous, short, noisy, or out-of-scope inputs" },
+              { f: "confidence",       d: "0–100 score indicating how certain the rule engine is" },
+              { f: "flags",            d: "Flags for ambiguous, short, noisy, or out-of-scope inputs" },
               { f: "salary_benchmark", d: "Market salary reference range for NZ or AU roles (±12% around median)" },
             ].map(({ f, d }) => (
               <div key={f} style={{ padding: "12px 14px", borderRadius: 8, background: C.bg, border: `1px solid ${C.border}` }}>
@@ -2735,7 +2741,7 @@ export default function App() {
     <div style={{ display: "flex", flexDirection: "column", height: "100vh", fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, sans-serif", background: C.bg }}>
       {/* Top bar */}
       <div style={{ background: C.sidebar, padding: "12px 16px", display: "flex", alignItems: "center", justifyContent: "space-between", flexShrink: 0, borderBottom: "1px solid #e5e7eb" }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+        <div onClick={() => setShowLanding(true)} style={{ display: "flex", alignItems: "center", gap: 8, cursor: "pointer" }}>
           <div style={{ width: 28, height: 28, borderRadius: 6, background: "#eef2ff", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14 }}>📦</div>
           <span style={{ fontSize: 13, fontWeight: 700, color: "#1e1b4b" }}>Logititles</span>
         </div>
@@ -2791,7 +2797,7 @@ export default function App() {
       {/* Sidebar */}
       <div style={{ width: 218, background: C.sidebar, display: "flex", flexDirection: "column", flexShrink: 0 }}>
         <div style={{ padding: "22px 18px 18px" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 6 }}>
+          <div onClick={() => setShowLanding(true)} style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 6, cursor: "pointer" }}>
             <div style={{ width: 32, height: 32, borderRadius: 8, background: "#eef2ff", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 16 }}>📦</div>
             <div>
               <div style={{ fontSize: 13, fontWeight: 700, color: "#1e1b4b", lineHeight: 1.2 }}>Logititles</div>
