@@ -1263,8 +1263,16 @@ function ResultCharts({ results }) {
     }))
     .sort((a, b) => b.median - a.median);
 
+  const noiseCount = results.filter(r => r.domain === "Other/Noise").length;
+  const noiseRatio = results.length > 0 ? noiseCount / results.length : 0;
+
   return (
     <Card style={{ padding: "20px 24px" }}>
+      {noiseRatio > 0.3 && (
+        <div style={{ marginBottom: 16, padding: "10px 16px", background: C.amberLight, borderRadius: 8, border: `1px solid ${C.amberBorder}`, fontSize: 12, color: "#78350f" }}>
+          ⚠ <strong>{Math.round(noiseRatio * 100)}% of titles ({noiseCount} rows)</strong> were classified as Other/Noise and excluded from charts. This may indicate non-logistics titles, very short titles, or unrecognised formats. Adding a <strong>description</strong> column may improve accuracy.
+        </div>
+      )}
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
         <div style={{ fontWeight: 700, fontSize: 15, color: C.text }}>Data Analysis</div>
         <div style={{ display: "flex", gap: 8 }}>
@@ -1637,6 +1645,22 @@ function BulkUpload({ onResultsReady }) {
             If your columns have different names, you'll be prompted to map them after uploading.
           </div>
         </div>
+        <div style={{ marginTop: 14, padding: "12px 16px", background: "#fffbeb", borderRadius: 8, border: "1px solid #fcd34d" }}>
+          <div style={{ fontSize: 12, fontWeight: 700, color: "#92400e", marginBottom: 6 }}>💡 Tips for better results</div>
+          <div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
+            {[
+              "Add a country column (NZ or AU) to unlock salary benchmarks and the Salary by Domain chart",
+              "Add a description column to improve classification accuracy for ambiguous titles",
+              "Non-logistics titles (retail, teaching, healthcare) will be classified as Other/Noise — this is expected",
+              "The cleaner the title, the more accurate the output — noise like salary ranges or locations will be stripped automatically",
+            ].map((tip, i) => (
+              <div key={i} style={{ fontSize: 12, color: "#78350f", display: "flex", gap: 7, alignItems: "flex-start" }}>
+                <span style={{ flexShrink: 0, color: "#d97706" }}>·</span>
+                <span style={{ lineHeight: 1.55 }}>{tip}</span>
+              </div>
+            ))}
+          </div>
+        </div>
         <div style={{ marginTop: 12, fontSize: 11, color: C.textMuted, textAlign: "center" }}>
           Job titles submitted are used to improve classification accuracy. No personal data is collected.
         </div>
@@ -1828,6 +1852,17 @@ function BulkUpload({ onResultsReady }) {
         {/* Charts — shown when done */}
         {phase === "done" && <ResultCharts results={results} />}
         {phase === "done" && <BulkAIBubble results={results} />}
+
+        {/* Clean Preview hint */}
+        {phase === "previewing" && (() => {
+          const noiseCount = cleanPreviews.filter(p => p.clean?.toLowerCase().includes("other") || p.clean?.length < 4).length;
+          const noiseRatio = cleanPreviews.length > 0 ? noiseCount / cleanPreviews.length : 0;
+          return noiseRatio > 0.3 ? (
+            <div style={{ marginBottom: 12, padding: "10px 16px", background: C.amberLight, borderRadius: 8, border: `1px solid ${C.amberBorder}`, fontSize: 12, color: "#78350f" }}>
+              ⚠ High proportion of short or unrecognised titles detected — classification accuracy may be lower. Consider adding a <strong>description</strong> column or reviewing your data before running.
+            </div>
+          ) : null;
+        })()}
 
         {/* Preview table */}
         <Card style={{ padding: 0, overflow: "hidden" }}>
