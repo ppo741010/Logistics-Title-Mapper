@@ -155,12 +155,16 @@ _HOURS_POSITIONS_RE = re.compile(
     r'|multiple\s*(?:position|role)s?)\b',
     re.IGNORECASE,
 )
-_LOCATION_RE = re.compile(
-    r'[-–|,]\s*(?:NZ|AU|NZL|AUS|NZ/AU|AU/NZ|Auckland|Wellington|Christchurch'
+_LOCATION_CITIES = (
+    r'NZ|AU|NZL|AUS|NZ/AU|AU/NZ|Auckland|Wellington|Christchurch'
     r'|Hamilton|Dunedin|Sydney|Melbourne|Brisbane|Perth|Adelaide|Canberra'
     r'|Singapore|SGP|London|Manchester|Birmingham|UK|United Kingdom'
     r'|New York|Los Angeles|Chicago|Houston|US|USA|United States'
-    r'|APAC|ANZ|Remote|Hybrid|On-?site).*',
+    r'|APAC|ANZ|Remote|Hybrid|On-?site'
+)
+_LOCATION_RE = re.compile(
+    r'(?:[-–|,]\s*(?:' + _LOCATION_CITIES + r').*'
+    r'|\s*[\(\[]\s*(?:' + _LOCATION_CITIES + r')[^\)\]]*[\)\]])',
     re.IGNORECASE,
 )
 _EMOJI_RE       = re.compile(r'[\U0001F300-\U0001FAFF]|[☀-➿]|[︀-️]')
@@ -251,7 +255,10 @@ def _title_case(s: str) -> str:
     words = s.split()
     out = []
     for w in words:
-        if w.lower() in _PRESERVE_UPPER:
+        core = w.strip("(),/–-")
+        if core.lower() in _PRESERVE_UPPER:
+            out.append(w.upper())
+        elif "/" in w and all(p.lower() in _PRESERVE_UPPER for p in w.split("/")):
             out.append(w.upper())
         else:
             out.append(_TITLE_CASE_RE.sub(lambda m: m.group().upper(), w))
