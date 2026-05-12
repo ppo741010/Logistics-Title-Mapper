@@ -3974,5 +3974,69 @@
   "SAP Functional Consultant": {
     "skills": "SAP Module Configuration, Business Process Analysis, User Acceptance Testing, System Integration",
     "level": "Senior"
+  },
+  "AI Coordinator": {
+    "skills": "Generative AI, AI Tools, Prompt Engineering, Process Improvement, Stakeholder Management",
+    "level": "Mid"
+  },
+  "AI Specialist": {
+    "skills": "Generative AI, AI Tools, Prompt Engineering, Machine Learning, Data Analysis",
+    "level": "Senior"
+  },
+  "Digital Transformation Specialist": {
+    "skills": "AI Automation, Change Management, ERP Systems, Stakeholder Management, Process Improvement",
+    "level": "Senior"
+  },
+  "Digital Transformation Manager": {
+    "skills": "AI Automation, Change Management, ERP Systems, Stakeholder Management, Strategic Planning",
+    "level": "Management"
+  },
+  "Automation Analyst": {
+    "skills": "RPA, AI Automation, Process Improvement, Data Analysis, SQL",
+    "level": "Mid"
+  },
+  "Automation Specialist": {
+    "skills": "RPA, AI Automation, Process Improvement, ERP Systems, SQL",
+    "level": "Senior"
+  },
+  "Supply Chain Data Analyst": {
+    "skills": "Tableau, Power BI, SQL, Data Analysis, Supply Chain Management, KPI Management",
+    "level": "Mid"
+  },
+  "Logistics Data Analyst": {
+    "skills": "Tableau, Power BI, SQL, Data Analysis, KPI Management, TMS",
+    "level": "Mid"
+  },
+  "Logistics Analyst": {
+    "skills": "Tableau, Microsoft Excel (Advanced), KPI Management, Data Analysis, Supply Chain Management",
+    "level": "Mid"
+  },
+  "Quality Assurance Officer": {
+    "skills": "ISO 9001, SOP Adherence, Compliance, Quality Control, Continuous Improvement",
+    "level": "Mid"
+  },
+  "Pharmaceutical Logistics Coordinator": {
+    "skills": "GDP Compliance, TAPA, Cold Chain Management, SOP Adherence, Inventory Control",
+    "level": "Mid"
+  },
+  "Cold Chain Logistics Coordinator": {
+    "skills": "GDP Compliance, Cold Chain Management, Temperature Monitoring, SOP Adherence, Inventory Control",
+    "level": "Mid"
+  },
+  "Last Mile Operations Manager": {
+    "skills": "Last Mile Delivery, TMS, Route Optimisation, Fleet Management, KPI Management",
+    "level": "Management"
+  },
+  "Last Mile Coordinator": {
+    "skills": "Last Mile Delivery, TMS, Route Optimisation, Customer Service, SLA Management",
+    "level": "Mid"
+  },
+  "Control Tower Analyst": {
+    "skills": "Control Tower, Supply Chain Management, TMS, KPI Management, Data Analysis",
+    "level": "Mid"
+  },
+  "Control Tower Manager": {
+    "skills": "Control Tower, Supply Chain Management, TMS, Stakeholder Management, KPI Management",
+    "level": "Management"
   }
 }
