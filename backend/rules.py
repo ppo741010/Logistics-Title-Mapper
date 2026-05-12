@@ -165,12 +165,15 @@ _LOCATION_RE = re.compile(
 )
 _EMOJI_RE       = re.compile(r'[\U0001F300-\U0001FAFF]|[☀-➿]|[︀-️]')
 _MULTI_SEP_RE   = re.compile(r'(\s*[-–]\s*){2,}')
-_TRAILING_RE    = re.compile(r'[-–,|&]+$')
+_TRAILING_RE    = re.compile(r'[\s\-–,|&/]+$')
+_EMPTY_BRACKETS_RE = re.compile(r'[\(\[]\s*[\)\]]')
 _TITLE_CASE_RE  = re.compile(r'\b\w')
 _PRESERVE_UPPER = {"hse", "whs", "it", "hr", "erp", "sap", "qa", "qc", "kpi",
                    "apac", "anz", "au", "nz", "fcl", "lcl", "3pl", "4pl",
                    "b2b", "b2c", "po", "edi", "api", "dc", "id", "io",
-                   "fmcg", "ngo", "ceo", "coo", "cfo", "vp", "gm"}
+                   "fmcg", "ngo", "ceo", "coo", "cfo", "vp", "gm",
+                   "bd", "rpa", "ai", "ml", "wms", "tms", "sku", "skus",
+                   "gdp", "iso", "sop", "sla", "p&l", "rd", "iv"}
 
 # ── AI fallback (Claude Haiku) ───────────────────────────────────────────────
 
@@ -268,6 +271,7 @@ def clean_title(raw: str) -> str:
     for typo, fix in TYPO_MAP.items():
         tl = tl.replace(typo, fix)
     t = _MULTI_SEP_RE.sub(" – ", tl)
+    t = _EMPTY_BRACKETS_RE.sub("", t)
     t = _TRAILING_RE.sub("", t).strip()
     t = re.sub(r'\s+', ' ', t).strip()
     return _title_case(t) if t else raw.strip()
