@@ -764,8 +764,8 @@ function LandingPage({ onEnter }) {
     { icon: "🏷️", title: "Classify Roles",     desc: "Suggests functional area, seniority level, and work nature using a rule-based taxonomy." },
     { icon: "🧩", title: "Normalize Skills",   desc: "Maps raw skill phrases like 'WMS software' or 'advanced excel' to standard canonical labels." },
     { icon: "📂", title: "Bulk Processing",    desc: "Upload CSV or XLSX files with up to 10,000 rows. Map your own column names." },
-    { icon: "⬇️", title: "Export Ready",       desc: "Download structured output as CSV, JSON, or XLSX — ready for downstream use." },
-    { icon: "⚑",  title: "Flag for Review",    desc: "Highlights ambiguous, low-confidence, cross-functional, and out-of-scope titles automatically." },
+    { icon: "📈", title: "Data Analysis",      desc: "Auto-generate charts — domain distribution, seniority breakdown, top skills, and salary benchmarks. Export as PNG or PDF report." },
+    { icon: "✨", title: "AI Assistant",       desc: "Ask questions about your classified data in plain English. Hiring trends, skill gaps, salary comparisons and more. Pro plan." },
   ];
 
   const audiences = ["Recruiters cleaning job ad data", "HR teams standardizing job title libraries", "Analysts normalizing workforce data", "Operations teams building role taxonomies"];
@@ -789,7 +789,7 @@ function LandingPage({ onEnter }) {
         <div style={{ display: "inline-block", padding: "4px 14px", borderRadius: 20, border: "1px solid rgba(255,255,255,0.25)", background: "rgba(255,255,255,0.1)", color: "#c7d2fe", fontSize: 11, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 28 }}>
           Workflow Utility Tool · Logistics
         </div>
-        <h1 style={{ color: "#ffffff", fontSize: 46, fontWeight: 800, maxWidth: 680, lineHeight: 1.18, margin: "0 0 22px", letterSpacing: "-0.02em" }}>
+        <h1 style={{ color: "#fff", fontSize: 46, fontWeight: 800, maxWidth: 680, lineHeight: 1.18, margin: "0 0 22px", letterSpacing: "-0.02em" }}>
           Turn messy logistics job titles into structured data
         </h1>
         <p style={{ color: "#c7d2fe", fontSize: 17, maxWidth: 540, lineHeight: 1.75, margin: "0 0 38px" }}>

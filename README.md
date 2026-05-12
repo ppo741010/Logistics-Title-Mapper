@@ -38,29 +38,37 @@ Upload a CSV or XLSX file (up to 10,000 rows) and process everything at once:
 - **Multi-sheet XLSX support** — select which sheet to import when a workbook has multiple sheets
 - Auto-detect or manually map column names (title, description, country)
 - **Clean Preview** — review before/after cleaning for every title; edit any clean title manually before classification runs
+- **Data Analysis Charts** — automatically generated after processing: Domain Distribution, Seniority Breakdown, Top Skills, Salary by Domain
+- **PNG Export** — download charts as a screenshot image
+- **PDF Report** — 2-page A4 landscape export: page 1 is a summary report (stats + insights), page 2 is the charts
 - Download structured output as CSV, JSON, or Excel
 - Export includes `salary_range` and `salary_median` columns when country is provided
 
-### 3. Skill Mapper
+### 3. AI Assistant
+A floating chat bubble (bottom-right of the Bulk Upload results page) powered by Claude Haiku:
+- Ask questions about your uploaded dataset in plain language
+- Context from the classify results is automatically passed in
+- Available to authenticated Pro users
+- Examples: *"Which domain has the most senior roles?"*, *"Summarise the skill gaps in the dataset"*
+
+### 4. Skill Mapper
 Paste raw skill phrases from job descriptions and normalize them to standard canonical labels:
 - `warehouse management system` → `WMS`
 - `advanced excel` → `Microsoft Excel (Advanced)`
 - `generative ai`, `chatgpt` → `Generative AI`
-- `rpa`, `robotic process automation` → `RPA`
 - Covers logistics systems, AI tools, Microsoft/Google Office, accounting software (Xero, MYOB), project management tools, HR systems, and soft skills
 - Skill data loaded from `skill_normalize.json` — single source of truth shared with the backend
 
-### 4. Title Cleaner
+### 5. Title Cleaner
 See exactly how titles are transformed — useful for understanding the cleaning rules before running a bulk job:
 - Removes salary ranges, locations, shift patterns, contract types, noise phrases
 - Expands abbreviations (`Sr.` → `Senior`, `Ops Mgr` → `Operations Manager`)
 - Preserves known acronyms in uppercase (HSE, WMS, SAP, HR, IT, KPI, etc.)
 
-### 5. Export
+### 6. Export
 Configure and download structured output with selectable fields:
 - Choose which fields to include (raw title, clean title, domain, seniority, skills, salary, flags, etc.)
 - Export as CSV, JSON, or XLSX
-- Works with Bulk Upload results or demo data
 
 ---
 
@@ -76,8 +84,8 @@ Roles are classified into 9 domains:
 | Planning | Demand Planner, Supply Chain Analyst, Procurement Manager |
 | Operations | Operations Manager, HSE Manager, Logistics Coordinator |
 | Finance | Accounts Payable, FP&A Manager, Payroll Officer |
-| Sales | Account Manager, Business Development, Digital Marketing Manager |
-| IT Support | Systems Analyst, SAP Functional Consultant, IT Support Officer |
+| Sales | Account Manager, Business Development, BD Executive |
+| IT Support | IT Support Officer, Helpdesk, Technical Support, SAP Consultant |
 | Business Administration | EA, HR Coordinator, Office Manager |
 
 ---
@@ -100,8 +108,12 @@ All outputs are **suggested draft classifications** intended for normalization a
 | Layer | Technology |
 |-------|-----------|
 | Frontend | React + Vite, deployed on Vercel |
-| Backend | Python FastAPI, deployed on Render |
+| Backend | Python FastAPI, deployed on Render (Sydney) |
 | Classification | Rule-based engine + Claude Haiku AI fallback |
+| AI Assistant | Claude Haiku (Anthropic API) — chat only, not classification |
+| Charts | Recharts (frontend, no API cost) |
+| PDF Export | jsPDF + html2canvas |
+| Auth | Supabase Auth (JWT) |
 | Skill data | `skill_normalize.json` (shared frontend/backend) |
 | Config | `logistics_config.json` — domain keywords, level mapping, salary benchmarks |
 | File handling | SheetJS (xlsx) for CSV/XLSX parsing and export |
@@ -112,13 +124,15 @@ The frontend calls the Python API for all classification. A local JavaScript fal
 
 ## JSON Config Files
 
-All classification data lives in `backend/json/` (synced from [logistics-data-pipeline](https://github.com/ppo741010/logistics-data-pipeline)):
+All classification data lives in `backend/json/`:
 
 | File | Purpose |
 |------|---------|
 | `logistics_config.json` | Domain keywords, fuzzy repair rules, level mapping, salary benchmarks |
 | `skill_normalize.json` | Skill synonym map (also copied to `src/` for frontend use) |
 | `skills_knowledge_map.json` | 992 job title → skills/level lookup entries |
+
+> `backend/json/` is the source of truth. After editing, copy `skill_normalize.json` to `src/skill_normalize.json` and sync to seek-pipeline with `cp backend/json/*.json ../seek-pipeline/json/`.
 
 ---
 
@@ -139,7 +153,7 @@ uvicorn main:app --reload
 
 Backend runs at `http://localhost:8000`. Set `VITE_API_URL=http://localhost:8000` in a `.env.local` file to point the frontend at your local backend.
 
-Set `ANTHROPIC_API_KEY` in your environment to enable the AI fallback in local development.
+Set `ANTHROPIC_API_KEY` in your environment to enable the AI fallback and AI Assistant in local development.
 
 ---
 
