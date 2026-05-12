@@ -1949,7 +1949,8 @@ function SkillMapper() {
   function mapSkills() {
     const phrases = input.split(/[,\n]+/).map(s => s.trim().toLowerCase()).filter(Boolean);
     setResults(phrases.map(phrase => {
-      const match = Object.entries(SKILL_SYNONYMS).find(([k]) => phrase.includes(k) || k.includes(phrase));
+      const exact = Object.entries(SKILL_SYNONYMS).find(([k]) => k === phrase);
+      const match = exact ?? Object.entries(SKILL_SYNONYMS).find(([k]) => phrase.includes(k) && k.length > 3);
       return { raw: phrase, normalized: match ? match[1] : null };
     }));
   }
