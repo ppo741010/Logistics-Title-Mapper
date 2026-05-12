@@ -3,6 +3,9 @@ import * as XLSX from "xlsx";
 import { analyzeViaAPI, bulkAnalyzeViaAPI, cleanPreviewViaAPI, submitFeedback, chatViaAPI } from "./api.js";
 import skillConfig from "./skill_normalize.json";
 import { supabase } from "./supabase.js";
+import { BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend } from "recharts";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
 
 // ── Classification data ─────────────────────────────────────────────────────
 
@@ -1076,6 +1079,395 @@ function InlineFeedback({ title, result }) {
 
 // ── Page 2: Bulk Upload ─────────────────────────────────────────────────────
 
+const DOMAIN_PALETTE = [
+  "#3b6ef5","#16a34a","#d97706","#dc2626","#7c3aed",
+  "#0891b2","#db2777","#65a30d","#ea580c","#6b7280",
+];
+
+function ResultCharts({ results }) {
+  const chartRef = useRef(null);
+  const [exporting, setExporting] = useState(false);
+
+  async function downloadPNG() {
+    if (!chartRef.current) return;
+    setExporting(true);
+    const canvas = await html2canvas(chartRef.current, { scale: 2, backgroundColor: "#ffffff" });
+    const link = document.createElement("a");
+    link.download = "logititles_analysis.png";
+    link.href = canvas.toDataURL("image/png");
+    link.click();
+    setExporting(false);
+  }
+
+  async function downloadPDF() {
+    if (!chartRef.current) return;
+    setExporting(true);
+
+    const canvas = await html2canvas(chartRef.current, { scale: 2, backgroundColor: "#ffffff" });
+    const imgData = canvas.toDataURL("image/png");
+
+    const pageW = 841.89, pageH = 595.28; // A4 landscape in pts
+    const margin = 32;
+    const pdf = new jsPDF({ orientation: "landscape", unit: "pt", format: "a4" });
+
+    // ── Page 1: Summary ──────────────────────────────────────────────
+    const today = new Date().toLocaleDateString("en-NZ", { year: "numeric", month: "long", day: "numeric" });
+    const total = results.length;
+    const structured = results.filter(r => !r.needsReview && r.domain !== "Other/Noise").length;
+    const review = results.filter(r => r.needsReview && r.domain !== "Other/Noise").length;
+    const outOfScope = results.filter(r => r.domain === "Other/Noise").length;
+
+    const domainCounts = {};
+    const skillCounts = {};
+    const domainSalary = {};
+    results.forEach(r => {
+      if (r.domain) domainCounts[r.domain] = (domainCounts[r.domain] || 0) + 1;
+      (r.skills || []).forEach(s => { skillCounts[s] = (skillCounts[s] || 0) + 1; });
+      if (r.salaryBenchmark?.median && r.domain && r.domain !== "Other/Noise") {
+        if (!domainSalary[r.domain]) domainSalary[r.domain] = [];
+        domainSalary[r.domain].push(r.salaryBenchmark.median);
+      }
+    });
+    const topDomains = Object.entries(domainCounts).sort((a,b) => b[1]-a[1]).slice(0,3).map(([d,c]) => `${d} (${c})`);
+    const topSkills = Object.entries(skillCounts).sort((a,b) => b[1]-a[1]).slice(0,5).map(([s]) => s);
+    const topSalaryDomain = Object.entries(domainSalary)
+      .map(([d, vals]) => [d, Math.round(vals.reduce((a,b) => a+b,0)/vals.length)])
+      .sort((a,b) => b[1]-a[1])[0];
+
+    // Header bar
+    pdf.setFillColor(59, 110, 245);
+    pdf.rect(0, 0, pageW, 52, "F");
+    pdf.setTextColor(255, 255, 255);
+    pdf.setFontSize(20);
+    pdf.setFont("helvetica", "bold");
+    pdf.text("Logititles — Classification Report", margin, 34);
+    pdf.setFontSize(10);
+    pdf.setFont("helvetica", "normal");
+    pdf.text(today, pageW - margin, 34, { align: "right" });
+
+    // Summary section title
+    pdf.setTextColor(17, 24, 39);
+    pdf.setFontSize(13);
+    pdf.setFont("helvetica", "bold");
+    pdf.text("Summary", margin, 80);
+
+    // Stats row
+    const stats = [
+      { label: "Total Records", value: String(total), color: [59, 110, 245] },
+      { label: "Structured", value: String(structured), color: [22, 163, 74] },
+      { label: "Review Required", value: String(review), color: [217, 119, 6] },
+      { label: "Out of Scope", value: String(outOfScope), color: [220, 38, 38] },
+    ];
+    const boxW = (pageW - margin * 2 - 24) / 4;
+    stats.forEach(({ label, value, color }, i) => {
+      const x = margin + i * (boxW + 8);
+      pdf.setFillColor(248, 250, 252);
+      pdf.roundedRect(x, 92, boxW, 52, 4, 4, "F");
+      pdf.setTextColor(...color);
+      pdf.setFontSize(22);
+      pdf.setFont("helvetica", "bold");
+      pdf.text(value, x + 12, 120);
+      pdf.setTextColor(107, 114, 128);
+      pdf.setFontSize(9);
+      pdf.setFont("helvetica", "normal");
+      pdf.text(label, x + 12, 134);
+    });
+
+    // Insights
+    let y = 168;
+    pdf.setFontSize(13);
+    pdf.setFont("helvetica", "bold");
+    pdf.setTextColor(17, 24, 39);
+    pdf.text("Key Insights", margin, y); y += 18;
+
+    const insights = [
+      `Top domains: ${topDomains.join(", ")}`,
+      `Most common skills: ${topSkills.join(", ")}`,
+      topSalaryDomain ? `Highest avg salary: ${topSalaryDomain[0]} — NZD $${topSalaryDomain[1].toLocaleString()}` : null,
+      `Classification rate: ${total > 0 ? Math.round((structured / total) * 100) : 0}% structured successfully`,
+    ].filter(Boolean);
+
+    pdf.setFontSize(10);
+    pdf.setFont("helvetica", "normal");
+    pdf.setTextColor(55, 65, 81);
+    insights.forEach(line => {
+      pdf.text(`• ${line}`, margin + 8, y);
+      y += 16;
+    });
+
+    // Footer
+    pdf.setFontSize(8);
+    pdf.setTextColor(156, 163, 175);
+    pdf.text("Generated by Logititles · logititles.com · Market estimates only, not financial advice.", margin, pageH - 16);
+
+    // ── Page 2: Charts ───────────────────────────────────────────────
+    pdf.addPage();
+    pdf.setFillColor(59, 110, 245);
+    pdf.rect(0, 0, pageW, 52, "F");
+    pdf.setTextColor(255, 255, 255);
+    pdf.setFontSize(20);
+    pdf.setFont("helvetica", "bold");
+    pdf.text("Logititles — Data Analysis Charts", margin, 34);
+    pdf.setFontSize(10);
+    pdf.setFont("helvetica", "normal");
+    pdf.text(today, pageW - margin, 34, { align: "right" });
+
+    const chartY = 60;
+    const chartH = pageH - chartY - 24;
+    const chartW = pageW - margin * 2;
+    const ratio = canvas.width / canvas.height;
+    const finalH = Math.min(chartH, chartW / ratio);
+    const finalW = finalH * ratio;
+    pdf.addImage(imgData, "PNG", margin, chartY, finalW, finalH);
+    pdf.setFontSize(8);
+    pdf.setTextColor(156, 163, 175);
+    pdf.text("Generated by Logititles · logititles.com · Market estimates only, not financial advice.", margin, pageH - 16);
+
+    pdf.save("logititles_report.pdf");
+    setExporting(false);
+  }
+
+  const domainCounts = {};
+  const seniorityCounts = {};
+  const skillCounts = {};
+  const domainSalary = {};
+
+  results.forEach(r => {
+    if (r.domain) domainCounts[r.domain] = (domainCounts[r.domain] || 0) + 1;
+    if (r.seniority) seniorityCounts[r.seniority] = (seniorityCounts[r.seniority] || 0) + 1;
+    (r.skills || []).forEach(s => { skillCounts[s] = (skillCounts[s] || 0) + 1; });
+    if (r.salaryBenchmark?.median && r.domain && r.domain !== "Other/Noise") {
+      if (!domainSalary[r.domain]) domainSalary[r.domain] = [];
+      domainSalary[r.domain].push(r.salaryBenchmark.median);
+    }
+  });
+
+  const domainData = Object.entries(domainCounts)
+    .sort((a, b) => b[1] - a[1])
+    .map(([name, value]) => ({ name, value }));
+
+  const seniorityOrder = ["Executive","Manager","Senior","Mid Level","Entry Level","Unknown"];
+  const seniorityData = seniorityOrder
+    .filter(s => seniorityCounts[s])
+    .map(s => ({ name: s, value: seniorityCounts[s] }));
+
+  const topSkillsData = Object.entries(skillCounts)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 10)
+    .map(([name, value]) => ({ name, value }));
+
+  const salaryData = Object.entries(domainSalary)
+    .map(([domain, medians]) => ({
+      name: domain,
+      median: Math.round(medians.reduce((a, b) => a + b, 0) / medians.length),
+    }))
+    .sort((a, b) => b.median - a.median);
+
+  return (
+    <Card style={{ padding: "20px 24px" }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
+        <div style={{ fontWeight: 700, fontSize: 15, color: C.text }}>Data Analysis</div>
+        <div style={{ display: "flex", gap: 8 }}>
+          <button onClick={downloadPNG} disabled={exporting}
+            style={{ padding: "6px 14px", borderRadius: 8, border: `1px solid ${C.border}`, background: C.card, fontSize: 12, fontWeight: 600, color: C.textSub, cursor: exporting ? "default" : "pointer", fontFamily: "inherit" }}>
+            {exporting ? "Exporting…" : "⬇ PNG"}
+          </button>
+          <button onClick={downloadPDF} disabled={exporting}
+            style={{ padding: "6px 14px", borderRadius: 8, border: `1px solid ${C.border}`, background: C.card, fontSize: 12, fontWeight: 600, color: C.textSub, cursor: exporting ? "default" : "pointer", fontFamily: "inherit" }}>
+            {exporting ? "Exporting…" : "⬇ PDF"}
+          </button>
+        </div>
+      </div>
+      <div ref={chartRef}>
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 32 }}>
+
+        {/* Domain bar chart */}
+        <div>
+          <div style={{ fontSize: 12, fontWeight: 600, color: C.textMuted, marginBottom: 12, textTransform: "uppercase", letterSpacing: "0.05em" }}>Domain Distribution</div>
+          <ResponsiveContainer width="100%" height={220}>
+            <BarChart data={domainData} layout="vertical" margin={{ left: 8, right: 16, top: 0, bottom: 0 }}>
+              <XAxis type="number" tick={{ fontSize: 11, fill: C.textMuted }} axisLine={false} tickLine={false} />
+              <YAxis type="category" dataKey="name" tick={{ fontSize: 11, fill: C.text }} axisLine={false} tickLine={false} width={130} />
+              <Tooltip formatter={(v) => [v, "Count"]} contentStyle={{ fontSize: 12, borderRadius: 8, border: `1px solid ${C.border}` }} />
+              <Bar dataKey="value" radius={[0, 4, 4, 0]}>
+                {domainData.map((_, i) => <Cell key={i} fill={DOMAIN_PALETTE[i % DOMAIN_PALETTE.length]} />)}
+              </Bar>
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+
+        {/* Seniority pie chart */}
+        <div>
+          <div style={{ fontSize: 12, fontWeight: 600, color: C.textMuted, marginBottom: 12, textTransform: "uppercase", letterSpacing: "0.05em" }}>Seniority Breakdown</div>
+          <ResponsiveContainer width="100%" height={220}>
+            <PieChart>
+              <Pie data={seniorityData} cx="50%" cy="50%" innerRadius={55} outerRadius={85} dataKey="value" paddingAngle={2}>
+                {seniorityData.map((_, i) => <Cell key={i} fill={DOMAIN_PALETTE[i % DOMAIN_PALETTE.length]} />)}
+              </Pie>
+              <Tooltip formatter={(v, n) => [v, n]} contentStyle={{ fontSize: 12, borderRadius: 8, border: `1px solid ${C.border}` }} />
+              <Legend iconType="circle" iconSize={8} formatter={(v) => <span style={{ fontSize: 11, color: C.text }}>{v}</span>} />
+            </PieChart>
+          </ResponsiveContainer>
+        </div>
+
+        {/* Top Skills */}
+        {topSkillsData.length > 0 && (
+          <div>
+            <div style={{ fontSize: 12, fontWeight: 600, color: C.textMuted, marginBottom: 12, textTransform: "uppercase", letterSpacing: "0.05em" }}>Top Skills in Dataset</div>
+            <ResponsiveContainer width="100%" height={260}>
+              <BarChart data={topSkillsData} layout="vertical" margin={{ left: 8, right: 16, top: 0, bottom: 0 }}>
+                <XAxis type="number" tick={{ fontSize: 11, fill: C.textMuted }} axisLine={false} tickLine={false} />
+                <YAxis type="category" dataKey="name" tick={{ fontSize: 11, fill: C.text }} axisLine={false} tickLine={false} width={150} />
+                <Tooltip formatter={(v) => [v, "Count"]} contentStyle={{ fontSize: 12, borderRadius: 8, border: `1px solid ${C.border}` }} />
+                <Bar dataKey="value" radius={[0, 4, 4, 0]} fill={C.accent} />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+        )}
+
+        {/* Salary by Domain */}
+        {salaryData.length > 0 && (
+          <div>
+            <div style={{ fontSize: 12, fontWeight: 600, color: C.textMuted, marginBottom: 12, textTransform: "uppercase", letterSpacing: "0.05em" }}>Avg Salary Benchmark by Domain (NZD)</div>
+            <ResponsiveContainer width="100%" height={260}>
+              <BarChart data={salaryData} layout="vertical" margin={{ left: 8, right: 16, top: 0, bottom: 0 }}>
+                <XAxis type="number" tick={{ fontSize: 11, fill: C.textMuted }} axisLine={false} tickLine={false} tickFormatter={v => `$${(v/1000).toFixed(0)}k`} />
+                <YAxis type="category" dataKey="name" tick={{ fontSize: 11, fill: C.text }} axisLine={false} tickLine={false} width={130} />
+                <Tooltip formatter={(v) => [`NZD $${v.toLocaleString()}`, "Avg Median"]} contentStyle={{ fontSize: 12, borderRadius: 8, border: `1px solid ${C.border}` }} />
+                <Bar dataKey="median" radius={[0, 4, 4, 0]} fill="#16a34a" />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+        )}
+
+      </div>
+      </div>
+    </Card>
+  );
+}
+
+function BulkAIBubble({ results }) {
+  const [open, setOpen] = useState(false);
+  const [messages, setMessages] = useState([
+    { role: "assistant", content: "Hi! Ask me anything about your classified data — domain breakdown, skills, salary, or specific titles." }
+  ]);
+  const [input, setInput] = useState("");
+  const [loading, setLoading] = useState(false);
+  const bottomRef = useRef(null);
+
+  useEffect(() => {
+    if (open) bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages, loading, open]);
+
+  function buildContext() {
+    const domainCounts = {};
+    const skillCounts = {};
+    results.forEach(r => {
+      if (r.domain) domainCounts[r.domain] = (domainCounts[r.domain] || 0) + 1;
+      (r.skills || []).forEach(s => { skillCounts[s] = (skillCounts[s] || 0) + 1; });
+    });
+    const topDomains = Object.entries(domainCounts).sort((a,b) => b[1]-a[1]).map(([d,c]) => `${d}: ${c}`).join(", ");
+    const topSkills = Object.entries(skillCounts).sort((a,b) => b[1]-a[1]).slice(0,8).map(([s,c]) => `${s}(${c})`).join(", ");
+    const total = results.length;
+    const noise = results.filter(r => r.domain === "Other/Noise").length;
+    return `Dataset summary: ${total} records total, ${noise} Other/Noise. Domain breakdown: ${topDomains}. Top skills: ${topSkills}.`;
+  }
+
+  async function send() {
+    const msg = input.trim();
+    if (!msg || loading) return;
+    setInput("");
+    const updated = [...messages, { role: "user", content: msg }];
+    setMessages(updated);
+    setLoading(true);
+    const history = updated.slice(1, -1).map(m => ({ role: m.role, content: m.content }));
+    const { data: { session } } = await supabase.auth.getSession();
+    const token = session?.access_token ?? "";
+    const ctx = results.length > 0 ? buildContext() : "";
+    const reply = await chatViaAPI(msg, history, ctx, token);
+    setMessages(prev => [...prev, { role: "assistant", content: reply || "Sorry, I couldn't get a response. Please try again." }]);
+    setLoading(false);
+  }
+
+  return (
+    <>
+      {/* Floating button */}
+      <div
+        onClick={() => setOpen(o => !o)}
+        style={{
+          position: "fixed", bottom: 28, right: 28, zIndex: 1000,
+          width: 52, height: 52, borderRadius: "50%",
+          background: C.accent, color: "#fff",
+          display: "flex", alignItems: "center", justifyContent: "center",
+          fontSize: 22, cursor: "pointer", boxShadow: "0 4px 16px rgba(59,110,245,0.4)",
+          transition: "transform 0.15s",
+        }}
+        title="AI Assistant"
+      >
+        {open ? "✕" : "✨"}
+      </div>
+
+      {/* Chat panel */}
+      {open && (
+        <div style={{
+          position: "fixed", bottom: 92, right: 28, zIndex: 999,
+          width: 360, height: 480,
+          background: C.card, borderRadius: 16,
+          boxShadow: "0 8px 32px rgba(0,0,0,0.15)",
+          border: `1px solid ${C.border}`,
+          display: "flex", flexDirection: "column", overflow: "hidden",
+        }}>
+          {/* Header */}
+          <div style={{ padding: "12px 16px", borderBottom: `1px solid ${C.border}`, background: C.accent, color: "#fff" }}>
+            <div style={{ fontWeight: 700, fontSize: 14 }}>✨ AI Assistant</div>
+            <div style={{ fontSize: 11, opacity: 0.8, marginTop: 2 }}>
+              {results.length > 0 ? `Analysing ${results.length} classified records` : "Ask about logistics job titles"}
+            </div>
+          </div>
+
+          {/* Messages */}
+          <div style={{ flex: 1, overflowY: "auto", padding: 12, display: "flex", flexDirection: "column", gap: 10 }}>
+            {messages.map((m, i) => (
+              <div key={i} style={{ display: "flex", justifyContent: m.role === "user" ? "flex-end" : "flex-start" }}>
+                <div style={{
+                  maxWidth: "85%", padding: "8px 12px",
+                  borderRadius: m.role === "user" ? "14px 14px 4px 14px" : "14px 14px 14px 4px",
+                  background: m.role === "user" ? C.accent : C.bg,
+                  color: m.role === "user" ? "#fff" : C.text,
+                  fontSize: 12, lineHeight: 1.6, whiteSpace: "pre-wrap",
+                  border: m.role === "assistant" ? `1px solid ${C.border}` : "none",
+                }}>{m.content}</div>
+              </div>
+            ))}
+            {loading && (
+              <div style={{ display: "flex", justifyContent: "flex-start" }}>
+                <div style={{ background: C.bg, border: `1px solid ${C.border}`, borderRadius: "14px 14px 14px 4px", padding: "8px 14px", fontSize: 12, color: C.textMuted }}>Thinking…</div>
+              </div>
+            )}
+            <div ref={bottomRef} />
+          </div>
+
+          {/* Input */}
+          <div style={{ padding: "10px 12px", borderTop: `1px solid ${C.border}`, display: "flex", gap: 8 }}>
+            <input
+              value={input}
+              onChange={e => setInput(e.target.value)}
+              onKeyDown={e => e.key === "Enter" && !e.shiftKey && send()}
+              placeholder="Ask about your data…"
+              style={{ flex: 1, padding: "8px 12px", borderRadius: 8, border: `1px solid ${C.border}`, fontSize: 12, fontFamily: "inherit", outline: "none" }}
+            />
+            <button
+              onClick={send}
+              disabled={loading || !input.trim()}
+              style={{ padding: "8px 14px", borderRadius: 8, border: "none", background: loading || !input.trim() ? C.border : C.accent, color: loading || !input.trim() ? C.textMuted : "#fff", fontWeight: 700, fontSize: 12, cursor: loading || !input.trim() ? "default" : "pointer", fontFamily: "inherit" }}
+            >Send</button>
+          </div>
+        </div>
+      )}
+    </>
+  );
+}
+
 function BulkUpload({ onResultsReady }) {
   const [phase, setPhase]               = useState("idle"); // idle | error | sheet-select | mapping | ready | previewing | processing | done
   const [error, setError]               = useState(null);
@@ -1432,6 +1824,10 @@ function BulkUpload({ onResultsReady }) {
             ))}
           </div>
         )}
+
+        {/* Charts — shown when done */}
+        {phase === "done" && <ResultCharts results={results} />}
+        {phase === "done" && <BulkAIBubble results={results} />}
 
         {/* Preview table */}
         <Card style={{ padding: 0, overflow: "hidden" }}>
