@@ -2919,12 +2919,36 @@ function MarketInsights() {
     return [...main, { name: "Other", value: otherVal }];
   }
 
+  function salaryByLevel(rows) {
+    const LEVEL_ORDER = ["Executive", "Manager", "Senior", "Mid Level", "Intermediate / Staff", "Entry Level"];
+    const buckets = {};
+    rows.forEach(r => {
+      if (!r.salary_yearly) return;
+      if (r.salary_yearly < 20000 || r.salary_yearly > 400000) return;
+      const label = cleanLabel(r.level);
+      if (!label) return;
+      if (!buckets[label]) buckets[label] = [];
+      buckets[label].push(r.salary_yearly);
+    });
+    return LEVEL_ORDER
+      .filter(l => buckets[l] && buckets[l].length >= 3)
+      .map(l => ({
+        name: l,
+        avg:    Math.round(buckets[l].reduce((a, b) => a + b, 0) / buckets[l].length / 1000) * 1000,
+        median: Math.round([...buckets[l]].sort((a,b)=>a-b)[Math.floor(buckets[l].length/2)] / 1000) * 1000,
+        min:    Math.round(Math.min(...buckets[l]) / 1000) * 1000,
+        max:    Math.round(Math.max(...buckets[l]) / 1000) * 1000,
+        count:  buckets[l].length,
+      }));
+  }
+
   const total = data?.length ?? 0;
-  const domainData  = data ? countBy(data, "domain")    : [];
-  const levelData   = data ? mergeTinySlices(countBy(data, "level"))     : [];
-  const natureData  = data ? countBy(data, "work_nature") : [];
-  const skillData   = data ? topSkills(data)            : [];
-  const salaryData  = data ? salaryByDomain(data)       : [];
+  const domainData    = data ? countBy(data, "domain")                    : [];
+  const levelData     = data ? mergeTinySlices(countBy(data, "level"))    : [];
+  const natureData    = data ? countBy(data, "work_nature")               : [];
+  const skillData     = data ? topSkills(data)                            : [];
+  const salaryData    = data ? salaryByDomain(data)                       : [];
+  const salaryLvlData = data ? salaryByLevel(data)                        : [];
 
   return (
     <div>
@@ -3061,6 +3085,38 @@ function MarketInsights() {
                   }} />
                   <Bar dataKey="avg" radius={[4,4,0,0]} isAnimationActive={false}>
                     {salaryData.map((_, i) => <Cell key={i} fill={CHART_COLORS[i % CHART_COLORS.length]} />)}
+                  </Bar>
+                </BarChart>
+              </ResponsiveContainer>
+            </Card>
+          )}
+
+          {/* Salary by Seniority Level */}
+          {salaryLvlData.length > 0 && (
+            <Card style={{ gridColumn: "1 / -1" }}>
+              <div style={{ fontSize: 11, fontWeight: 700, color: C.accent, textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 4 }}>
+                Avg Salary by Seniority ({country === "AU" ? "AUD" : country === "NZ" ? "NZD" : "NZD/AUD"}/yr)
+              </div>
+              <div style={{ fontSize: 11, color: C.textMuted, marginBottom: 14 }}>Average salary from Executive down to Entry Level — based on roles with salary data only.</div>
+              <ResponsiveContainer width="100%" height={220}>
+                <BarChart data={salaryLvlData} margin={{ left: 10, right: 20 }}>
+                  <XAxis dataKey="name" tick={{ fontSize: 10 }} />
+                  <YAxis tick={{ fontSize: 10 }} tickFormatter={v => `$${(v/1000).toFixed(0)}k`} />
+                  <Tooltip content={({ active, payload }) => {
+                    if (!active || !payload?.length) return null;
+                    const d = payload[0].payload;
+                    return (
+                      <div style={{ background: "#fff", border: "1px solid #e5e7eb", borderRadius: 8, padding: "8px 12px", fontSize: 12 }}>
+                        <div style={{ fontWeight: 700 }}>{d.name}</div>
+                        <div>Avg: <strong>${d.avg.toLocaleString()}</strong></div>
+                        <div>Median: <strong>${d.median.toLocaleString()}</strong></div>
+                        <div style={{ color: "#6b7280" }}>Range: ${d.min.toLocaleString()} – ${d.max.toLocaleString()}</div>
+                        <div style={{ color: "#6b7280" }}>Based on {d.count} records</div>
+                      </div>
+                    );
+                  }} />
+                  <Bar dataKey="avg" radius={[4,4,0,0]} isAnimationActive={false}>
+                    {salaryLvlData.map((_, i) => <Cell key={i} fill={CHART_COLORS[i % CHART_COLORS.length]} />)}
                   </Bar>
                 </BarChart>
               </ResponsiveContainer>
