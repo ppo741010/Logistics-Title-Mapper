@@ -188,6 +188,39 @@ function AILoginWall({ onLogin }) {
   );
 }
 
+function AIProWall({ onLogin, isLoggedIn }) {
+  return (
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", height: "60vh", gap: 16, textAlign: "center", padding: "0 24px" }}>
+      <div style={{ fontSize: 48 }}>✨</div>
+      <div style={{ fontWeight: 700, fontSize: 20, color: C.text }}>AI Assistant</div>
+      <div style={{ display: "inline-block", padding: "3px 12px", borderRadius: 20, background: "#fef3c7", border: "1px solid #fcd34d", color: "#92400e", fontSize: 11, fontWeight: 700, letterSpacing: "0.06em", textTransform: "uppercase", marginTop: -4 }}>Pro Plan</div>
+      <div style={{ fontSize: 14, color: C.textMuted, maxWidth: 340, lineHeight: 1.65 }}>
+        Ask questions about your classified data in plain English — hiring trends, skill gaps, salary comparisons, and more.
+      </div>
+      <div style={{ padding: "14px 20px", borderRadius: 10, background: C.bg, border: `1px solid ${C.border}`, maxWidth: 320, width: "100%" }}>
+        <div style={{ fontSize: 13, fontWeight: 700, color: C.text, marginBottom: 8 }}>Pro — NZ$29/mo</div>
+        {["Unlimited Bulk Upload (10,000 rows)", "AI Assistant (100 messages/month)", "All charts, PDF & PNG export"].map(f => (
+          <div key={f} style={{ fontSize: 12, color: C.textSub, display: "flex", gap: 8, marginBottom: 5 }}>
+            <span style={{ color: C.green }}>✓</span>{f}
+          </div>
+        ))}
+      </div>
+      <a href="https://buy.stripe.com/logititles-pro" target="_blank" rel="noopener noreferrer"
+        style={{ padding: "11px 32px", borderRadius: 9, background: C.accent, color: "#fff", fontWeight: 700, fontSize: 14, textDecoration: "none", marginTop: 4 }}>
+        Upgrade to Pro →
+      </a>
+      {!isLoggedIn && (
+        <button onClick={onLogin} style={{ background: "none", border: "none", cursor: "pointer", fontSize: 13, color: C.accent, fontFamily: "inherit", textDecoration: "underline" }}>
+          Already have an account? Sign in
+        </button>
+      )}
+      <div style={{ fontSize: 11, color: C.textMuted, maxWidth: 300 }}>
+        Plan activated within 24 hours. For urgent access contact logititles@gmail.com
+      </div>
+    </div>
+  );
+}
+
 function FeedbackModal({ page = "", title = "", result = "", onClose }) {
   const [step, setStep] = useState("rate");   // "rate" | "comment" | "done"
   const [rating, setRating] = useState(null);
@@ -850,16 +883,45 @@ const SA_EXAMPLES = [
   "BD Executive Last Mile AU",
 ];
 
-function SingleAnalyzer({ onAskAI }) {
+const ANALYZER_GUEST_LIMIT = 10;
+const ANALYZER_LS_KEY = "analyzer_usage";
+
+function getGuestUsage() {
+  try {
+    const raw = localStorage.getItem(ANALYZER_LS_KEY);
+    if (!raw) return { count: 0, date: new Date().toDateString() };
+    const parsed = JSON.parse(raw);
+    if (parsed.date !== new Date().toDateString()) return { count: 0, date: new Date().toDateString() };
+    return parsed;
+  } catch { return { count: 0, date: new Date().toDateString() }; }
+}
+
+function incrementGuestUsage() {
+  const usage = getGuestUsage();
+  usage.count += 1;
+  localStorage.setItem(ANALYZER_LS_KEY, JSON.stringify(usage));
+  return usage.count;
+}
+
+function SingleAnalyzer({ onAskAI, user, planKey = "guest", onLogin }) {
   const isMobile = useIsMobile();
   const [title, setTitle]   = useState("");
   const [desc, setDesc]     = useState("");
   const [country, setCountry] = useState("");
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [guestUsage, setGuestUsage] = useState(() => getGuestUsage());
+
+  const isGuest = !user;
+  const guestBlocked = isGuest && guestUsage.count >= ANALYZER_GUEST_LIMIT;
 
   async function run() {
-    if (!title.trim()) return;
+    if (!title.trim() || loading) return;
+    if (guestBlocked) return;
+    if (isGuest) {
+      const newCount = incrementGuestUsage();
+      setGuestUsage({ count: newCount, date: new Date().toDateString() });
+    }
     setLoading(true); setResult(null);
     const apiResult = await analyzeViaAPI(title, desc, country);
     setResult(apiResult ?? { ...analyze(title, desc, country), source: "local" });
@@ -898,9 +960,17 @@ function SingleAnalyzer({ onAskAI }) {
             </select>
           </div>
 
-          <button onClick={run} disabled={!title.trim() || loading}
-            style={{ width: "100%", padding: "12px", borderRadius: 8, background: title.trim() ? C.accent : "#d1d5db", color: "#fff", border: "none", fontSize: 14, fontWeight: 700, cursor: title.trim() ? "pointer" : "default", fontFamily: "inherit" }}>
-            {loading ? "Processing…" : "Analyze →"}
+          {isGuest && (
+            <div style={{ marginBottom: 14, padding: "9px 13px", borderRadius: 8, background: guestBlocked ? "#fef2f2" : "#fffbeb", border: `1px solid ${guestBlocked ? "#fca5a5" : "#fde68a"}`, fontSize: 12, color: guestBlocked ? "#b91c1c" : "#92400e" }}>
+              {guestBlocked
+                ? <>Daily limit reached (10/10). <button onClick={onLogin} style={{ background: "none", border: "none", color: C.accent, fontWeight: 700, cursor: "pointer", padding: 0, fontFamily: "inherit", fontSize: 12 }}>Sign in</button> for unlimited access.</>
+                : <>Guest: {guestUsage.count}/{ANALYZER_GUEST_LIMIT} free analyses today. <button onClick={onLogin} style={{ background: "none", border: "none", color: C.accent, fontWeight: 700, cursor: "pointer", padding: 0, fontFamily: "inherit", fontSize: 12 }}>Sign in</button> to remove limit.</>
+              }
+            </div>
+          )}
+          <button onClick={run} disabled={!title.trim() || loading || guestBlocked}
+            style={{ width: "100%", padding: "12px", borderRadius: 8, background: (title.trim() && !guestBlocked) ? C.accent : "#d1d5db", color: "#fff", border: "none", fontSize: 14, fontWeight: 700, cursor: (title.trim() && !guestBlocked) ? "pointer" : "default", fontFamily: "inherit" }}>
+            {loading ? "Processing…" : guestBlocked ? "Daily limit reached" : "Analyze →"}
           </button>
 
           <div style={{ marginTop: 18, paddingTop: 16, borderTop: `1px solid ${C.border}` }}>
@@ -1476,7 +1546,7 @@ function BulkAIBubble({ results }) {
   );
 }
 
-function BulkUpload({ onResultsReady }) {
+function BulkUpload({ onResultsReady, user, limits = { bulk: 100 }, userPlan, onLogin, planKey = "guest" }) {
   const [phase, setPhase]               = useState("idle"); // idle | error | sheet-select | mapping | ready | previewing | processing | done
   const [error, setError]               = useState(null);
   const [fileName, setFileName]         = useState("");
@@ -1530,7 +1600,18 @@ function BulkUpload({ onResultsReady }) {
   function applyParsed(parsed) {
     const { headers: hdrs, rows } = parsed;
     if (!rows.length) throw new Error("The file has no data rows.");
-    setParsedRows(rows); setHeaders(hdrs);
+    const limited = rows.slice(0, limits.bulk);
+    const trimmed = rows.length > limits.bulk;
+    setParsedRows(limited); setHeaders(hdrs);
+    if (trimmed) {
+      const planLabel = !user ? "guest" : (userPlan?.plan ?? "basic");
+      const upgradeMsg = planLabel === "guest"
+        ? `Guest users are limited to ${limits.bulk} rows. Sign in for more.`
+        : planLabel === "basic"
+        ? `Basic plan is limited to ${limits.bulk} rows. Upgrade to Pro for up to 10,000 rows.`
+        : "";
+      if (upgradeMsg) setError(`⚠ File has ${rows.length} rows — only the first ${limits.bulk} will be processed. ${upgradeMsg}`);
+    }
     const detected = detectColumns(hdrs);
     setColMap({ rawTitle: detected.rawTitle || "", description: detected.description || "", country: detected.country || "" });
     setPhase(detected.rawTitle ? "ready" : "mapping");
@@ -1619,6 +1700,21 @@ function BulkUpload({ onResultsReady }) {
   if (phase === "idle") return (
     <div>
       <SectionTitle children="Bulk Upload" sub="Upload a CSV or XLSX file to process multiple titles at once. Download export-ready structured output." />
+
+      {/* Plan banner */}
+      {!user && (
+        <div style={{ marginBottom: 14, padding: "10px 16px", background: C.accentLight, borderRadius: 8, border: `1px solid ${C.accentBorder}`, fontSize: 13, color: "#1e40af", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 8 }}>
+          <span>Guest users are limited to <strong>100 rows</strong>. Sign in for more.</span>
+          <button onClick={onLogin} style={{ padding: "5px 16px", borderRadius: 6, border: "none", background: C.accent, color: "#fff", fontWeight: 700, fontSize: 12, cursor: "pointer", fontFamily: "inherit" }}>Sign In</button>
+        </div>
+      )}
+      {user && userPlan?.plan === "basic" && (
+        <div style={{ marginBottom: 14, padding: "10px 16px", background: "#fffbeb", borderRadius: 8, border: "1px solid #fcd34d", fontSize: 13, color: "#92400e", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 8 }}>
+          <span>Basic plan — up to <strong>1,000 rows</strong> per upload. Used this period: <strong>{userPlan.bulk_used || 0}</strong></span>
+          <a href="https://buy.stripe.com/logititles-pro" target="_blank" rel="noopener noreferrer" style={{ padding: "5px 16px", borderRadius: 6, background: "#d97706", color: "#fff", fontWeight: 700, fontSize: 12, textDecoration: "none" }}>Upgrade to Pro</a>
+        </div>
+      )}
+
       <Card>
         <div onDragOver={e => { e.preventDefault(); setDragOver(true); }}
           onDragLeave={() => setDragOver(false)} onDrop={onDrop}
@@ -1851,7 +1947,19 @@ function BulkUpload({ onResultsReady }) {
 
         {/* Charts — shown when done */}
         {phase === "done" && <ResultCharts results={results} />}
-        {phase === "done" && <BulkAIBubble results={results} />}
+        {phase === "done" && planKey === "pro" && <BulkAIBubble results={results} />}
+        {phase === "done" && planKey !== "pro" && (
+          <div style={{ position: "fixed", bottom: 24, right: 24, zIndex: 200 }}>
+            <div style={{ background: "#1e1b4b", color: "#c7d2fe", borderRadius: 16, padding: "12px 18px", maxWidth: 280, boxShadow: "0 4px 20px rgba(0,0,0,0.3)", fontSize: 13 }}>
+              <div style={{ fontWeight: 700, marginBottom: 6 }}>💬 AI Analysis — Pro only</div>
+              <div style={{ color: "#a5b4fc", marginBottom: 10, fontSize: 12 }}>Ask questions about your data — domain breakdown, skills, salary trends, and more.</div>
+              <a href="https://buy.stripe.com/placeholder" target="_blank" rel="noreferrer"
+                style={{ display: "inline-block", background: "#4f46e5", color: "#fff", borderRadius: 8, padding: "7px 14px", fontSize: 12, fontWeight: 700, textDecoration: "none" }}>
+                Upgrade to Pro →
+              </a>
+            </div>
+          </div>
+        )}
 
         {/* Clean Preview hint */}
         {phase === "previewing" && (() => {
@@ -2731,12 +2839,50 @@ export default function App() {
   const [showFeedback, setShowFeedback]   = useState(false);
   const [aiContext, setAiContext]          = useState("");
   const [user, setUser]                   = useState(null);
+  const [userPlan, setUserPlan]           = useState(null); // null = guest
   const [showAuth, setShowAuth]           = useState(false);
 
+  // Plan limits
+  const LIMITS = {
+    guest: { bulk: 100,  ai: 0,   analyzer: 10 },
+    basic: { bulk: 1000, ai: 0,   analyzer: Infinity },
+    pro:   { bulk: 10000, ai: 100, analyzer: Infinity },
+  };
+
+  async function fetchPlan(uid) {
+    const { data } = await supabase.from("user_plans").select("*").eq("user_id", uid).single();
+    if (!data) {
+      // First login — create basic plan
+      const { data: created } = await supabase.from("user_plans")
+        .insert({ user_id: uid, plan: "basic" }).select().single();
+      setUserPlan(created);
+    } else {
+      // Auto-reset if period expired
+      if (new Date(data.current_period_end) < new Date()) {
+        const { data: reset } = await supabase.from("user_plans")
+          .update({ bulk_used: 0, ai_used: 0, current_period_end: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString() })
+          .eq("user_id", uid).select().single();
+        setUserPlan(reset);
+      } else {
+        setUserPlan(data);
+      }
+    }
+  }
+
+  const planKey = userPlan?.plan ?? (user ? "basic" : "guest");
+  const limits  = LIMITS[planKey] ?? LIMITS.guest;
+
   useEffect(() => {
-    supabase.auth.getSession().then(({ data }) => setUser(data.session?.user ?? null));
+    supabase.auth.getSession().then(({ data }) => {
+      const u = data.session?.user ?? null;
+      setUser(u);
+      if (u) fetchPlan(u.id);
+    });
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null);
+      const u = session?.user ?? null;
+      setUser(u);
+      if (u) fetchPlan(u.id);
+      else setUserPlan(null);
     });
     return () => subscription.unsubscribe();
   }, []);
@@ -2802,10 +2948,10 @@ export default function App() {
 
       {/* Content */}
       <div style={{ flex: 1, overflowY: "auto", padding: "20px 16px" }}>
-        {page === "analyzer" && <SingleAnalyzer onAskAI={handleAskAI} />}
-        {page === "bulk"     && <BulkUpload onResultsReady={setBulkResults} />}
+        {page === "analyzer" && <SingleAnalyzer onAskAI={handleAskAI} user={user} planKey={planKey} onLogin={() => setShowAuth(true)} />}
+        {page === "bulk"     && <BulkUpload onResultsReady={setBulkResults} user={user} limits={limits} userPlan={userPlan} onLogin={() => setShowAuth(true)} planKey={planKey} />}
         {page === "export"   && <ExportPage bulkResults={bulkResults} />}
-        {page === "ai"       && (user ? <AIAssistant initialContext={aiContext} onClearContext={() => setAiContext("")} /> : <AILoginWall onLogin={() => setShowAuth(true)} />)}
+        {page === "ai"       && (planKey === "pro" ? <AIAssistant initialContext={aiContext} onClearContext={() => setAiContext("")} /> : <AIProWall onLogin={() => setShowAuth(true)} isLoggedIn={!!user} />)}
         {page === "privacy"  && <PrivacyPolicy />}
         {page === "terms"    && <TermsOfService />}
         {!["analyzer","bulk","export","ai","privacy","terms"].includes(page) && navItem && <navItem.component />}
@@ -2892,10 +3038,10 @@ export default function App() {
 
       {/* Main */}
       <div style={{ flex: 1, overflowY: "auto", padding: "32px 38px" }}>
-        {page === "analyzer" && <SingleAnalyzer onAskAI={handleAskAI} />}
-        {page === "bulk"     && <BulkUpload onResultsReady={setBulkResults} />}
+        {page === "analyzer" && <SingleAnalyzer onAskAI={handleAskAI} user={user} planKey={planKey} onLogin={() => setShowAuth(true)} />}
+        {page === "bulk"     && <BulkUpload onResultsReady={setBulkResults} user={user} limits={limits} userPlan={userPlan} onLogin={() => setShowAuth(true)} planKey={planKey} />}
         {page === "export"   && <ExportPage bulkResults={bulkResults} />}
-        {page === "ai"       && (user ? <AIAssistant initialContext={aiContext} onClearContext={() => setAiContext("")} /> : <AILoginWall onLogin={() => setShowAuth(true)} />)}
+        {page === "ai"       && (planKey === "pro" ? <AIAssistant initialContext={aiContext} onClearContext={() => setAiContext("")} /> : <AIProWall onLogin={() => setShowAuth(true)} isLoggedIn={!!user} />)}
         {page === "privacy"  && <PrivacyPolicy />}
         {page === "terms"    && <TermsOfService />}
         {!["analyzer","bulk","export","ai","privacy","terms"].includes(page) && navItem && <navItem.component />}
