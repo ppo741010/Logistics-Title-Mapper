@@ -2841,7 +2841,7 @@ function MarketInsights() {
         while (true) {
           let q = supabase
             .from("cleaned_jobs")
-            .select("domain, level, work_nature, tech_skills, salary_yearly, country")
+            .select("domain, level, work_nature, skills, salary_yearly, country")
             .not("domain", "eq", "Other/Noise")
             .not("domain", "eq", "Pending Review")
             .not("domain", "is", null)
@@ -2879,8 +2879,7 @@ function MarketInsights() {
   function topSkills(rows, n = 10) {
     const counts = {};
     rows.forEach(r => {
-      // Use tech_skills — keywords actually extracted from job text (not fixed domain skills)
-      const raw = r.tech_skills ?? "";
+      const raw = r.skills ?? "";
       const skills = typeof raw === "string"
         ? raw.split(",").map(s => s.trim()).filter(s => s.length > 1)
         : [];
