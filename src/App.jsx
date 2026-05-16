@@ -2179,6 +2179,9 @@ function SkillMapper() {
 
 // ── Page 4: Title Cleaner ────────────────────────────────────────────────────
 
+// Cache sample results at module level so navigating away and back doesn't re-fetch
+let _tcSampleCache = null;
+
 const TC_SAMPLES = [
   "Sr. Freight Coordinator – FCL/LCL (Auckland, NZ)",
   "Ops Mgr - 3PL Warehouse [Fixed Term]",
@@ -2194,13 +2197,17 @@ function TitleCleaner() {
   const [manualInput, setManualInput]   = useState("");
   const [manualResult, setManualResult] = useState(null);
   const [manualLoading, setManualLoading] = useState(false);
-  const [sampleResults, setSampleResults] = useState(null);
+  const [sampleResults, setSampleResults] = useState(_tcSampleCache);
 
   useEffect(() => {
+    if (_tcSampleCache) return; // already fetched this session
     bulkAnalyzeViaAPI(TC_SAMPLES.map(title => ({ title, description: "", country: "" })))
       .then(res => {
-        if (res) setSampleResults(TC_SAMPLES.map((raw, i) => ({ raw, ...res[i] })));
-        else setSampleResults(TC_SAMPLES.map(raw => ({ raw, ...analyze(raw, "", "") })));
+        const results = res
+          ? TC_SAMPLES.map((raw, i) => ({ raw, ...res[i] }))
+          : TC_SAMPLES.map(raw => ({ raw, ...analyze(raw, "", "") }));
+        _tcSampleCache = results;
+        setSampleResults(results);
       });
   }, []);
 
