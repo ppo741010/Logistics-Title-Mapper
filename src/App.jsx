@@ -207,7 +207,7 @@ function AIProWall({ onLogin, isLoggedIn }) {
         ))}
       </div>
       <div style={{ padding: "11px 32px", borderRadius: 9, background: "#6b7280", color: "#fff", fontWeight: 700, fontSize: 14, marginTop: 4 }}>
-        準備中，請稍後
+        Coming Soon
       </div>
       {!isLoggedIn && (
         <button onClick={onLogin} style={{ background: "none", border: "none", cursor: "pointer", fontSize: 13, color: C.accent, fontFamily: "inherit", textDecoration: "underline" }}>
@@ -1708,7 +1708,7 @@ function BulkUpload({ onResultsReady, user, limits = { bulk: 100 }, userPlan, on
       {user && userPlan?.plan === "basic" && (
         <div style={{ marginBottom: 14, padding: "10px 16px", background: "#fffbeb", borderRadius: 8, border: "1px solid #fcd34d", fontSize: 13, color: "#92400e", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 8 }}>
           <span>Basic plan — up to <strong>1,000 rows</strong> per upload. Used this period: <strong>{userPlan.bulk_used || 0}</strong></span>
-          <span style={{ padding: "5px 16px", borderRadius: 6, background: "#9ca3af", color: "#fff", fontWeight: 700, fontSize: 12 }}>準備中</span>
+          <span style={{ padding: "5px 16px", borderRadius: 6, background: "#9ca3af", color: "#fff", fontWeight: 700, fontSize: 12 }}>Coming Soon</span>
         </div>
       )}
 
@@ -1951,7 +1951,7 @@ function BulkUpload({ onResultsReady, user, limits = { bulk: 100 }, userPlan, on
               <div style={{ fontWeight: 700, marginBottom: 6 }}>💬 AI Analysis</div>
               <div style={{ color: "#a5b4fc", marginBottom: 10, fontSize: 12 }}>Ask questions about your data — domain breakdown, skills, salary trends, and more.</div>
               <div style={{ display: "inline-block", background: "#6b7280", color: "#fff", borderRadius: 8, padding: "7px 14px", fontSize: 12, fontWeight: 700 }}>
-                準備中，請稍後
+                Coming Soon
               </div>
             </div>
           </div>
