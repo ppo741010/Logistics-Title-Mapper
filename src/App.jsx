@@ -206,18 +206,14 @@ function AIProWall({ onLogin, isLoggedIn }) {
           </div>
         ))}
       </div>
-      <a href="https://buy.stripe.com/logititles-pro" target="_blank" rel="noopener noreferrer"
-        style={{ padding: "11px 32px", borderRadius: 9, background: C.accent, color: "#fff", fontWeight: 700, fontSize: 14, textDecoration: "none", marginTop: 4 }}>
-        Upgrade to Pro →
-      </a>
+      <div style={{ padding: "11px 32px", borderRadius: 9, background: "#6b7280", color: "#fff", fontWeight: 700, fontSize: 14, marginTop: 4 }}>
+        準備中，請稍後
+      </div>
       {!isLoggedIn && (
         <button onClick={onLogin} style={{ background: "none", border: "none", cursor: "pointer", fontSize: 13, color: C.accent, fontFamily: "inherit", textDecoration: "underline" }}>
           Already have an account? Sign in
         </button>
       )}
-      <div style={{ fontSize: 11, color: C.textMuted, maxWidth: 300 }}>
-        Plan activated within 24 hours. For urgent access contact logititles@gmail.com
-      </div>
     </div>
   );
 }
@@ -1712,7 +1708,7 @@ function BulkUpload({ onResultsReady, user, limits = { bulk: 100 }, userPlan, on
       {user && userPlan?.plan === "basic" && (
         <div style={{ marginBottom: 14, padding: "10px 16px", background: "#fffbeb", borderRadius: 8, border: "1px solid #fcd34d", fontSize: 13, color: "#92400e", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 8 }}>
           <span>Basic plan — up to <strong>1,000 rows</strong> per upload. Used this period: <strong>{userPlan.bulk_used || 0}</strong></span>
-          <a href="https://buy.stripe.com/logititles-pro" target="_blank" rel="noopener noreferrer" style={{ padding: "5px 16px", borderRadius: 6, background: "#d97706", color: "#fff", fontWeight: 700, fontSize: 12, textDecoration: "none" }}>Upgrade to Pro</a>
+          <span style={{ padding: "5px 16px", borderRadius: 6, background: "#9ca3af", color: "#fff", fontWeight: 700, fontSize: 12 }}>準備中</span>
         </div>
       )}
 
@@ -1952,12 +1948,11 @@ function BulkUpload({ onResultsReady, user, limits = { bulk: 100 }, userPlan, on
         {phase === "done" && planKey !== "pro" && (
           <div style={{ position: "fixed", bottom: 24, right: 24, zIndex: 200 }}>
             <div style={{ background: "#1e1b4b", color: "#c7d2fe", borderRadius: 16, padding: "12px 18px", maxWidth: 280, boxShadow: "0 4px 20px rgba(0,0,0,0.3)", fontSize: 13 }}>
-              <div style={{ fontWeight: 700, marginBottom: 6 }}>💬 AI Analysis — Pro only</div>
+              <div style={{ fontWeight: 700, marginBottom: 6 }}>💬 AI Analysis</div>
               <div style={{ color: "#a5b4fc", marginBottom: 10, fontSize: 12 }}>Ask questions about your data — domain breakdown, skills, salary trends, and more.</div>
-              <a href="https://buy.stripe.com/placeholder" target="_blank" rel="noreferrer"
-                style={{ display: "inline-block", background: "#4f46e5", color: "#fff", borderRadius: 8, padding: "7px 14px", fontSize: 12, fontWeight: 700, textDecoration: "none" }}>
-                Upgrade to Pro →
-              </a>
+              <div style={{ display: "inline-block", background: "#6b7280", color: "#fff", borderRadius: 8, padding: "7px 14px", fontSize: 12, fontWeight: 700 }}>
+                準備中，請稍後
+              </div>
             </div>
           </div>
         )}
@@ -2847,9 +2842,9 @@ function MarketInsights() {
         if (country !== "all") q = q.eq("country", country);
         const { data: rows, error: err } = await q.limit(5000);
         if (err) throw err;
-        setData(rows);
+        setData(rows ?? []);
       } catch (e) {
-        setError("Could not load market data. Please try again later.");
+        setError(`無法載入市場資料：${e?.message || "請確認 Supabase cleaned_jobs 已開放 anon read 權限"}`);
       }
       setLoading(false);
     }
@@ -2932,7 +2927,12 @@ function MarketInsights() {
         </div>
       )}
 
-      {data && !loading && (
+      {data && !loading && data.length === 0 && (
+        <div style={{ padding: "14px 18px", borderRadius: 10, background: "#fffbeb", color: "#92400e", fontSize: 13, border: "1px solid #fde68a", marginBottom: 16 }}>
+          目前沒有資料。請確認 Supabase <code>cleaned_jobs</code> 已開放 anon read 權限，且資料表有資料。
+        </div>
+      )}
+      {data && !loading && data.length > 0 && (
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 }}>
 
           {/* Domain breakdown */}
