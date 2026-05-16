@@ -2834,16 +2834,27 @@ function MarketInsights() {
     async function load() {
       setLoading(true); setError(null);
       try {
-        let q = supabase
-          .from("cleaned_jobs")
-          .select("domain, level, work_nature, skills, salary_yearly, country")
-          .not("domain", "eq", "Other/Noise")
-          .not("domain", "eq", "Pending Review")
-          .not("domain", "is", null);
-        if (country !== "all") q = q.eq("country", country);
-        const { data: rows, error: err } = await q.limit(5000);
-        if (err) throw err;
-        setData(rows ?? []);
+        // Paginate to bypass Supabase default 1000-row limit
+        let allRows = [];
+        let from = 0;
+        const pageSize = 1000;
+        while (true) {
+          let q = supabase
+            .from("cleaned_jobs")
+            .select("domain, level, work_nature, tech_skills, salary_yearly, country")
+            .not("domain", "eq", "Other/Noise")
+            .not("domain", "eq", "Pending Review")
+            .not("domain", "is", null)
+            .range(from, from + pageSize - 1);
+          if (country !== "all") q = q.eq("country", country);
+          const { data: rows, error: err } = await q;
+          if (err) throw err;
+          if (!rows || rows.length === 0) break;
+          allRows = allRows.concat(rows);
+          if (rows.length < pageSize) break;
+          from += pageSize;
+        }
+        setData(allRows);
       } catch (e) {
         setError(`Could not load market data: ${e?.message || "Please check Supabase cleaned_jobs has anon read policy enabled."}`);
       }
@@ -2868,10 +2879,12 @@ function MarketInsights() {
   function topSkills(rows, n = 10) {
     const counts = {};
     rows.forEach(r => {
-      const skills = typeof r.skills === "string"
-        ? r.skills.split(",").map(s => s.trim()).filter(Boolean)
-        : Array.isArray(r.skills) ? r.skills : [];
-      skills.forEach(s => { if (s) counts[s] = (counts[s] || 0) + 1; });
+      // Use tech_skills — keywords actually extracted from job text (not fixed domain skills)
+      const raw = r.tech_skills ?? "";
+      const skills = typeof raw === "string"
+        ? raw.split(",").map(s => s.trim()).filter(s => s.length > 1)
+        : [];
+      skills.forEach(s => { counts[s] = (counts[s] || 0) + 1; });
     });
     return Object.entries(counts).sort((a, b) => b[1] - a[1]).slice(0, n).map(([name, value]) => ({ name, value }));
   }
@@ -2896,9 +2909,19 @@ function MarketInsights() {
 
   const CHART_COLORS = ["#4f46e5","#7c3aed","#0ea5e9","#10b981","#f59e0b","#ef4444","#8b5cf6","#06b6d4","#84cc16","#f97316"];
 
+  // Merge slices < 3% into "Other" to avoid tiny unreadable pie slices
+  function mergeTinySlices(arr, threshold = 0.03) {
+    const totalVal = arr.reduce((s, d) => s + d.value, 0);
+    const main = arr.filter(d => d.value / totalVal >= threshold);
+    const tiny = arr.filter(d => d.value / totalVal < threshold);
+    if (tiny.length === 0) return arr;
+    const otherVal = tiny.reduce((s, d) => s + d.value, 0);
+    return [...main, { name: "Other", value: otherVal }];
+  }
+
   const total = data?.length ?? 0;
   const domainData  = data ? countBy(data, "domain")    : [];
-  const levelData   = data ? countBy(data, "level")     : [];
+  const levelData   = data ? mergeTinySlices(countBy(data, "level"))     : [];
   const natureData  = data ? countBy(data, "work_nature") : [];
   const skillData   = data ? topSkills(data)            : [];
   const salaryData  = data ? salaryByDomain(data)       : [];
@@ -3017,7 +3040,9 @@ function MarketInsights() {
           {/* Avg Salary by Domain */}
           {salaryData.length > 0 && (
             <Card style={{ gridColumn: "1 / -1" }}>
-              <div style={{ fontSize: 11, fontWeight: 700, color: C.accent, textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 4 }}>Avg Salary by Domain (NZD/yr)</div>
+              <div style={{ fontSize: 11, fontWeight: 700, color: C.accent, textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 4 }}>
+                Avg Salary by Domain ({country === "AU" ? "AUD" : country === "NZ" ? "NZD" : "NZD/AUD"}/yr)
+              </div>
               <div style={{ fontSize: 11, color: C.textMuted, marginBottom: 14 }}>Based on roles with salary data only. Market estimates — not authoritative benchmarks.</div>
               <ResponsiveContainer width="100%" height={220}>
                 <BarChart data={salaryData} margin={{ left: 10, right: 20 }}>
