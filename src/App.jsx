@@ -2844,16 +2844,23 @@ function MarketInsights() {
         if (err) throw err;
         setData(rows ?? []);
       } catch (e) {
-        setError(`無法載入市場資料：${e?.message || "請確認 Supabase cleaned_jobs 已開放 anon read 權限"}`);
+        setError(`Could not load market data: ${e?.message || "Please check Supabase cleaned_jobs has anon read policy enabled."}`);
       }
       setLoading(false);
     }
     load();
   }, [country]);
 
+  // Strip numeric prefix like "2. Intermediate / Staff" → "Intermediate / Staff"
+  function cleanLabel(s) { return s ? s.replace(/^\d+\.\s*/, "") : s; }
+
   function countBy(rows, key) {
     const counts = {};
-    rows.forEach(r => { if (r[key]) counts[r[key]] = (counts[r[key]] || 0) + 1; });
+    rows.forEach(r => {
+      if (!r[key]) return;
+      const label = cleanLabel(r[key]);
+      counts[label] = (counts[label] || 0) + 1;
+    });
     return Object.entries(counts).sort((a, b) => b[1] - a[1]).map(([name, value]) => ({ name, value }));
   }
 
@@ -2901,12 +2908,16 @@ function MarketInsights() {
       {/* Filter bar */}
       <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 24 }}>
         <span style={{ fontSize: 12, fontWeight: 600, color: C.textMuted }}>COUNTRY</span>
-        {["all","New Zealand","Australia"].map(c => (
-          <button key={c} onClick={() => setCountry(c)}
-            style={{ padding: "5px 14px", borderRadius: 20, border: `1px solid ${country === c ? C.accent : C.border}`,
-              background: country === c ? C.accent : C.card, color: country === c ? "#fff" : C.text,
+        {[
+          { key: "all", label: "All" },
+          { key: "NZ",  label: "New Zealand" },
+          { key: "AU",  label: "Australia" },
+        ].map(c => (
+          <button key={c.key} onClick={() => setCountry(c.key)}
+            style={{ padding: "5px 14px", borderRadius: 20, border: `1px solid ${country === c.key ? C.accent : C.border}`,
+              background: country === c.key ? C.accent : C.card, color: country === c.key ? "#fff" : C.text,
               fontSize: 12, fontWeight: 600, cursor: "pointer", fontFamily: "inherit" }}>
-            {c === "all" ? "All" : c}
+            {c.label}
           </button>
         ))}
         {!loading && data && (
@@ -2929,7 +2940,7 @@ function MarketInsights() {
 
       {data && !loading && data.length === 0 && (
         <div style={{ padding: "14px 18px", borderRadius: 10, background: "#fffbeb", color: "#92400e", fontSize: 13, border: "1px solid #fde68a", marginBottom: 16 }}>
-          目前沒有資料。請確認 Supabase <code>cleaned_jobs</code> 已開放 anon read 權限，且資料表有資料。
+          No data found for this filter. If you selected NZ or AU, check that the <code>country</code> field in cleaned_jobs uses "NZ" / "AU" values.
         </div>
       )}
       {data && !loading && data.length > 0 && (
