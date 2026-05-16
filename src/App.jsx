@@ -2880,6 +2880,7 @@ function MarketInsights() {
     const buckets = {};
     rows.forEach(r => {
       if (!r.domain || !r.salary_yearly) return;
+      if (r.salary_yearly < 20000 || r.salary_yearly > 400000) return; // filter parsing errors
       if (!buckets[r.domain]) buckets[r.domain] = [];
       buckets[r.domain].push(r.salary_yearly);
     });
@@ -3012,7 +3013,17 @@ function MarketInsights() {
                 <BarChart data={salaryData} margin={{ left: 10, right: 20 }}>
                   <XAxis dataKey="name" tick={{ fontSize: 10 }} />
                   <YAxis tick={{ fontSize: 10 }} tickFormatter={v => `$${(v/1000).toFixed(0)}k`} />
-                  <Tooltip formatter={v => [`$${v.toLocaleString()}`, "Avg Salary"]} />
+                  <Tooltip content={({ active, payload }) => {
+                    if (!active || !payload?.length) return null;
+                    const d = payload[0].payload;
+                    return (
+                      <div style={{ background: "#fff", border: "1px solid #e5e7eb", borderRadius: 8, padding: "8px 12px", fontSize: 12 }}>
+                        <div style={{ fontWeight: 700 }}>{d.name}</div>
+                        <div>Avg: <strong>${d.avg.toLocaleString()}</strong></div>
+                        <div style={{ color: "#6b7280" }}>Based on {d.count} records</div>
+                      </div>
+                    );
+                  }} />
                   <Bar dataKey="avg" radius={[4,4,0,0]}>
                     {salaryData.map((_, i) => <Cell key={i} fill={CHART_COLORS[i % CHART_COLORS.length]} />)}
                   </Bar>
