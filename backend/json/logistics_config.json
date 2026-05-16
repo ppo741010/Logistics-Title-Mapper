@@ -16,6 +16,7 @@
   },
   "PRIORITY_DOMAIN_RULES": {
     "Transport": [
+      "transport coordinator",
       "driver",
       "delivery driver",
       "dispatcher",
@@ -58,7 +59,10 @@
       "safety coordinator",
       "safety officer",
       "compliance manager",
-      "compliance officer"
+      "compliance officer",
+      "continuous improvement",
+      "general manager logistics",
+      "dc team manager"
     ],
     "Freight Forwarding": [
       "export",
@@ -175,7 +179,15 @@
       "help desk",
       "service desk",
       "desktop support",
-      "it technician"
+      "it technician",
+      "business systems manager",
+      "business systems specialist",
+      "business systems analyst",
+      "application analyst",
+      "applications analyst",
+      "it manager",
+      "business applications manager",
+      "business applications analyst"
     ],
     "Business Administration": [
       "office",
@@ -234,7 +246,11 @@
       "strategic",
       "supply chain procurement",
       "vendor replenishment",
-      "vendor replenishment planner"
+      "vendor replenishment planner",
+      "allocation analyst",
+      "allocations analyst",
+      "commercial analyst",
+      "distribution analyst"
     ],
     "Sales": [
       "sales",
@@ -281,6 +297,7 @@
       "ecommerce manager"
     ],
     "Warehouse": [
+      "wms",
       "warehouse",
       "storeperson",
       "pick",
@@ -672,11 +689,37 @@
     "Junior": "Entry Level",
     "Trainee": "Entry Level",
     "Assistant": "Entry Level",
+    "Receptionist": "Entry Level",
     "Packer": "Entry Level",
     "Picker": "Entry Level",
     "Sorter": "Entry Level",
     "Handler": "Entry Level",
     "Decon": "Entry Level",
+    "Team Leader": "Senior",
+    "Clerk": "Entry Level",
+    "Worker": "Entry Level",
+    "Scheduler": "Mid Level",
+    "Team Member": "Entry Level",
+    "Pick Pack": "Entry Level",
+    "Storeman": "Mid Level",
+    "General Manager": "Executive",
+    "Head": "Executive",
+    "Director": "Executive",
+    "VP": "Executive",
+    "CEO": "Executive",
+    "GM": "Executive",
+    "Manager": "Manager",
+    "Mgr": "Manager",
+    "Senior": "Senior",
+    "Team Lead": "Senior",
+    "Advanced": "Senior",
+    "Principal": "Senior",
+    "Sourcing": "Senior",
+    "Specialist": "Manager",
+    "Consultant": "Manager",
+    "Analyst": "Manager",
+    "Expert": "Manager",
+    "Strategist": "Manager",
     "Mid": "Mid Level",
     "Lead": "Mid Level",
     "Intermediate": "Mid Level",
@@ -691,23 +734,10 @@
     "Storeperson": "Mid Level",
     "Accountant": "Mid Level",
     "Planner": "Mid Level",
-    "Business Development": "Mid Level",
-    "Senior": "Senior",
-    "Team Lead": "Senior",
-    "Advanced": "Senior",
-    "Principal": "Senior",
-    "Sourcing": "Senior",
-    "Specialist": "Manager",
-    "Consultant": "Manager",
-    "Analyst": "Manager",
-    "Expert": "Manager",
-    "Strategist": "Manager",
-    "Manager": "Manager",
-    "Head": "Executive",
-    "Director": "Executive",
-    "Executive": "Executive",
-    "CEO": "Executive",
-    "GM": "Executive"
+    "Controller": "Mid Level",
+    "Allocator": "Mid Level",
+    "Broker": "Mid Level",
+    "Business Development": "Mid Level"
   },
   "WORK_NATURE_MAPPING": {
     "Management": [
@@ -718,7 +748,8 @@
       "chief",
       "executive",
       "superintendent",
-      "principal"
+      "principal",
+      "vp"
     ],
     "Specialist / Support": [
       "analyst",
@@ -744,7 +775,8 @@
       "finance",
       "billing",
       "payroll",
-      "assistant"
+      "broker",
+      "controller"
     ],
     "Operational": [
       "coordinator",

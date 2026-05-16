@@ -2945,7 +2945,7 @@ function MarketInsights() {
   const domainData    = data ? countBy(data, "domain")                    : [];
   const levelData     = data ? mergeTinySlices(countBy(data, "level"))    : [];
   const natureData    = data ? countBy(data, "work_nature")               : [];
-  const skillData     = data ? topSkills(data, 5)                         : [];
+  const skillData     = data ? topSkills(data, 8)                         : [];
   const salaryData    = data ? salaryByDomain(data)                       : [];
   const salaryLvlData = data ? salaryByLevel(data)                        : [];
 
@@ -3011,7 +3011,7 @@ function MarketInsights() {
 
           {/* Top Skills */}
           <Card>
-            <div style={{ fontSize: 11, fontWeight: 700, color: C.accent, textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 16 }}>Top 5 Skills</div>
+            <div style={{ fontSize: 11, fontWeight: 700, color: C.accent, textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 16 }}>Top 8 Skills</div>
             <ResponsiveContainer width="100%" height={220}>
               <BarChart data={skillData} layout="vertical" margin={{ left: 10, right: 20 }}>
                 <XAxis type="number" tick={{ fontSize: 10 }} />
