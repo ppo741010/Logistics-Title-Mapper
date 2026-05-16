@@ -3082,7 +3082,7 @@ function MarketInsights() {
                       </div>
                     );
                   }} />
-                  <Bar dataKey="avg" radius={[4,4,0,0]} isAnimationActive={false}>
+                  <Bar dataKey="avg" radius={[4,4,0,0]} isAnimationActive={false} activeBar={false}>
                     {salaryData.map((_, i) => <Cell key={i} fill={CHART_COLORS[i % CHART_COLORS.length]} />)}
                   </Bar>
                 </BarChart>
@@ -3114,7 +3114,7 @@ function MarketInsights() {
                       </div>
                     );
                   }} />
-                  <Bar dataKey="avg" radius={[4,4,0,0]} isAnimationActive={false}>
+                  <Bar dataKey="avg" radius={[4,4,0,0]} isAnimationActive={false} activeBar={false}>
                     {salaryLvlData.map((_, i) => <Cell key={i} fill={CHART_COLORS[i % CHART_COLORS.length]} />)}
                   </Bar>
                 </BarChart>
