@@ -3060,8 +3060,15 @@ function MarketInsights() {
             </ResponsiveContainer>
           </Card>
 
+          {/* Salary charts — only shown when a single country is selected */}
+          {country === "all" && (
+            <div style={{ gridColumn: "1 / -1", padding: "16px 20px", borderRadius: 10, background: "#fffbeb", border: "1px solid #fde68a", fontSize: 13, color: "#92400e" }}>
+              Salary data is shown per country only. Select <strong>New Zealand</strong> or <strong>Australia</strong> for a meaningful salary comparison.
+            </div>
+          )}
+
           {/* Avg Salary by Domain */}
-          {salaryData.length > 0 && (
+          {country !== "all" && salaryData.length > 0 && (
             <Card style={{ gridColumn: "1 / -1" }}>
               <div style={{ fontSize: 11, fontWeight: 700, color: C.accent, textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 4 }}>
                 Avg Salary by Domain ({country === "AU" ? "AUD" : country === "NZ" ? "NZD" : "NZD/AUD"}/yr)
@@ -3091,7 +3098,7 @@ function MarketInsights() {
           )}
 
           {/* Salary by Seniority Level */}
-          {salaryLvlData.length > 0 && (
+          {country !== "all" && salaryLvlData.length > 0 && (
             <Card style={{ gridColumn: "1 / -1" }}>
               <div style={{ fontSize: 11, fontWeight: 700, color: C.accent, textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 4 }}>
                 Avg Salary by Seniority ({country === "AU" ? "AUD" : country === "NZ" ? "NZD" : "NZD/AUD"}/yr)
