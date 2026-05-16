@@ -2985,7 +2985,12 @@ function MarketInsights() {
                   {levelData.map((_, i) => <Cell key={i} fill={CHART_COLORS[i % CHART_COLORS.length]} />)}
                 </Pie>
                 <Tooltip formatter={v => [v, "Jobs"]} />
-                <Legend iconSize={10} wrapperStyle={{ fontSize: 11 }} formatter={(name, entry) => `${name} ${(entry.payload.percent * 100).toFixed(0)}%`} />
+                <Legend iconSize={10} wrapperStyle={{ fontSize: 11 }} formatter={name => {
+                  const total = levelData.reduce((s, d) => s + d.value, 0);
+                  const item = levelData.find(d => d.name === name);
+                  const pct = item && total ? ((item.value / total) * 100).toFixed(0) : 0;
+                  return `${name} ${pct}%`;
+                }} />
               </PieChart>
             </ResponsiveContainer>
           </Card>
@@ -2999,7 +3004,12 @@ function MarketInsights() {
                   {natureData.map((_, i) => <Cell key={i} fill={CHART_COLORS[i % CHART_COLORS.length]} />)}
                 </Pie>
                 <Tooltip formatter={v => [v, "Jobs"]} />
-                <Legend iconSize={10} wrapperStyle={{ fontSize: 11 }} formatter={(name, entry) => `${name} ${(entry.payload.percent * 100).toFixed(0)}%`} />
+                <Legend iconSize={10} wrapperStyle={{ fontSize: 11 }} formatter={name => {
+                  const total = natureData.reduce((s, d) => s + d.value, 0);
+                  const item = natureData.find(d => d.name === name);
+                  const pct = item && total ? ((item.value / total) * 100).toFixed(0) : 0;
+                  return `${name} ${pct}%`;
+                }} />
               </PieChart>
             </ResponsiveContainer>
           </Card>
