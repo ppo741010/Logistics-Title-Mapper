@@ -3002,9 +3002,9 @@ function MarketInsights() {
           {/* Seniority */}
           <Card>
             <div style={{ fontSize: 11, fontWeight: 700, color: C.accent, textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 16 }}>Seniority Level</div>
-            <ResponsiveContainer width="100%" height={220}>
+            <ResponsiveContainer width="100%" height={240}>
               <PieChart>
-                <Pie data={levelData} dataKey="value" nameKey="name" cx="50%" cy="45%" outerRadius={70}>
+                <Pie data={levelData} dataKey="value" nameKey="name" cx="50%" cy="42%" outerRadius={70}>
                   {levelData.map((_, i) => <Cell key={i} fill={CHART_COLORS[i % CHART_COLORS.length]} />)}
                 </Pie>
                 <Tooltip formatter={v => [v, "Jobs"]} />
@@ -3021,9 +3021,9 @@ function MarketInsights() {
           {/* Work Nature */}
           <Card>
             <div style={{ fontSize: 11, fontWeight: 700, color: C.accent, textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 16 }}>Work Nature</div>
-            <ResponsiveContainer width="100%" height={220}>
+            <ResponsiveContainer width="100%" height={240}>
               <PieChart>
-                <Pie data={natureData} dataKey="value" nameKey="name" cx="50%" cy="45%" outerRadius={70}>
+                <Pie data={natureData} dataKey="value" nameKey="name" cx="50%" cy="42%" outerRadius={70}>
                   {natureData.map((_, i) => <Cell key={i} fill={CHART_COLORS[i % CHART_COLORS.length]} />)}
                 </Pie>
                 <Tooltip formatter={v => [v, "Jobs"]} />
@@ -3059,7 +3059,7 @@ function MarketInsights() {
                       </div>
                     );
                   }} />
-                  <Bar dataKey="avg" radius={[4,4,0,0]}>
+                  <Bar dataKey="avg" radius={[4,4,0,0]} isAnimationActive={false}>
                     {salaryData.map((_, i) => <Cell key={i} fill={CHART_COLORS[i % CHART_COLORS.length]} />)}
                   </Bar>
                 </BarChart>
