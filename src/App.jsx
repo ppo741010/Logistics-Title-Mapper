@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import * as XLSX from "xlsx";
-import { analyzeViaAPI, bulkAnalyzeViaAPI, cleanPreviewViaAPI, submitFeedback, chatViaAPI } from "./api.js";
+import { analyzeViaAPI, bulkAnalyzeViaAPI, cleanPreviewViaAPI, submitFeedback, chatViaAPI, startKeepAlive } from "./api.js";
+startKeepAlive();
 import skillConfig from "./skill_normalize.json";
 import { supabase } from "./supabase.js";
 import { BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend } from "recharts";
@@ -2826,6 +2827,196 @@ function TermsOfService() {
 }
 
 
+// ── Market Insights ───────────────────────────────────────────────────────────
+
+function MarketInsights() {
+  const [data, setData]       = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError]     = useState(null);
+  const [country, setCountry] = useState("all");
+
+  useEffect(() => {
+    async function load() {
+      setLoading(true); setError(null);
+      try {
+        let q = supabase
+          .from("cleaned_jobs")
+          .select("domain, level, work_nature, skills, salary_yearly, country")
+          .not("domain", "eq", "Other/Noise")
+          .not("domain", "is", null);
+        if (country !== "all") q = q.eq("country", country);
+        const { data: rows, error: err } = await q.limit(5000);
+        if (err) throw err;
+        setData(rows);
+      } catch (e) {
+        setError("Could not load market data. Please try again later.");
+      }
+      setLoading(false);
+    }
+    load();
+  }, [country]);
+
+  function countBy(rows, key) {
+    const counts = {};
+    rows.forEach(r => { if (r[key]) counts[r[key]] = (counts[r[key]] || 0) + 1; });
+    return Object.entries(counts).sort((a, b) => b[1] - a[1]).map(([name, value]) => ({ name, value }));
+  }
+
+  function topSkills(rows, n = 10) {
+    const counts = {};
+    rows.forEach(r => {
+      const skills = typeof r.skills === "string"
+        ? r.skills.split(",").map(s => s.trim()).filter(Boolean)
+        : Array.isArray(r.skills) ? r.skills : [];
+      skills.forEach(s => { if (s) counts[s] = (counts[s] || 0) + 1; });
+    });
+    return Object.entries(counts).sort((a, b) => b[1] - a[1]).slice(0, n).map(([name, value]) => ({ name, value }));
+  }
+
+  function salaryByDomain(rows) {
+    const buckets = {};
+    rows.forEach(r => {
+      if (!r.domain || !r.salary_yearly) return;
+      if (!buckets[r.domain]) buckets[r.domain] = [];
+      buckets[r.domain].push(r.salary_yearly);
+    });
+    return Object.entries(buckets)
+      .map(([domain, vals]) => ({
+        name: domain,
+        avg: Math.round(vals.reduce((a, b) => a + b, 0) / vals.length / 1000) * 1000,
+        count: vals.length,
+      }))
+      .filter(d => d.count >= 3)
+      .sort((a, b) => b.avg - a.avg);
+  }
+
+  const CHART_COLORS = ["#4f46e5","#7c3aed","#0ea5e9","#10b981","#f59e0b","#ef4444","#8b5cf6","#06b6d4","#84cc16","#f97316"];
+
+  const total = data?.length ?? 0;
+  const domainData  = data ? countBy(data, "domain")    : [];
+  const levelData   = data ? countBy(data, "level")     : [];
+  const natureData  = data ? countBy(data, "work_nature") : [];
+  const skillData   = data ? topSkills(data)            : [];
+  const salaryData  = data ? salaryByDomain(data)       : [];
+
+  return (
+    <div>
+      <SectionTitle children="Market Insights" sub="Aggregated trends from the NZ/AU logistics job market dataset." />
+
+      {/* Filter bar */}
+      <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 24 }}>
+        <span style={{ fontSize: 12, fontWeight: 600, color: C.textMuted }}>COUNTRY</span>
+        {["all","New Zealand","Australia"].map(c => (
+          <button key={c} onClick={() => setCountry(c)}
+            style={{ padding: "5px 14px", borderRadius: 20, border: `1px solid ${country === c ? C.accent : C.border}`,
+              background: country === c ? C.accent : C.card, color: country === c ? "#fff" : C.text,
+              fontSize: 12, fontWeight: 600, cursor: "pointer", fontFamily: "inherit" }}>
+            {c === "all" ? "All" : c}
+          </button>
+        ))}
+        {!loading && data && (
+          <span style={{ marginLeft: "auto", fontSize: 12, color: C.textMuted }}>
+            {total.toLocaleString()} records
+          </span>
+        )}
+      </div>
+
+      {loading && (
+        <div style={{ textAlign: "center", padding: "60px 0", color: C.textMuted, fontSize: 14 }}>
+          Loading market data…
+        </div>
+      )}
+      {error && (
+        <div style={{ padding: "14px 18px", borderRadius: 10, background: "#fef2f2", color: "#b91c1c", fontSize: 13, border: "1px solid #fca5a5" }}>
+          {error}
+        </div>
+      )}
+
+      {data && !loading && (
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 }}>
+
+          {/* Domain breakdown */}
+          <Card>
+            <div style={{ fontSize: 11, fontWeight: 700, color: C.accent, textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 16 }}>Domain Breakdown</div>
+            <ResponsiveContainer width="100%" height={220}>
+              <BarChart data={domainData} layout="vertical" margin={{ left: 10, right: 20 }}>
+                <XAxis type="number" tick={{ fontSize: 10 }} />
+                <YAxis type="category" dataKey="name" tick={{ fontSize: 10 }} width={120} />
+                <Tooltip formatter={v => [v, "Jobs"]} />
+                <Bar dataKey="value" radius={[0,4,4,0]}>
+                  {domainData.map((_, i) => <Cell key={i} fill={CHART_COLORS[i % CHART_COLORS.length]} />)}
+                </Bar>
+              </BarChart>
+            </ResponsiveContainer>
+          </Card>
+
+          {/* Top Skills */}
+          <Card>
+            <div style={{ fontSize: 11, fontWeight: 700, color: C.accent, textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 16 }}>Top 10 Skills</div>
+            <ResponsiveContainer width="100%" height={220}>
+              <BarChart data={skillData} layout="vertical" margin={{ left: 10, right: 20 }}>
+                <XAxis type="number" tick={{ fontSize: 10 }} />
+                <YAxis type="category" dataKey="name" tick={{ fontSize: 10 }} width={130} />
+                <Tooltip formatter={v => [v, "Mentions"]} />
+                <Bar dataKey="value" fill={C.accent} radius={[0,4,4,0]} />
+              </BarChart>
+            </ResponsiveContainer>
+          </Card>
+
+          {/* Seniority */}
+          <Card>
+            <div style={{ fontSize: 11, fontWeight: 700, color: C.accent, textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 16 }}>Seniority Level</div>
+            <ResponsiveContainer width="100%" height={200}>
+              <PieChart>
+                <Pie data={levelData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={75} label={({ name, percent }) => `${name} ${(percent*100).toFixed(0)}%`} labelLine={false}>
+                  {levelData.map((_, i) => <Cell key={i} fill={CHART_COLORS[i % CHART_COLORS.length]} />)}
+                </Pie>
+                <Tooltip formatter={v => [v, "Jobs"]} />
+              </PieChart>
+            </ResponsiveContainer>
+          </Card>
+
+          {/* Work Nature */}
+          <Card>
+            <div style={{ fontSize: 11, fontWeight: 700, color: C.accent, textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 16 }}>Work Nature</div>
+            <ResponsiveContainer width="100%" height={200}>
+              <PieChart>
+                <Pie data={natureData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={75} label={({ name, percent }) => `${name.split("/")[0]} ${(percent*100).toFixed(0)}%`} labelLine={false}>
+                  {natureData.map((_, i) => <Cell key={i} fill={CHART_COLORS[i % CHART_COLORS.length]} />)}
+                </Pie>
+                <Tooltip formatter={v => [v, "Jobs"]} />
+              </PieChart>
+            </ResponsiveContainer>
+          </Card>
+
+          {/* Avg Salary by Domain */}
+          {salaryData.length > 0 && (
+            <Card style={{ gridColumn: "1 / -1" }}>
+              <div style={{ fontSize: 11, fontWeight: 700, color: C.accent, textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 4 }}>Avg Salary by Domain (NZD/yr)</div>
+              <div style={{ fontSize: 11, color: C.textMuted, marginBottom: 14 }}>Based on roles with salary data only. Market estimates — not authoritative benchmarks.</div>
+              <ResponsiveContainer width="100%" height={220}>
+                <BarChart data={salaryData} margin={{ left: 10, right: 20 }}>
+                  <XAxis dataKey="name" tick={{ fontSize: 10 }} />
+                  <YAxis tick={{ fontSize: 10 }} tickFormatter={v => `$${(v/1000).toFixed(0)}k`} />
+                  <Tooltip formatter={v => [`$${v.toLocaleString()}`, "Avg Salary"]} />
+                  <Bar dataKey="avg" radius={[4,4,0,0]}>
+                    {salaryData.map((_, i) => <Cell key={i} fill={CHART_COLORS[i % CHART_COLORS.length]} />)}
+                  </Bar>
+                </BarChart>
+              </ResponsiveContainer>
+            </Card>
+          )}
+
+          <div style={{ gridColumn: "1 / -1", fontSize: 11, color: C.textMuted, textAlign: "center", paddingBottom: 8 }}>
+            Data sourced from NZ/AU logistics job postings. Updated periodically. For reference only.
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+
 // ── App shell ─────────────────────────────────────────────────────────────────
 
 const NAV = [
@@ -2834,6 +3025,7 @@ const NAV = [
   { id: "skills",   label: "Skill Mapper",    icon: "🧩", component: SkillMapper },
   { id: "titles",   label: "Title Cleaner",   icon: "✏️", component: TitleCleaner },
   { id: "export",   label: "Export",          icon: "⬇️", component: ExportPage },
+  { id: "insights", label: "Market Insights", icon: "📊", component: MarketInsights },
   { id: "ai",       label: "AI Assistant",    icon: "✨", component: AIAssistant },
   { id: "about",    label: "About",           icon: "ℹ️", component: About },
 ];

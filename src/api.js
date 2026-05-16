@@ -97,6 +97,17 @@ export async function checkAPIHealth() {
   }
 }
 
+// Ping the backend every 13 minutes to prevent Render free-tier sleep.
+// Call once on app load — safe to call multiple times (ignores if already started).
+let _keepAliveStarted = false;
+export function startKeepAlive() {
+  if (_keepAliveStarted) return;
+  _keepAliveStarted = true;
+  const ping = () => fetch(`${API_BASE}/health`, { signal: AbortSignal.timeout(5000) }).catch(() => {});
+  ping(); // immediate first ping
+  setInterval(ping, 13 * 60 * 1000);
+}
+
 export async function chatViaAPI(message, history = [], context = "", token = "") {
   try {
     const headers = { "Content-Type": "application/json" };
