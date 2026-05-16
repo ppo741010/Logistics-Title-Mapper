@@ -2838,6 +2838,7 @@ function MarketInsights() {
           .from("cleaned_jobs")
           .select("domain, level, work_nature, skills, salary_yearly, country")
           .not("domain", "eq", "Other/Noise")
+          .not("domain", "eq", "Pending Review")
           .not("domain", "is", null);
         if (country !== "all") q = q.eq("country", country);
         const { data: rows, error: err } = await q.limit(5000);
@@ -2977,12 +2978,13 @@ function MarketInsights() {
           {/* Seniority */}
           <Card>
             <div style={{ fontSize: 11, fontWeight: 700, color: C.accent, textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 16 }}>Seniority Level</div>
-            <ResponsiveContainer width="100%" height={200}>
+            <ResponsiveContainer width="100%" height={220}>
               <PieChart>
-                <Pie data={levelData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={75} label={({ name, percent }) => `${name} ${(percent*100).toFixed(0)}%`} labelLine={false}>
+                <Pie data={levelData} dataKey="value" nameKey="name" cx="50%" cy="45%" outerRadius={70}>
                   {levelData.map((_, i) => <Cell key={i} fill={CHART_COLORS[i % CHART_COLORS.length]} />)}
                 </Pie>
                 <Tooltip formatter={v => [v, "Jobs"]} />
+                <Legend iconSize={10} wrapperStyle={{ fontSize: 11 }} formatter={(name, entry) => `${name} ${(entry.payload.percent * 100).toFixed(0)}%`} />
               </PieChart>
             </ResponsiveContainer>
           </Card>
@@ -2990,12 +2992,13 @@ function MarketInsights() {
           {/* Work Nature */}
           <Card>
             <div style={{ fontSize: 11, fontWeight: 700, color: C.accent, textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 16 }}>Work Nature</div>
-            <ResponsiveContainer width="100%" height={200}>
+            <ResponsiveContainer width="100%" height={220}>
               <PieChart>
-                <Pie data={natureData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={75} label={({ name, percent }) => `${name.split("/")[0]} ${(percent*100).toFixed(0)}%`} labelLine={false}>
+                <Pie data={natureData} dataKey="value" nameKey="name" cx="50%" cy="45%" outerRadius={70}>
                   {natureData.map((_, i) => <Cell key={i} fill={CHART_COLORS[i % CHART_COLORS.length]} />)}
                 </Pie>
                 <Tooltip formatter={v => [v, "Jobs"]} />
+                <Legend iconSize={10} wrapperStyle={{ fontSize: 11 }} formatter={(name, entry) => `${name} ${(entry.payload.percent * 100).toFixed(0)}%`} />
               </PieChart>
             </ResponsiveContainer>
           </Card>
